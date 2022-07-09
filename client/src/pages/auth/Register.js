@@ -16,11 +16,6 @@ const Register = () => {
   const [data, setData] = useState(initialState);
   const [confirmPass, setConfirmPass] = useState(true);
 
-  // Reset Form
-  const resetForm = () => {
-    setData(initialState);
-    setConfirmPass(confirmPass);
-  }; // put this in link when we go to login form
 
   // Handle change in input
   const handleChange = (e) => {
@@ -34,12 +29,11 @@ const Register = () => {
     e.preventDefault();
 
     
-      if(data.password !== data.confirmpass){
-        setConfirmPass(false);
+    if(data.password !== data.confirmpass){
+      setConfirmPass(false);
 
-      }
-        
-        
+    }
+  
     
   };
 
@@ -109,11 +103,11 @@ const Register = () => {
 
             <button class="text-white bg-cyan-700 hover:bg-cyan-800 border-0 py-2 px-8 focus:outline-none rounded text-lg mt-5" type="submit">Sign Up</button>
 
-            <button class="text-s text-purple-400 hover:text-purple-500 mt-3 cursor-pointer m-auto" to="/">
+            <Link class="text-s text-cyan-700 hover:text-cyan-800 mt-3 cursor-pointer m-auto" to="/login">
               Back to login
 
-            </button> 
-            {/* link */}
+            </Link> 
+            
           
           </div>
           

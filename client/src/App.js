@@ -4,7 +4,10 @@ import Register from "./pages/auth/Register"
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile"
 
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Router } from "react-router-dom";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -16,40 +19,46 @@ function App() {
       {/* <Profile/> */}
       {/* <Login/> */}
       {/* <Register/> */}
+      
 
-      <Routes>
+        <Routes>
 
-        <Route
-          path="/"
-          element={<Home />}
-        />
-        <Route
-          path="/home"
-          element={<Home />}
-        />
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-        <Route
-          path="/register"
-          element={<Register />}
-        />
-        <Route
-          path="/profile/:id"
-          element={<Profile />}
-        />
-        {/* <Route
-          path="*"
-          element={
-            <main style={{ padding: "1rem" }}>
-              <p>There's nothing here!</p>
-            </main>
-          }
-        /> */}
+          <Route
+            path="/"
+            element={<Home />}
+          />
+          <Route
+            path="/home"
+            element={<Home />}
+          />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+          <Route
+            path="/register"
+            element={<Register />}
+          />
+          <Route
+            path="/profile/:id"
+            element={<Profile />}
+          />
+          {/* <Route
+            path="*"
+            element={
+              <main style={{ padding: "1rem" }}>
+                <p>There's nothing here!</p>
+              </main>
+            }
+          /> */}
 
 
-      </Routes>
+        </Routes>
+
+        <ToastContainer/>
+
+      
+      
 
     </div>
   );

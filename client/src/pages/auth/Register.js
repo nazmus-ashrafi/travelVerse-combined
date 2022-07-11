@@ -1,7 +1,14 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion"
+import Spinner from "../../components/Spinner";
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { register, reset } from '../../features/auth/authSlice'
+
 
 const Register = () => {
 
@@ -15,6 +22,14 @@ const Register = () => {
 
   const [data, setData] = useState(initialState);
   const [confirmPass, setConfirmPass] = useState(true);
+
+
+  // redux
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  )
 
 
   // Handle change in input
@@ -32,10 +47,33 @@ const Register = () => {
     if(data.password !== data.confirmpass){
       setConfirmPass(false);
 
+    }else{
+      dispatch(register(data))
     }
   
     
   };
+
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess || user) {
+      // window.location.reload();
+      navigate('/')
+      console.log(user)
+    }
+
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, navigate, dispatch])
+
+
+  if (isLoading) {
+    return <Spinner />
+  }
+  
 
 
 
@@ -65,12 +103,12 @@ const Register = () => {
 
             <div class="relative mb-4">
               <label for="username" class="leading-7 text-sm text-zinc-400">First name</label>
-              <input type="name" id="name" name="firstname" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.firstname}/>
+              <input type="name" id="firstname" name="firstname" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.firstname}/>
             </div>
 
             <div class="relative mb-4">
               <label for="username" class="leading-7 text-sm text-zinc-400">Last name</label>
-              <input type="name" id="name" name="lastname" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.lastname}/>
+              <input type="name" id="lastname" name="lastname" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.lastname}/>
             </div>
 
             <div class="relative mb-4">

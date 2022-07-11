@@ -1,11 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion"
+import { useNavigate } from 'react-router-dom'
+import Spinner from "../../components/Spinner";
+import { toast } from 'react-toastify'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { login, reset } from '../../features/auth/authSlice'
+
+
 
 const Login = () => {
 
+  // redux
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  )
+
   const initialState = {
-    email: "",
+    username: "",
     password: "",
   };
 
@@ -21,9 +36,30 @@ const Login = () => {
   const handleSubmit = (e) => {
 
     e.preventDefault();
+
+    dispatch(login(data))
   
     
   };
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess || user) {
+      // window.location.reload();
+      navigate('/')
+      console.log(user)
+    }
+
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, navigate, dispatch])
+
+
+  if (isLoading) {
+    return <Spinner />
+  }
   
   return (
     <motion.div
@@ -47,8 +83,8 @@ const Login = () => {
               <form class="lg:w-2/6 md:w-1/2 bg-base-300 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0" onSubmit={handleSubmit}>
                 
                 <div class="relative mb-4">
-                  <label for="email" class="leading-7 text-sm text-zinc-400">Email</label>
-                  <input type="email" id="email" name="email" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.email}/>
+                  <label for="username" class="leading-7 text-sm text-zinc-400">Username</label>
+                  <input type="name" id="username" name="username" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.username}/>
                 </div>
                 <div class="relative mb-4">
                   <label for="password" class="leading-7 text-sm text-zinc-400">Password</label>

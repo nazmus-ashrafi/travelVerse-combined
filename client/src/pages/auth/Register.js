@@ -113,7 +113,7 @@ const Register = () => {
 
             <div class="relative mb-4">
               <label for="username" class="leading-7 text-sm text-zinc-400">Username</label>
-              <input type="email" id="username" name="username" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.username}/>
+              <input type="name" id="username" name="username" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.username}/>
             </div>
 
             <div class="relative mb-4">

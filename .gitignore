@@ -2,5 +2,7 @@ client/node_modules
 client/.env
 server/.env
 
+client/note.txt
+
 
 

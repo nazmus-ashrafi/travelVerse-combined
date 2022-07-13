@@ -6,6 +6,7 @@ import ProfileCard from '../../components/ProfileCard'
 
 import UnExpandedPostMaker from '../../components/UnExpandedPostMaker'
 import Post from '../../components/Post'
+import AllPosts from '../../components/AllPosts'
 
 
 
@@ -69,7 +70,7 @@ export default function Home() {
                 <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
                 {/* post */}
-                <Post/>
+                <AllPosts/>
 
               </div>
 

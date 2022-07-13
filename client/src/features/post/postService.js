@@ -3,15 +3,17 @@ import axios from 'axios'
 const API_URL = '/post/'
 
 // Get timeline posts for user
-// @route   GET /api/posts/timeline/all
+// @route   GET /posts/id/timeline
 const getTimelinePosts = async (userData) => {
 
   const token = userData.token
+  const id = userData.user._id
   const config = {
     headers: { Authorization: `Bearer ${token}` }
   };
   
-  const response = await axios.get(API_URL + 'timeline/all', config)
+  const response = await axios.get(API_URL + `${id}/timeline`, config)
+  
 
 //   if (response.data) {
 //     localStorage.setItem('user', JSON.stringify(response.data))
@@ -25,7 +27,7 @@ const getTimelinePosts = async (userData) => {
 // @route   POST /api/posts
 const createPost = async (postData,token) => {
 
-  console.log(token)
+  // console.log(token)
   
   const config = {
     headers: { Authorization: `Bearer ${token}` }
@@ -33,6 +35,7 @@ const createPost = async (postData,token) => {
 
 
   const response = await axios.post(API_URL , postData, config)
+  console.log(response)
 
 //   if (response.data) {
 //     localStorage.setItem('user', JSON.stringify(response.data))

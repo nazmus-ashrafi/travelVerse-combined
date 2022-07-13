@@ -255,6 +255,7 @@ export const postSlice = createSlice({
         state.isSuccess = true
     
         state.timelinePosts = action.payload
+        
       })
       .addCase(getTimeLinePosts.rejected, (state, action) => {
         state.isLoading = false

@@ -45,9 +45,9 @@ const Nav = ({dark,setDark}) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  // const { user} = useSelector(
-  //   (state) => state.auth
-  // )
+  const { user} = useSelector(
+    (state) => state.auth
+  )
 
   const onLogout = () =>{
     dispatch(logout())
@@ -179,7 +179,7 @@ const Nav = ({dark,setDark}) => {
                       <Menu.Item>
                         {({ active }) => (
                           <>
-                          {/* <Link to="/profile"> */}
+                          <Link to={`/profile/${user.user._id}`}>
                             <a
                               href="#"
                               className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
@@ -187,7 +187,7 @@ const Nav = ({dark,setDark}) => {
                               Your Profile
                             </a>
                             
-                          {/* </Link> */}
+                          </Link>
 
                             <a
                               href="/login"

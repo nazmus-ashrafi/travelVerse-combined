@@ -11,6 +11,7 @@ import UnExpandedPostMaker from '../../components/UnExpandedPostMaker';
 import Post from '../../components/Post';
 import FriendsBlock from '../../components/FriendsBlock';
 import ProfileModal from '../../components/ProfileModal';
+import AllPosts from '../../components/AllPosts';
 
 
 const ProfilePage = () => {
@@ -173,16 +174,19 @@ const ProfilePage = () => {
         </div> */}
         
         {/* 2nd section */}
-        <div class="section-2 grid place-items-center xl:grid-cols-4 grid-cols-1 pt-10 xl:pl-28 xl:pr-28 xl:relative transition duration-200 ease-in-out pl-7 pr-7 mt-3">
+        <div class="section-2 grid xl:grid-cols-4 grid-cols-1 pt-10 xl:pl-28 xl:pr-28 xl:relative transition duration-200 ease-in-out pl-7 pr-7 mt-3 xl:place-items-stretch place-items-center">
 
             {/* friends block */}
             <FriendsBlock/>
 
             {/* tab */}
-            <div class=" tabs pb-5 xl:col-start-1 xl:col-span-3">
-                <a class="tab tab-bordered tab-active">Posts</a> 
+            <div class=" tabs pb-5 xl:col-start-2 xl:col-span-3 ">
+                
+                <a class="tab tab-bordered tab-active">Timeline</a> 
                 <a class="tab tab-bordered">Shares</a> 
-                <a class="tab tab-bordered">Friends</a>
+                <a class="tab tab-bordered">Posts</a>
+
+                
             </div>
 
             {/* 'unexpanded post' card */}
@@ -190,8 +194,8 @@ const ProfilePage = () => {
                 <UnExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
                 <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
-                {/* post */}
-                <Post/>
+                {/* posts */}
+                <AllPosts/>
             </div>
              
 

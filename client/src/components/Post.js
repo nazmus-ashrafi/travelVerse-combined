@@ -10,16 +10,24 @@ import { useState, useEffect } from "react";
 import Comment from "./Comment"
 
 
+import { useSelector } from "react-redux";
+
+
 const Post = ({data}) => {
+
+ 
 
   
 
+
   const [viewport, setViewport] = useState({
-        zoom: 8
-    });
+    zoom: 8
+  });
 
   
   return (
+
+    
     <div class="xl:grid xl:grid-cols-3 flex gap-6 w-full grid-rows-8 p-4 bg-base-100 shadow-xl card pt-10 pr-10 pl-10 mt-5 items-start">
 
         <div class="col-span-1 row-span-3 text-center p-2 card rounded-none h-60">
@@ -27,7 +35,7 @@ const Post = ({data}) => {
                     initialViewState={{
                         longitude: data.longitude,
                         latitude: data.latitude,
-                        zoom: 10
+                        zoom: 6
                     }}
                     // style={{width: "w-full", height: 250}}
                     attributionControl="none"

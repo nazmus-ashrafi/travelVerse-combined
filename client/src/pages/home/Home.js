@@ -5,7 +5,6 @@ import Nav from '../../components/Nav'
 import ProfileCard from '../../components/ProfileCard'
 
 import UnExpandedPostMaker from '../../components/UnExpandedPostMaker'
-import Post from '../../components/Post'
 import AllPosts from '../../components/AllPosts'
 
 

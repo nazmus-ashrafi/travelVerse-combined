@@ -92,7 +92,7 @@ const Login = () => {
                 </div>
 
                 {/* <Link to="/dashboard"> */}
-                  <button class="text-white bg-cyan-700 hover:bg-cyan-800 border-0 py-2 mt-3 w-full focus:outline-none rounded text-lg" type="submit">
+                  <button class="glass text-white bg-cyan-700 hover:bg-cyan-800 border-0 py-2 mt-3 w-full focus:outline-none rounded text-lg" type="submit">
                     Log in
                   </button>
                 {/* </Link> */}

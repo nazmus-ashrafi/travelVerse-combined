@@ -9,11 +9,27 @@ import mongoose from "mongoose";
 export const createPost = async (req, res) => {
   const newPost = new PostModel(req.body);
 
+  // if (!req.body.title) {
+  //       // res.status(400)
+  //       // throw new Error('Please add a title')
+        
+  //   } else if (!req.body.description) {
+  //       res.status(400)
+  //       throw new Error('Please add a description')
+  //   }else if (!req.body.latitude) {
+  //       res.status(400)
+  //       throw new Error('Please add a latitude')
+  //   }else if (!req.body.longitude) {
+  //       res.status(400)
+  //       throw new Error('Please add a longitude')
+  //   }
+
   try {
     await newPost.save();
-    res.status(200).json("Post created!");
+    res.status(200).json(newPost);
   } catch (error) {
     res.status(500).json(error);
+    console.log(error)
   }
 };
 

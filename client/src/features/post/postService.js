@@ -35,7 +35,7 @@ const createPost = async (postData,token) => {
 
 
   const response = await axios.post(API_URL , postData, config)
-  console.log(response)
+  // console.log(response)
 
 //   if (response.data) {
 //     localStorage.setItem('user', JSON.stringify(response.data))

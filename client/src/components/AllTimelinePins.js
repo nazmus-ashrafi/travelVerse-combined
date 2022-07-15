@@ -8,9 +8,10 @@ import { getTimeLinePosts } from '../features/post/postSlice';
 
 import { useEffect } from "react";
 
-const AllPosts = () => {
+import MarkerPin from './MarkerPin';
 
-// redux 
+const AllTimelinePins = () => {
+  // redux 
   const dispatch = useDispatch();
   const { user } = useSelector(
         (state) => state.auth
@@ -20,52 +21,30 @@ const AllPosts = () => {
 
   useEffect(() => {
     dispatch(getTimeLinePosts(user.user._id));
+
+    
     
   }, []);
 
   // console.log(timelinePosts)
 
 
-  // sort and iterate thru timeline posts
-  const [arrayForSort,setArrayForSort] = useState([])
-
-  useEffect(()=>{
-
-
-    if(timelinePosts){
-      setArrayForSort([...timelinePosts])
-    }else{
-      setArrayForSort([])
-
-    }
-
-  
-  },[timelinePosts])
-
-  
-
-  const sortedTimelinePosts = arrayForSort.sort(function(a,b){
-
-    console.log(a.updatedAt)
-    console.log(b.updatedAt)
-
-    return b.updatedAt.localeCompare(a.updatedAt);  
-    
-
-  })
-
-  //
 
 
   return (
     <div>
+      
         {isLoading
         ? <Spinner/>
-        : sortedTimelinePosts.map((post, id) => {
-            return <Post data={post} key={id} />;
+        : timelinePosts.map((post, id) => {
+            if(post.userId === user.user._id ){
+              return <MarkerPin data={post} key={id} color={"slategrey"} />;
+            }else{
+              return <MarkerPin data={post} key={id} color={"0EA5E9"} />;
+            }
           })}
     </div>
   )
 }
 
-export default AllPosts
+export default AllTimelinePins

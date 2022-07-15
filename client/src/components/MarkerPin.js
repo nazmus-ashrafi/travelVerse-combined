@@ -11,7 +11,7 @@ const MarkerPin = ({data,color}) => {
         zoom: 8
     });
 
-    console.log(color)
+    // console.log(color)
 
     
     return (

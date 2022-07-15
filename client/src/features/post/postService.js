@@ -27,7 +27,7 @@ const getTimelinePosts = async (userData) => {
 // @route   POST /api/posts
 const createPost = async (postData,token) => {
 
-  // console.log(token)
+  console.log(token)
   
   const config = {
     headers: { Authorization: `Bearer ${token}` }
@@ -127,6 +127,21 @@ const deleteComment = async ( commentId, token) => {
 }
 
 
+// Like/Unlike post
+// @route   PUT post/:id/like
+const likePost = async ( data) => {
+
+  // console.log(data.postId)
+  // console.log(data.userId)
+
+  const response = await axios.put(API_URL +  data.postId + "/like", {userId:data.userId} )
+
+  console.log(response.data)
+  return response.data
+  
+}
+
+
 const postService = {
   getTimelinePosts, 
   createPost,
@@ -136,6 +151,8 @@ const postService = {
 
   getCommentsForPost,
   deleteComment,
+
+  likePost,
   
 }
 

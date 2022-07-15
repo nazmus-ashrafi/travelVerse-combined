@@ -28,7 +28,7 @@ export default function Home() {
   return (
     
     
-    <div class='window dark'>
+    <div class='window dark' data-theme="halloween">
 
 
       {/* nav bar */}

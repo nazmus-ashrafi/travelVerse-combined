@@ -90,11 +90,11 @@ export const likePost = async (req, res) => {
   try {
     const post = await PostModel.findById(id);
     if (!post.likes.includes(userId)) {
-      await post.updateOne({ $push: { likes: userId } });
-      res.status(200).json("Post liked");
+      await post.updateOne({ $push: { likes: userId } }, { timestamps: false });
+      res.status(200).json(post);
     } else {
-      await post.updateOne({ $pull: { likes: userId } });
-      res.status(200).json("Post Unliked");
+      await post.updateOne({ $pull: { likes: userId } }, { timestamps: false });
+      res.status(200).json(post);
     }
   } catch (error) {
     res.status(500).json(error);

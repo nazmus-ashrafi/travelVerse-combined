@@ -6,13 +6,15 @@ const user = JSON.parse(localStorage.getItem('user'))
 
 const timelinePosts = []
 const comments = []
+const likes = []
 // const post = null
 
 const initialState = {
   user: user ? user : null,
   timelinePosts: timelinePosts ? timelinePosts : null,
   // post: post ? post : null,
-  comments: comments ? comments : null,
+  // comments: comments ? comments : null,
+  // likes: likes ? likes : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -229,6 +231,32 @@ export const deleteComment = createAsyncThunk(
 )
 
 
+// Like/Unlike
+export const likePost = createAsyncThunk(
+    'post/likePost',
+    async (postData, thunkAPI) => {
+
+      try {
+
+      return await postService.likePost(postData)
+
+      
+    } catch (error) {
+
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+      
+    }
+  }
+)
+
+
 
 
 
@@ -373,6 +401,43 @@ export const postSlice = createSlice({
         state.isError = true
         state.message = action.payload
         state.timelinePosts = null
+      })
+
+      // likePost
+      .addCase(likePost.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true 
+
+        if(action.payload.likes.includes(user.user._id)){
+          var index = state.timelinePosts.map(item => item._id).indexOf(action.payload._id);
+
+          state.timelinePosts[index].likes.splice(
+          state.timelinePosts[index].likes.findIndex(
+            (user) => user === action.payload._id
+          ),
+          1
+        );
+        }else{
+
+          var index = state.timelinePosts.map(item => item._id).indexOf(action.payload._id);
+          state.timelinePosts[index].likes.push(user.user._id)
+        }
+
+        
+        // var removeIndex = state.timelinePosts.map(item => item._id).indexOf(action.payload._id);
+        // state.timelinePosts.splice(removeIndex, 1, action.payload);
+
+        // state.timelinePosts.push(action.payload)
+
+        // console.log(state.timelinePosts[removeIndex])
+      })
+      .addCase(likePost.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
       })
    }
 })

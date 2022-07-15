@@ -46,8 +46,8 @@ const AllPosts = () => {
 
   const sortedTimelinePosts = arrayForSort.sort(function(a,b){
 
-    console.log(a.updatedAt)
-    console.log(b.updatedAt)
+    // console.log(a.updatedAt)
+    // console.log(b.updatedAt)
 
     return b.updatedAt.localeCompare(a.updatedAt);  
     

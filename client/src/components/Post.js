@@ -9,20 +9,59 @@ import { useState, useEffect } from "react";
 
 import Comment from "./Comment"
 
-
-import { useSelector } from "react-redux";
+import { likePost } from "../features/post/postSlice";
+import { useSelector, useDispatch } from "react-redux";
+import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 
 
 const Post = ({data}) => {
-
- 
-
-  
 
 
   const [viewport, setViewport] = useState({
     zoom: 8
   });
+
+  // Likes/Unlike
+  // redux 
+  const dispatch = useDispatch();
+
+  const { user} = useSelector(
+    (state) => state.auth
+  )
+
+  const {timelinePosts } = useSelector(
+    (state) => state.post
+  )
+
+  //
+
+  //likes/dislikes
+  const thisPostIndex = timelinePosts.findIndex((post)=> post._id === data._id)
+
+
+  const [liked, setLiked] = useState(timelinePosts[thisPostIndex].likes.includes(user.user._id));
+  const [likes, setLikes] = useState(timelinePosts[thisPostIndex].likes.length)
+  //
+  
+
+  const handleLike = () => {
+    dispatch(likePost({postId:data._id, userId:user.user._id}));
+    setLiked((prev) => !prev);
+
+    console.log(data)
+    console.log(timelinePosts)
+    console.log(thisPostIndex)
+    
+    
+    // console.log(data._id)
+    // console.log(user.user._id)
+  
+    liked? setLikes((prev)=>prev-1): setLikes((prev)=>prev+1)
+  
+  };
+
+  //
 
   
   return (
@@ -107,13 +146,24 @@ const Post = ({data}) => {
 
 
 
-        <div class="col-span-3 row-start-4 flex place-items-center mt-2 h-10 ">
+        <div class="col-span-3 row-start-4 flex place-items-center mt-2 h-10 space-x-4 ">
+          
+          <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline z-20" onClick={handleLike}>
+            
+            <span class='mr-8'>
+              {likes} likes
+            </span>
+            
 
-          <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal">Like</button>
+            {liked ? <ThumbUpAltRoundedIcon/> : <ThumbUpAltOutlinedIcon/> }
+            
+            <span class='ml-2' >Like</span>
+          </button>
 
-          <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal ">Comment</button>
 
-          <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal ">Share</button>
+          <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline ">Comment</button>
+
+          <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline">Share</button>
 
         </div>
         

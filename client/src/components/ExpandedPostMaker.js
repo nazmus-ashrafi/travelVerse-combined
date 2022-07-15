@@ -91,6 +91,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
             // create post 
             dispatch(createPost(newPost,user))
+            
 
             setShowModal(false)
 

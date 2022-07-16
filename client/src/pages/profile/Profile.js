@@ -13,10 +13,7 @@ import FriendsBlock from '../../components/FriendsBlock';
 import ProfileModal from '../../components/ProfileModal';
 import AllPosts from '../../components/AllPosts';
 
-import {Marker} from 'react-map-gl'
-import "mapbox-gl/dist/mapbox-gl.css"
-import RoomRoundedIcon from '@mui/icons-material/RoomRounded'
-import MarkerPin from '../../components/MarkerPin';
+
 import AllTimelinePins from '../../components/AllTimelinePins';
 
 

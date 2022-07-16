@@ -59,9 +59,7 @@ const AllPosts = () => {
 
   return (
     <div>
-        {isLoading
-        ? <Spinner/>
-        : sortedTimelinePosts.map((post, id) => {
+        {sortedTimelinePosts.map((post, id) => {
             return <Post data={post} key={id} />;
           })}
     </div>

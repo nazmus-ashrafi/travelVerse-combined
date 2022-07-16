@@ -10,6 +10,9 @@ import { useEffect } from "react";
 
 import MarkerPin from './MarkerPin';
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 const AllTimelinePins = () => {
   // redux 
   const dispatch = useDispatch();
@@ -34,9 +37,8 @@ const AllTimelinePins = () => {
   return (
     <div>
       
-        {isLoading
-        ? <Spinner/>
-        : timelinePosts.map((post, id) => {
+        {
+        timelinePosts.map((post, id) => {
             if(post.userId === user.user._id ){
               return <MarkerPin data={post} key={id} color={"slategrey"} />;
             }else{

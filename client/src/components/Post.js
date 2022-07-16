@@ -14,6 +14,9 @@ import { useSelector, useDispatch } from "react-redux";
 import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 
 const Post = ({data}) => {
 
@@ -30,7 +33,7 @@ const Post = ({data}) => {
     (state) => state.auth
   )
 
-  const {timelinePosts } = useSelector(
+  const {timelinePosts, isLoading  } = useSelector(
     (state) => state.post
   )
 
@@ -102,7 +105,8 @@ const Post = ({data}) => {
           </div>
           
           {/* title */}
-          <h3 class="grow">{data.title}</h3>
+          {<h3 class="grow">{data.title || <Skeleton/>}</h3>}
+          
           
           {/* triple dot dropdown */}
           <div class="dropdown dropdown-end dropdown-hover">
@@ -127,16 +131,16 @@ const Post = ({data}) => {
 
         </div>
 
-        <div class="col-span-2 p-1 -mt-6 flex h-30">
+        <div class="col-span-2 p-1 -mt-6 h-30">
 
-          <h3>{data.description}         
+          <h3>{data.description || <Skeleton count={2}/>}         
              </h3>
 
         </div>
 
         <div class="col-span-2 p-1 flex place-items-center justify-between h-10">
 
-          <h3 class=""><b>{Date(data.date)}</b> <br/>
+          <h3 class=""><b>{Date(data.date) || <Skeleton/>}</b> <br/>
                       by Biman 
             (Dhaka to Kathmandu)</h3>
 

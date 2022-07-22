@@ -6,10 +6,13 @@ import ProfileCard from '../../components/ProfileCard'
 
 import UnExpandedPostMaker from '../../components/UnExpandedPostMaker'
 import AllPosts from '../../components/AllPosts'
+import NotificationBell from '../../components/NotificationBell'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect } from "react";
 
 
-
-export default function Home() {
+export default function Home({socket}) {
 
   // const [dark,setDark] = useState('dark')
 
@@ -24,16 +27,36 @@ export default function Home() {
 
   // },[setDark])
 
+  // redux
+  const dispatch = useDispatch()
+
+
+  const { user } = useSelector(
+        (state) => state.auth
+    )
+
+
+  useEffect(()=>{
+
+
+  },[])
+
+  //
+
+
+
 
   return (
+
     
     
-    <div class='window dark' data-theme="halloween">
+    <div class='window dark' data-theme='dark'>
 
 
       {/* nav bar */}
       <div class="sticky top-0 z-50">
-        <Nav />
+        <Nav socket={socket} />
+        
       </div>
       
   
@@ -69,7 +92,7 @@ export default function Home() {
                 <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
                 {/* post */}
-                <AllPosts/>
+                <AllPosts socket={socket}/>
 
               </div>
 

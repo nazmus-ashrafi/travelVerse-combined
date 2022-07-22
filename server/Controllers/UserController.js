@@ -96,7 +96,7 @@ export const followUser = async (req, res) => {
 };
 
 // UnFollow a User
-export const UnFollowUser = async (req, res) => {
+export const unFollowUser = async (req, res) => {
   const id = req.params.id;
 
   const { currentUserId } = req.body;
@@ -120,3 +120,53 @@ export const UnFollowUser = async (req, res) => {
     }
   }
 };
+
+// show notifications
+export const showNotifications = async (req, res) => {
+  
+  if(req.body.userId){
+
+    UserModel.findById(req.body.userId, (err, user) => {
+      if(err){
+        res.status(500).json(err);
+      } else {
+        let notifications = user.notifications;
+
+        res.status(200).json(notifications);
+      }
+    })
+    
+  }else{
+    res.status(500).json("No userId provided");
+  }
+
+   
+}
+
+
+// Dismiss notification
+export const dismissNotifications = async (req, res) => {
+
+  const id = req.params.id;
+  
+  if(id){
+
+    UserModel.findById(id, (err, user) => {
+      if(err){
+        res.status(500).json(err);
+      } else {
+        let notifications = user.notifications;
+        let blank = [];
+        user.notifications = blank;
+        user.save()
+
+        res.status(200).json(notifications);
+      }
+    })
+
+  }else{
+    res.status(500).json("No userId provided");
+  }
+
+   
+}

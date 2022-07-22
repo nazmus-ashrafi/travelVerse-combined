@@ -284,6 +284,7 @@ export const postSlice = createSlice({
     
         state.timelinePosts = action.payload
         
+        
       })
       .addCase(getTimeLinePosts.rejected, (state, action) => {
         state.isLoading = false
@@ -299,7 +300,13 @@ export const postSlice = createSlice({
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.timelinePosts.push(action.payload)
+        
+        // state.timelinePosts = state.timelinePosts.reverse()
+        // state.timelinePosts.push(action.payload)
+
+        state.timelinePosts = [action.payload, ...state.timelinePosts] 
+        
+        
       })
       .addCase(createPost.rejected, (state, action) => {
         state.isLoading = false
@@ -420,19 +427,16 @@ export const postSlice = createSlice({
           ),
           1
         );
+
         }else{
 
           var index = state.timelinePosts.map(item => item._id).indexOf(action.payload._id);
           state.timelinePosts[index].likes.push(user.user._id)
         }
-
         
-        // var removeIndex = state.timelinePosts.map(item => item._id).indexOf(action.payload._id);
-        // state.timelinePosts.splice(removeIndex, 1, action.payload);
-
-        // state.timelinePosts.push(action.payload)
-
-        // console.log(state.timelinePosts[removeIndex])
+        // state.refreshNotification
+        
+       
       })
       .addCase(likePost.rejected, (state, action) => {
         state.isLoading = false

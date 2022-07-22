@@ -4,13 +4,15 @@ import Spinner from './Spinner'
 import { useRef, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { getTimeLinePosts } from '../features/post/postSlice';
+import { getTimeLinePosts,createPost } from '../features/post/postSlice';
 
 import { useEffect } from "react";
+import { getUser } from '../features/user/userSlice';
 
-const AllPosts = () => {
 
-// redux 
+const AllPosts = ({socket}) => {
+
+  // redux 
   const dispatch = useDispatch();
   const { user } = useSelector(
         (state) => state.auth
@@ -18,50 +20,50 @@ const AllPosts = () => {
 
   let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
-  useEffect(() => {
-    dispatch(getTimeLinePosts(user.user._id));
-    
-  }, []);
 
-  // console.log(timelinePosts)
-
-
-  // sort and iterate thru timeline posts
-  const [arrayForSort,setArrayForSort] = useState([])
 
   useEffect(()=>{
 
 
-    if(timelinePosts){
-      setArrayForSort([...timelinePosts])
-    }else{
-      setArrayForSort([])
 
-    }
+    //running the api call on first render/refresh 
+    dispatch(getTimeLinePosts(user.user._id))
+    dispatch(getUser(user.user._id))
+
+    //running the api call every one minute
+
+    // const interval = setInterval(() => {
+    //  dispatch(getTimeLinePosts(user.user._id))
+    // dispatch(getUser(user.user._id))
+    // console.log("bye")
+    // }, 10000);
+    // return () => clearInterval(interval);
+  
+  },[])
 
   
-  },[timelinePosts])
-
   
 
-  const sortedTimelinePosts = arrayForSort.sort(function(a,b){
+  // const sortedTimelinePosts = arrayForSort.sort(function(a,b){
 
-    // console.log(a.updatedAt)
-    // console.log(b.updatedAt)
+  //   // console.log(a.updatedAt)
+  //   // console.log(b.updatedAt)
 
-    return b.updatedAt.localeCompare(a.updatedAt);  
+  //   return b.createdAt.localeCompare(a.createdAt);  
     
 
-  })
+  // })
 
-  //
+  //\
+  
+  
 
 
   return (
     <div>
-        {sortedTimelinePosts.map((post, id) => {
-            return <Post data={post} key={id} />;
-          })}
+        {timelinePosts ? timelinePosts.map((post, id) => {
+            return <Post data={post} key={id} socket={socket} />;
+          }):null}
     </div>
   )
 }

@@ -1,8 +1,11 @@
 import React from 'react'
 import Map from 'react-map-gl';
 import { motion } from "framer-motion"
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { UilPen } from "@iconscout/react-unicons";
+
+//material icons
+import HomeMaxOutlinedIcon from '@mui/icons-material/HomeMaxOutlined';
 
 import { useDimensions } from "../../dimentions/Dimentions"
 
@@ -16,18 +19,43 @@ import AllPosts from '../../components/AllPosts';
 
 import AllTimelinePins from '../../components/AllTimelinePins';
 
+import { Link, useNavigate } from 'react-router-dom'
+
+import { useDispatch, useSelector } from "react-redux";
+import { createPost, updatePost, reset, getTimeLinePosts } from '../../features/post/postSlice'
+
+
+
+
+
 
 const ProfilePage = () => {
     const constraintsRef = useRef(null);
     const { width,height } = useDimensions(constraintsRef);
 
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(false)
 
     const [viewport, setViewport] = useState({
         zoom: 8
     });
 
+    // redux
+
+    const { user } = useSelector(
+        (state) => state.auth
+    )
+
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+
     
+  
+    },[])
+
+    //
+
+ 
 
 
     const profileCardVariants = {
@@ -77,7 +105,7 @@ const ProfilePage = () => {
 
     
       
-    <div class='window dark' data-theme="dark" > 
+    <div class='window dark' data-theme='dark' > 
     {/* cupcake dark coffee */}
         {/* 1st section */}
         <div class="grid place-items-center md:grid-cols-3 pt-10 mt-5 "  >
@@ -100,7 +128,7 @@ const ProfilePage = () => {
                 <motion.div class="card w-72 bg-base-100 shadow-xl grid place-items-center z-10">
 
                     {/* vertical slide button */}
-                    <button className='slideBtn rounded-md bg-yellow-600 hover:bg-yellow-700 glass outline-transparent btn-sm mt-5 ml-5 absolute top-0 left-0' onClick={slideButtonClick}>
+                    <button className='slideBtn rounded-md  btn-accent outline-transparent btn-sm mt-5 ml-5 absolute top-0 left-0' onClick={slideButtonClick}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="12.91" height="17.879" viewBox="0 0 12.91 17.879">
                         <path id="XMLID_225_" d="M12.739,75.172a.587.587,0,0,0-.83,0L6.456,80.625,1,75.172a.587.587,0,0,0-.83.83L6.041,81.87a.587.587,0,0,0,.83,0L12.739,76A.587.587,0,0,0,12.739,75.172Z" transform="translate(-0.001 -64.163)" fill="#fff"/>
                         <path id="XMLID_225_2" data-name="XMLID_225_" d="M12.738.172a.587.587,0,0,0-.83,0L6.455,5.625,1,.172A.587.587,0,0,0,.172,1L6.04,6.87a.587.587,0,0,0,.83,0L12.738,1A.587.587,0,0,0,12.738.172Z" transform="translate(12.91 7.042) rotate(-180)" fill="#fff"/>
@@ -116,12 +144,25 @@ const ProfilePage = () => {
                         // className='mt-6 mr-5 absolute top-0 right-0  btn modal-button'
                     /> */}
 
-                    <label for="profile-modal" class="mt-6 mr-5 absolute top-0 right-0 modal-button">
-                        <UilPen
-                        width="2rem"
-                        height="1.2rem"                
-                    />
-                    </label>
+                    <div className='sideButtons'>
+                        <label for="home" class="mt-6 mr-6 absolute top-0 right-0 modal-button cursor-pointer">
+                            <Link to={'/home'}>
+                                <HomeMaxOutlinedIcon/>
+                            </Link>
+                            
+                        </label>
+
+                        <label for="profile-modal" class="mt-16 mr-5 absolute top-0 right-0 modal-button cursor-pointer">
+                            <UilPen
+                            width="2rem"
+                            height="1.2rem"                
+                            />
+                        </label>
+                    </div>
+
+                    
+
+                    
 
                     <ProfileModal/>
 
@@ -141,7 +182,7 @@ const ProfilePage = () => {
                     
                         
                         <div class="card-actions">
-                            <button class="btn bg-cyan-700 hover:bg-cyan-800 glass  text-white  btn-sm ">Follow</button>
+                            <button class="btn btn-primary text-white  btn-sm ">Follow</button>
                         </div>
                     </div>
                 
@@ -207,7 +248,7 @@ const ProfilePage = () => {
                 <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
                 {/* posts */}
-                <AllPosts/>
+                <AllPosts />
             </div>
              
 

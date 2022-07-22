@@ -8,6 +8,9 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout, reset } from '../features/auth/authSlice'
+import NotificationBell from './NotificationBell'
+
+import { useRef, useState } from "react";
 
 
 
@@ -34,7 +37,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const Nav = ({dark,setDark}) => {
+const Nav = ({dark,setDark, socket}) => {
+
+  // navbell lag
+  const [isHide, setIsHide] = useState(true);
+  setTimeout(() => setIsHide(false), 2000);
+  //
 
 
   // const darkBtn = ()=>{
@@ -55,11 +63,20 @@ const Nav = ({dark,setDark}) => {
     navigate('/login')
   }
 
+function refreshPage() {
+    setTimeout(()=>{
+        window.location.reload(false);
+    }, 500);
+    console.log('page to reload')
+}
+
   
   
 
     
   return (
+
+    
     <Disclosure as="nav" className="bg-gray-300 dark:bg-base-200">
       {({ open }) => (
         <>
@@ -115,7 +132,13 @@ const Nav = ({dark,setDark}) => {
                 
                 
                 <div className="flex-shrink-0 flex items-center sm:ml-6">
-                  <h1 class="font-['Abril'] italic font-medium text-2xl text-sky-600 pb-0 flex flex-col text-center w-full mr-10 sm:mr-5">Travelverse</h1>
+
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 221.506 297.001">
+                    <path id="location-pin-svgrepo-com" d="M148.5,0A110.9,110.9,0,0,0,37.747,110.8c0,91.026,99.729,179.9,103.976,183.645a10.255,10.255,0,0,0,13.555,0c4.245-3.739,103.975-92.618,103.975-183.645A110.9,110.9,0,0,0,148.5,0Zm0,79.693a31.106,31.106,0,1,1-30.765,31.1A30.971,30.971,0,0,1,148.5,79.693Z" transform="translate(-37.747)" fill="#ebebeb"/>
+                  </svg>
+
+
+                  <h1 class="font-['Abril'] italic font-medium text-2xl text-sky-600 pb-0 flex flex-col text-center w-full mr-10 sm:mr-5 ml-1">Travelverse</h1>
                   {/* <h1 class="font-['Abril'] font-bold italic text-5xl text-sky-500">Around the world</h1> */}
                 </div>
                   
@@ -141,15 +164,14 @@ const Nav = ({dark,setDark}) => {
               
 
               {/* rightside */}
+
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+
+
+
                   {/* notification button */}
-                <button
-                  type="button"
-                  className="bg-gray-100 dark:bg-gray-800 p-1 rounded-full text-gray-400 hover:text-gray-500 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 focus:ring-offset-gray-400 dark:focus:ring-white"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+                  {!isHide ?<NotificationBell socket={socket}/>:null}
+                
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
@@ -179,7 +201,7 @@ const Nav = ({dark,setDark}) => {
                       <Menu.Item>
                         {({ active }) => (
                           <>
-                          <Link to={`/profile/${user.user._id}`}>
+                          <Link to={`/profile/${user.user._id}`} onClick={refreshPage} >
                             <a
                               href="#"
                               className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}

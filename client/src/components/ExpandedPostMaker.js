@@ -10,7 +10,8 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 
 import { useDispatch, useSelector } from "react-redux";
-import { createPost, updatePost, reset } from '../features/post/postSlice'
+import { createPost, updatePost, reset, getTimeLinePosts } from '../features/post/postSlice'
+import Spinner from './Spinner';
 
 const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
@@ -73,6 +74,8 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
         // console.log(lat)
     }
 
+    let { timelinePosts, isLoading } = useSelector((state) => state.post);
+
     // handle post upload
     const handleUpload = async (e) => {
         e.preventDefault();
@@ -91,12 +94,21 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
             // create post 
             dispatch(createPost(newPost,user))
+
+            // dispatch(getTimeLinePosts(user.user._id));
             
 
             setShowModal(false)
 
             resetShare()
 
+            
+
+
+            //
+
+            window.location.reload()
+            
 
 
         }

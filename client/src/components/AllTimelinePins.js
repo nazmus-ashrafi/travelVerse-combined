@@ -38,13 +38,14 @@ const AllTimelinePins = () => {
     <div>
       
         {
-        timelinePosts.map((post, id) => {
+          
+        timelinePosts ? timelinePosts.map((post, id) => {
             if(post.userId === user.user._id ){
               return <MarkerPin data={post} key={id} color={"slategrey"} />;
             }else{
               return <MarkerPin data={post} key={id} color={"0EA5E9"} />;
             }
-          })}
+          }):null}
     </div>
   )
 }

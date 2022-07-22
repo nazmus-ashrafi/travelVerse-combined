@@ -136,7 +136,7 @@ const likePost = async ( data) => {
 
   const response = await axios.put(API_URL +  data.postId + "/like", {userId:data.userId} )
 
-  console.log(response.data)
+  // console.log(response.data)
   return response.data
   
 }

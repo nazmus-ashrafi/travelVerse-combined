@@ -12,6 +12,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
+import { io } from "socket.io-client";
+
+import { useEffect, useState } from "react";
+
 
 
 function App() {
@@ -19,6 +23,19 @@ function App() {
   const { user } = useSelector(
     (state) => state.auth
   )
+
+  //socket 
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    setSocket(io("http://localhost:3006"));
+  }, []);
+
+  useEffect(() => {
+    socket?.emit("newUser", user);
+  }, [socket, user]);
+
+  //
 
   return (
     <div className="App">
@@ -36,7 +53,7 @@ function App() {
           />
           <Route
             path="/home"
-            element={user ? <Home /> : <Navigate to="../login" />}
+            element={user ? <Home socket={socket} /> : <Navigate to="../login" />}
           />
           <Route
             path="/login"

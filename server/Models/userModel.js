@@ -29,7 +29,10 @@ const UserSchema = mongoose.Schema(
         worksAt: String,
         relationship: String,
         followers: [] ,
-        following: []
+        following: [] ,
+        notifications: {
+            type: Array
+        }
     },
     {timestamps: true}
 )

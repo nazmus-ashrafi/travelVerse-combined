@@ -10,6 +10,8 @@ const register = async (userData) => {
     localStorage.setItem('user', JSON.stringify(response.data))
   }
 
+  // window.location.reload()
+
   return response.data
 }
 
@@ -21,6 +23,8 @@ const login = async (userData) => {
     localStorage.setItem('user', JSON.stringify(response.data))
   }
 
+  // window.location.reload()
+
   return response.data
 }
 
@@ -29,6 +33,7 @@ const login = async (userData) => {
 const logout = () => {
   localStorage.removeItem('user')
 }
+
 
 
 const authService = {

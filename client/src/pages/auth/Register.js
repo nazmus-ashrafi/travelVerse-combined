@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { register, reset } from '../../features/auth/authSlice'
+import { getUser } from '../../features/user/userSlice'
 
 
 const Register = () => {
@@ -49,6 +50,7 @@ const Register = () => {
 
     }else{
       dispatch(register(data))
+      
     }
   
     

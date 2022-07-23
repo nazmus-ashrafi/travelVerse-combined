@@ -38,7 +38,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+
+    "server": "npm start --prefix ../server",
+    "socket": "npm start --prefix ../socket",
+
+    "dev": "concurrently \"npm start\" \"npm run server\" \"npm run socket\""
   },
   "eslintConfig": {
     "extends": [
@@ -59,6 +64,7 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^7.3.0",
     "tailwindcss": "^3.1.4"
   }
 }

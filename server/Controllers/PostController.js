@@ -103,7 +103,7 @@ export const likePost = async (req, res) => {
         const originalPoster = await UserModel.findById(post.userId)
         const currentUser = await UserModel.findById(userId);
 
-      originalPoster.notifications.push({"message" :currentUser.username +" likes a post you made: "+ post.description,"currentUserUsername":currentUser.username,"postDescription":post.description,"interaction":" liked the post: "})
+      originalPoster.notifications.push({"message" :currentUser.username +" likes a post you made: "+ post.description,"currentUserUsername":currentUser.username,"postDescription":post.description,"interaction":" liked the post: ","currentUserId":currentUser._id})
 
       originalPoster.save()
 
@@ -128,7 +128,7 @@ export const likePost = async (req, res) => {
 
       // originalPoster.notifications.pull(currentUser.username +" likes a post you made: "+ post.description)
 
-      originalPoster.notifications.push({"message" :currentUser.username +" likes a post you made: "+ post.description,"currentUserUsername":currentUser.username,"postDescription":post.description,"interaction":" unliked the post: "})
+      originalPoster.notifications.push({"message" :currentUser.username +" likes a post you made: "+ post.description,"currentUserUsername":currentUser.username,"postDescription":post.description,"interaction":" unliked the post: ","currentUserId":currentUser._id})
 
       originalPoster.save()
 

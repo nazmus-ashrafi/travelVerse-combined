@@ -260,6 +260,10 @@ export const likePost = createAsyncThunk(
 
 
 
+
+
+
+
 export const postSlice = createSlice({
   name: 'post',
   initialState,
@@ -443,6 +447,8 @@ export const postSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
+
+
    }
 })
 

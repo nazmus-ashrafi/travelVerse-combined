@@ -27,7 +27,7 @@ const getTimelinePosts = async (userData) => {
 // @route   POST /api/posts
 const createPost = async (postData,token) => {
 
-  console.log(token)
+  // console.log(token)
   
   const config = {
     headers: { Authorization: `Bearer ${token}` }
@@ -142,6 +142,9 @@ const likePost = async ( data) => {
 }
 
 
+
+
+
 const postService = {
   getTimelinePosts, 
   createPost,
@@ -153,6 +156,7 @@ const postService = {
   deleteComment,
 
   likePost,
+ 
   
 }
 

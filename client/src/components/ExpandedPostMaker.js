@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDimensions } from "../dimentions/Dimentions"
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 import Modal from "../components/Modal";
 import ModalHeader from "../components/ModalHeader";
@@ -12,6 +12,12 @@ import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, updatePost, reset, getTimeLinePosts } from '../features/post/postSlice'
 import Spinner from './Spinner';
+
+import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app from "../firebase";
 
 const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
@@ -35,7 +41,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
     const [initialViewState,setInitialViewState]= useState({
         
-        longitude: 90.38149930538287,
+        longitude: 103.38149930538287,
         latitude: 23.77783437646191,
         zoom: 4
                         
@@ -77,61 +83,133 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
     let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
     // handle post upload
+    let codedImages = [];
     const handleUpload = async (e) => {
         e.preventDefault();
 
         // post data
-        if(data.description && newPlace.lat && newPlace.long){
+        if(data.description && data.title && newPlace.lat && newPlace.long){
             const newPost = {
                 userId: user.user._id,
                 title: data.title,
                 description: data.description,
                 latitude: newPlace.lat,
                 longitude: newPlace.long,
+                images: null
             };
 
-            console.log(newPost)
+            // console.log(newPost)
 
-            // create post 
-            dispatch(createPost(newPost,user))
 
-            // dispatch(getTimeLinePosts(user.user._id));
+            if (images) { // if there is an image with post
+
+                const promise = images.map((image) => {
+                    
+
+
+                    const storage = getStorage();
+                    const fileName = Date.now() + image;
+                    const storageRef = ref(storage, fileName);
+                    const uploadTask = uploadBytesResumable(storageRef, image);
+
+                    // Firebase image upload boilerplate
+                    // Listen for state changes, errors, and completion of the upload.
+                    uploadTask.on('state_changed',
+                    (snapshot) => {
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                        switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused');
+                            break;
+                        case 'running':
+                            console.log('Upload is running');
+                            break;
+                        }
+                    }, 
+                    (error) => {
+                        // A full list of error codes is available at
+                        // https://firebase.google.com/docs/storage/web/handle-errors
+                        switch (error.code) {
+                        case 'storage/unauthorized':
+                            // User doesn't have permission to access the object
+                            break;
+                        case 'storage/canceled':
+                            // User canceled the upload
+                            break;
+
+                        // ...
+
+                        case 'storage/unknown':
+                            // Unknown error occurred, inspect error.serverResponse
+                            break;
+                        }
+                    }, 
+                    () => {
+                        // Upload completed successfully, now we can get the download URL
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+
+                        // let url = URL.createObjectURL(downloadURL);
+
+                        codedImages.push(`${downloadURL}`);
+                        console.log(codedImages)
+                        }).then(() => {
+                            
+
+                            
+                            
+                            if(codedImages.length === images.length){
+                                newPost.images = codedImages;
+                                dispatch(createPost(newPost))
+                                
+                                setShowModal(false)
+
+                                resetShare()
+
+                                window.location.reload()
+                            }
+
+                    
+
+                        })
+                    }
+                    );
+
+
+                }) 
+                
+                
+            } else { // if there is no image with post
+
+                // create post 
+                dispatch(createPost(newPost,user))
+
+        
+
+                // dispatch(getTimeLinePosts(user.user._id));
+                
+
+                setShowModal(false)
+
+                resetShare()
+
+                window.location.reload() // timeline sorting bug
+
+            }
+
             
 
-            setShowModal(false)
-
-            resetShare()
 
             
-
-
-            //
-
-            window.location.reload()
             
 
 
         }
         
 
-        // if there is an image with post
-        // if (image) {
-        //     const data = new FormData();
-        //     const fileName = Date.now() + image.name;
-        //     data.append("name", fileName);
-        //     data.append("file", image);
-        //     newPost.image = fileName;
-        //     console.log(newPost);
-        //     try {
-        //         dispatch(uploadImage(data));
-        //     } catch (err) {
-        //         console.log(err);
-        //     }
-        // }
-
-
-        // dispatch(uploadPost(newPost));
-        // resetShare();
+    
 
     }
 
@@ -153,7 +231,54 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
             latitude: 23.77783437646191,
             zoom: 4
         })
+
+        // reset images array
+        setImages(null)
+
     };
+
+
+    // handle image upload
+    const [images, setImages] = useState(null);
+    const imageRef = useRef();
+    const currImages = []
+
+
+
+    const onImageChange = (event) => {
+    
+        if (event.target.files && event.target.files[0]) {
+
+            
+            
+
+            for (let i = 0; i < event.target.files.length; i++) {
+                let img = event.target.files[i];
+                // let url = URL.createObjectURL(img);
+                
+
+                currImages.push(img)
+
+                
+            }
+
+            setImages(currImages);
+            // setImage({
+            //     image: URL.createObjectURL(img),
+            // });
+
+        
+            
+            
+        }
+    };
+
+    // useEffect(()=>{
+
+
+    //     console.log(images)
+
+    // },[onImageChange])
     
     
 
@@ -237,21 +362,62 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
                     <div class="flex flex-row basis-1/4">
 
-                        <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal ">Photo</button>
+                        <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal flex" onClick={()=>imageRef.current.click()}><InsertPhotoRoundedIcon  color='primary'/><span className='ml-1'>Photo</span></button>
                     
                         <button class="flex btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal">
                         <span>Mood</span>
                         </button>
+
+                        <div style={{ display: "none" }}>
+                            
+                            <input
+                                type="file"
+                                
+                                ref={imageRef}
+                                onChange={onImageChange}
+                                multiple
+                                accept='image/*'
+                                
+                            />
+
+                            
+                            
+                        </div>
 
                     </div>
                         
 
                 </div>
 
+                {images && images[0]? (
+                <div class="carousel carousel-center w-full  p-4 space-x-4 bg-base-200 rounded-box mt-4">
+
+                    {images.map((image) => (
+
+    
+                        
+                        <div class="carousel-item">
+
+                            <CancelRoundedIcon onClick={()=>{
+                                setImages(images.filter((e) => e !== image));
+
+
+                                console.log(images)
+
+                            }}/>
+
+                            <img src={URL.createObjectURL(image)} class="rounded-box w-60 h-60"  />
+                            
+                        </div>
+
+                    ))}
+
+                </div>):null}
+
                 {/* <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-4 mb-2 w-full" onClick={handleUpload}>Post</button> */}
 
                 {
-                    (newPlace && data.description)?(
+                    (newPlace && data.description && data.title)?(
                         <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-4 mb-2 w-full" onClick={handleUpload}>Post</button>
                     ):(
                         <button data-modal-toggle="defaultModal" type="button" class="btn no-animation mt-4 mb-2 w-full pointer-events-none opacity-20" >Post</button>

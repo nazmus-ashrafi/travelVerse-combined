@@ -18,8 +18,10 @@
     "axios": "^0.27.2",
     "daisyui": "^2.15.4",
     "express-async-handler": "^1.2.0",
+    "firebase": "^9.9.1",
     "framer-motion": "^6.3.16",
     "mapbox-gl": "^2.9.1",
+    "multer": "^1.4.5-lts.1",
     "node-fetch": "^3.2.8",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -39,11 +41,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-
     "server": "npm start --prefix ../server",
     "socket": "npm start --prefix ../socket",
-
-    "dev": "concurrently \"npm start\" \"npm run server\" \"npm run socket\""
+    "dev": "concurrently \"npm run server\" \"npm run socket\" \"npm start\""
   },
   "eslintConfig": {
     "extends": [

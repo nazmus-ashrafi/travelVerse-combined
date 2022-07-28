@@ -4,6 +4,8 @@ import { UilPen } from "@iconscout/react-unicons";
 import ExpandedPostMaker from './ExpandedPostMaker'; 
 import { useState } from "react";
 
+import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
+
 const UnExpandedPostMaker = ({showModal,setShowModal}) => {
 
     const [modalOpened, setModalOpened] = useState(false)
@@ -41,7 +43,7 @@ const UnExpandedPostMaker = ({showModal,setShowModal}) => {
                     <div class='flex justify-center items-center xl:p-3 p-1 space-x-3'>
                         <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal">Location</button>
 
-                        <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal ">Photo</button>
+                        <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal flex"><InsertPhotoRoundedIcon  color='primary'/><span className='ml-1'>Photo</span></button>
                         
                         <button class="flex btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal">
                             <svg class="w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

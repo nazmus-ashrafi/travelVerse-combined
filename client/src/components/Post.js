@@ -116,25 +116,24 @@ const Post = ({data,socket}) => {
     
     <div class="xl:grid xl:grid-cols-3 flex gap-6 w-full grid-rows-8 p-4 bg-base-100 shadow-xl card pt-10 pr-10 pl-10 mt-5 items-start">
 
+        {/* main post section */}
         <div class="col-span-1 row-span-3 text-center p-2 card rounded-none h-60">
-            <Map
-                    {...viewState}
-                    onMove={evt => setViewState(evt.viewState)}
-                    onRender={evt => setViewState(viewState)}
+          <Map
+                  {...viewState}
+                  onMove={evt => setViewState(evt.viewState)}
+                  onRender={evt => setViewState(viewState)}
 
-                    // style={{width: "w-full", height: 250}}
-                    attributionControl="none"
-                    mapStyle="mapbox://styles/mapbox/streets-v9"
-                    mapboxAccessToken={process.env.REACT_APP_MAPBOX}
-                    
+                  // style={{width: "w-full", height: 250}}
+                  attributionControl="none"
+                  mapStyle="mapbox://styles/mapbox/streets-v9"
+                  mapboxAccessToken={process.env.REACT_APP_MAPBOX}
+                  
 
-                >
-                  <Marker longitude={data.longitude} latitude={data.latitude} anchor="bottom" >
-                    <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
-                  </Marker>
-            </Map>
-            
-
+              >
+                <Marker longitude={data.longitude} latitude={data.latitude} anchor="bottom" >
+                  <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
+                </Marker>
+          </Map>
               
         </div>
 
@@ -191,9 +190,42 @@ const Post = ({data,socket}) => {
 
         </div>
 
+        {/* photos section */}
+        <div class="col-span-3 row-start-4 flex place-items-center mt-2 h-70 space-x-4 pr-5 pl-5 ">
+            
+          <div class="carousel carousel-center w-full  p-4 space-x-4 bg-base-200 rounded-box">
+            <div class="carousel-item">
+              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
+            </div>
+          </div>
+                  
+          
+          
+          
+
+        </div>
 
 
-        <div class="col-span-3 row-start-4 flex place-items-center mt-2 h-10 space-x-4 ">
+        {/* likes/comment/share section */}
+        <div class="col-span-3 row-start-5 flex place-items-center mt-2 h-10 space-x-4 ">
           
           <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline z-20" onClick={handleLike}>
             
@@ -215,8 +247,8 @@ const Post = ({data,socket}) => {
         </div>
         
 
-        
-        <div class="col-span-3 row-start-5 row-span-4">
+        {/* comment section */}
+        <div class="col-span-3 row-start-6 row-span-4">
           
           {/* comments */}
           <Comment/>

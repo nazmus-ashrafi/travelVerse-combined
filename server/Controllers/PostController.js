@@ -4,6 +4,9 @@ import mongoose from "mongoose";
 
 // import asyncHandler from "express-async-handler"
 
+import express from 'express'
+const router = express.Router()
+import multer from 'multer'
 
 
 
@@ -194,7 +197,7 @@ export const likePost = async (req, res) => {
 export const getTimelinePosts = async(req,res) =>{
     try {
 
-      const userId = req.params.id;
+    const userId = req.params.id;
     const currentUser = await UserModel.findById(userId);
     const userPosts = await PostModel.find({ userId: userId });
 
@@ -229,3 +232,4 @@ export const getUserPosts = async (req, res) => {
     res.status(500).json(error);
   }
 };
+

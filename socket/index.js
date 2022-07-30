@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
     // addNewUser(user, socket.id);
 
     // console.log(onlineUsers[0].user.user._id);
-    console.log([...onlineUsers]);
+    // console.log([...onlineUsers]);
     console.log("added nnew user");
 
   });

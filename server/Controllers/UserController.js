@@ -2,7 +2,10 @@ import UserModel from "../Models/userModel.js";
 import bcrypt from "bcrypt";
 
 
-// get a User
+
+// @desc    Get user data
+// @route   GET user/:id
+// @access  Private
 export const getUser = async (req, res) => {
   const id = req.params.id;
 

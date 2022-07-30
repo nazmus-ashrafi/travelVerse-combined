@@ -4,12 +4,19 @@ const API_URL = '/user/'
 
 // Get user
 // @route   GET /user/:id
-const getUser = async (userData) => {
+// Private route
+const getUser = async (user) => {
 
-    const id = userData
-    const response = await axios.get(API_URL + `${id}`)
+    const id = user.user._id
+    const token = user.token
 
-    console.log(response)
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    
+    const response = await axios.get(API_URL + `${id}`, config)
+
+    
     return response.data
    
   

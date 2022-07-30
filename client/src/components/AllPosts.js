@@ -28,7 +28,9 @@ const AllPosts = ({socket}) => {
 
     //running the api call on first render/refresh 
     dispatch(getTimeLinePosts(user.user._id))
-    dispatch(getUser(user.user._id))
+    dispatch(getUser(user)) // this populated the user state when the app first loads
+
+
 
     //running the api call every one minute
 

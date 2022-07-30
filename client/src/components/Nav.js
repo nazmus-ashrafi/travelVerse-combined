@@ -171,7 +171,7 @@ function refreshPage() {
 
 
                   {/* notification button */}
-                  {!isHide ?<NotificationBell socket={socket}/>:null}
+                  {!isHide ? <NotificationBell socket={socket}/> :null}
                 
 
                 {/* Profile dropdown */}

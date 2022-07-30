@@ -54,6 +54,8 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
         long: 90.38149930538287
     })
 
+    const [progressFull,setProgressFull]= useState(false)
+
     // redux
     const dispatch = useDispatch()
     const { user } = useSelector(
@@ -103,12 +105,11 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
             if (images) { // if there is an image with post
 
-                const promise = images.map((image) => {
+                images.map((image) => {
                     
 
-
                     const storage = getStorage();
-                    const fileName = Date.now() + image;
+                    const fileName = Date.now() + image.name;
                     const storageRef = ref(storage, fileName);
                     const uploadTask = uploadBytesResumable(storageRef, image);
 
@@ -118,6 +119,11 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                     (snapshot) => {
                         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+                        if(progress === 100){
+                            setProgressFull(true);
+                        }
+
                         console.log('Upload is ' + progress + '% done');
                         switch (snapshot.state) {
                         case 'paused':
@@ -154,10 +160,8 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                         // let url = URL.createObjectURL(downloadURL);
 
                         codedImages.push(`${downloadURL}`);
-                        console.log(codedImages)
+                        // console.log(codedImages)
                         }).then(() => {
-                            
-
                             
                             
                             if(codedImages.length === images.length){
@@ -199,11 +203,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
             }
 
-            
 
-
-            
-            
 
 
         }
@@ -418,6 +418,9 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
                 {
                     (newPlace && data.description && data.title)?(
+                        (progressFull)?(<button data-modal-toggle="defaultModal" class="btn loading mt-4 mb-2 w-full">Post</button>) :
+                        
+
                         <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-4 mb-2 w-full" onClick={handleUpload}>Post</button>
                     ):(
                         <button data-modal-toggle="defaultModal" type="button" class="btn no-animation mt-4 mb-2 w-full pointer-events-none opacity-20" >Post</button>

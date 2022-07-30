@@ -9,6 +9,7 @@ import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
   apiKey: "AIzaSyArCr0uQa-UgjmPTDADMxubaklidr08ryM",
   authDomain: "travelverse-e51f6.firebaseapp.com",
+  databaseURL: "gs://travelverse-e51f6.appspot.com",
   projectId: "travelverse-e51f6",
   storageBucket: "travelverse-e51f6.appspot.com",
   messagingSenderId: "803876815511",
@@ -21,3 +22,5 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 export default app
+
+

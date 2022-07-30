@@ -11,6 +11,7 @@ import { logout, reset } from '../features/auth/authSlice'
 import NotificationBell from './NotificationBell'
 
 import { useRef, useState } from "react";
+import Logo from './Logo'
 
 
 
@@ -133,9 +134,7 @@ function refreshPage() {
                 
                 <div className="flex-shrink-0 flex items-center sm:ml-6">
 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 221.506 297.001">
-                    <path id="location-pin-svgrepo-com" d="M148.5,0A110.9,110.9,0,0,0,37.747,110.8c0,91.026,99.729,179.9,103.976,183.645a10.255,10.255,0,0,0,13.555,0c4.245-3.739,103.975-92.618,103.975-183.645A110.9,110.9,0,0,0,148.5,0Zm0,79.693a31.106,31.106,0,1,1-30.765,31.1A30.971,30.971,0,0,1,148.5,79.693Z" transform="translate(-37.747)" fill="#ebebeb"/>
-                  </svg>
+                  <Logo size={'20'}/>
 
 
                   <h1 class="font-['Abril'] italic font-medium text-2xl text-sky-600 pb-0 flex flex-col text-center w-full mr-10 sm:mr-5 ml-1">Travelverse</h1>

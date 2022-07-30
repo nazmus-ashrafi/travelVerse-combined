@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost, deletePost, getPost, getTimelinePosts, likePost, updatePost, getUserPosts, uploadImage } from "../Controllers/PostController.js";
+import { createPost, deletePost, getPost, getTimelinePosts, likePost, updatePost, getUserPosts} from "../Controllers/PostController.js";
 const router = express.Router()
 import multer from 'multer'
 

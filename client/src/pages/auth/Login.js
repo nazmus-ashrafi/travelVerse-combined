@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux'
 import { login, reset } from '../../features/auth/authSlice'
 
+import Logo from '../../components/Logo'
 
 
 const Login = () => {
@@ -76,9 +77,7 @@ const Login = () => {
 
                 <div class="flex place-items-center">
 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 221.506 297.001">
-                  <path id="location-pin-svgrepo-com" d="M148.5,0A110.9,110.9,0,0,0,37.747,110.8c0,91.026,99.729,179.9,103.976,183.645a10.255,10.255,0,0,0,13.555,0c4.245-3.739,103.975-92.618,103.975-183.645A110.9,110.9,0,0,0,148.5,0Zm0,79.693a31.106,31.106,0,1,1-30.765,31.1A30.971,30.971,0,0,1,148.5,79.693Z" transform="translate(-37.747)" fill="#ebebeb"/>
-                  </svg>
+                  <Logo size={'35'}/>
 
                   <h1 class="font-['Abril'] font-bold italic text-5xl text-cyan-700 ml-2">Travelverse</h1>
 

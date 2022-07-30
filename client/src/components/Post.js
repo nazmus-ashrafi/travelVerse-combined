@@ -191,34 +191,27 @@ const Post = ({data,socket}) => {
         </div>
 
         {/* photos section */}
-        <div class="col-span-3 row-start-4 flex place-items-center mt-2 h-70 space-x-4 pr-5 pl-5 ">
+        
+        <div class="col-span-3 row-start-4 flex place-items-center h-70 space-x-4 pr-5 pl-5 ">
             
-          <div class="carousel carousel-center w-full  p-4 space-x-4 bg-base-200 rounded-box">
-            <div class="carousel-item">
-              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
-            </div> 
-            <div class="carousel-item">
-              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
-            </div> 
-            <div class="carousel-item">
-              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
-            </div> 
-            <div class="carousel-item">
-              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
-            </div> 
-            <div class="carousel-item">
-              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
-            </div> 
-            <div class="carousel-item">
-              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
-            </div> 
-            <div class="carousel-item">
-              <img src="https://placeimg.com/250/180/arch" class="rounded-box" />
+          {data.images && data.images[0]  ? 
+          <>
+            <div class="carousel carousel-center w-full  p-4 space-x-4 bg-base-200 rounded-box">
+
+              {data.images ? data.images.map((image) => (
+
+          
+                <div class="carousel-item">
+                  <img src={image} class="rounded-box w-60 h-60" />
+                </div> 
+
+              )) : null }
+              
+              
             </div>
-          </div>
-                  
           
-          
+          </>
+          : null }  
           
 
         </div>

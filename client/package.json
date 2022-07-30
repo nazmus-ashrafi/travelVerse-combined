@@ -43,7 +43,7 @@
     "eject": "react-scripts eject",
     "server": "npm start --prefix ../server",
     "socket": "npm start --prefix ../socket",
-    "dev": "concurrently \"npm run server\" \"npm run socket\" \"npm start\""
+    "dev": "concurrently \"npm start\" \"npm run server\" \"npm run socket\""
   },
   "eslintConfig": {
     "extends": [

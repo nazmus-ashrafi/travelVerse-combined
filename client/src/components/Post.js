@@ -20,9 +20,10 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 import { getTimeLinePosts } from '../features/post/postSlice';
 import NotificationBell from './NotificationBell'
+import CommentMaker from './CommentMaker'
 
 
-const Post = ({data,socket}) => {
+const Post = ({ data, socket }) => {
 
   // useEffect(() => {
   //   console.log(data)
@@ -242,17 +243,24 @@ const Post = ({data,socket}) => {
 
         {/* comment section */}
         <div class="col-span-3 row-start-6 row-span-4">
+          {/* {console.log(data.comments)} */}
           
           {/* comments */}
-          <Comment/>
+          {data.comments ? data.comments.map((comment) => (
+            <>
+            <Comment comment={comment}/> 
+            {/* comment is an id instead of an object*/}
+           
+            </>
+            
+            
+
+          )):null}
+          
         
         
 
-          {/* make a comment */}
-          {/* 50 rows */}
-          <textarea type="text" rows="1" placeholder="Write a comment..." class="input w-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200 h-full">
-            
-          </textarea>
+          <CommentMaker postId={data._id}/>
 
 
         </div>

@@ -96,8 +96,9 @@ const NotificationBell = ({socket}) => {
     const handleClick = (e) => {
      
 
+      dispatch(getUser(user)) // getUser can only be fed with a user, not id
+
       
-      dispatch(getUser(userDetails._id))
 
       setNotifications([])
       setIsOn(false)

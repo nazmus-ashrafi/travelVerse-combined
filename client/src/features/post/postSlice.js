@@ -22,6 +22,7 @@ const initialState = {
 }
 
 // Get timeline posts for user
+// updated
 export const getTimeLinePosts = createAsyncThunk(
     'post/timelinePosts',
     async ( _ , thunkAPI) => {
@@ -49,6 +50,7 @@ export const getTimeLinePosts = createAsyncThunk(
 
 
 // Create post
+// updated
 export const createPost = createAsyncThunk(
     'post/createPost',
     async (postData, thunkAPI) => {
@@ -142,6 +144,7 @@ export const deletePost = createAsyncThunk(
 
 
 // Create comment
+// updated
 export const createComment = createAsyncThunk(
     'post/createComment',
     async (commentData, thunkAPI) => {
@@ -200,17 +203,19 @@ export const getCommentsForPost = createAsyncThunk(
 )
 
 // Delete comment
+// updated
 export const deleteComment = createAsyncThunk(
     'post/deleteComment',
-    async (commentId, thunkAPI) => {
+    async (commentData, thunkAPI) => {
 
-      try {
+
+    try {
       
       const token = thunkAPI.getState().auth.user.token
       
-      console.log(commentId)
+      console.log(commentData.commentId)
     
-      return await postService.deleteComment(commentId, token)
+      return await postService.deleteComment(commentData, token)
 
       
     } catch (error) {
@@ -232,6 +237,7 @@ export const deleteComment = createAsyncThunk(
 
 
 // Like/Unlike
+// updated
 export const likePost = createAsyncThunk(
     'post/likePost',
     async (postData, thunkAPI) => {
@@ -366,8 +372,9 @@ export const postSlice = createSlice({
         state.isSuccess = true
         console.log(action.payload)
         
-        // state.timelinePosts.push = action.payload
-        state.timelinePosts.push(action.payload)
+        const index = state.timelinePosts.findIndex(post => post._id === action.payload.postId)
+        state.timelinePosts[index].comments.push(action.payload)
+        
       })
       .addCase(createComment.rejected, (state, action) => {
         state.isLoading = false
@@ -404,8 +411,11 @@ export const postSlice = createSlice({
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        console.log(action.payload)
-        state.timelinePosts.push(action.payload)
+        // console.log(action.payload)
+        // state.timelinePosts.push(action.payload) 
+        const index = state.timelinePosts.findIndex(post => post._id === action.payload.postId)
+        const commentIndex = state.timelinePosts[index].comments.findIndex(comment => comment._id === action.payload._id)
+        state.timelinePosts[index].comments.splice(commentIndex, 1)
       })
       .addCase(deleteComment.rejected, (state, action) => {
         state.isLoading = false

@@ -1,5 +1,6 @@
 import PostModel from "../Models/postModel.js";
 import UserModel from "../Models/userModel.js";
+import CommentModel from "../Models/commentModel.js";
 import mongoose from "mongoose";
 
 // import asyncHandler from "express-async-handler"
@@ -193,7 +194,7 @@ export const likePost = async (req, res) => {
 
 // @desc    Get all timeline posts
 // @route   GET /id/timeline
-// @access  Private
+// @access  
 export const getTimelinePosts = async(req,res) =>{
     try {
 
@@ -228,6 +229,76 @@ export const getUserPosts = async (req, res) => {
     const currentUserPosts = await PostModel.find({ userId: userId });
     res.status(200).json(currentUserPosts);
     
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+
+// @desc    Add comment to post
+// @route   POST /:postid/addcomment
+// @access  Private
+export const addComment = async (req, res, next) => {
+
+  const user = await UserModel.findById(req.body.userId);
+  const newComment = new CommentModel({ desc: req.body.desc, user: req.body.userId, postId: req.params.postid });
+
+  try {
+
+    const savedComment = await newComment.save();
+    const post = await PostModel.findById(req.params.postid);
+    
+  
+    
+    await post.updateOne({ $push: { 
+      comments: savedComment
+                
+    } }, { timestamps: false });
+          
+
+    res.status(200).send(savedComment);
+
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc    Delete comment
+// @route   PUT /:commentid/deletecomment
+// @access  Private
+export const deleteComment = async (req, res, next) => {
+
+  const userCommenter = await UserModel.findById(req.body.commenterId);
+  const post = await PostModel.findById(req.body.postId);
+  const commentId = req.params.commentid;
+  
+
+  try {
+
+    const comment = await CommentModel.findById(commentId);
+    // console.log((comment.user).toString())
+    // console.log((userCommenter._id).toString())
+
+    if ((comment.user).toString() === (userCommenter._id).toString()) {
+
+      await comment.deleteOne();
+
+      // console.log(comment)
+      // console.log(userCommenter)
+
+
+      await post.updateOne({ $pull: { 
+        comments: comment 
+
+                
+      }}, { timestamps: false });
+
+      console.log(comment)
+      res.status(200).json(comment);
+    } else {
+      res.status(403).json("Action forbidden");
+    }
+
   } catch (error) {
     res.status(500).json(error);
   }

@@ -1,9 +1,31 @@
 import React from 'react'
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+
+import { useRef, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteComment } from '../features/post/postSlice';
 
 
-const Comment = () => {
+const Comment = ({comment}) => {
+
+  // redux 
+  const dispatch = useDispatch();
+  const { user } = useSelector(
+        (state) => state.auth
+    )
+  //
+
+  // console.log(comment)
+
+  const handleDeleteComment = () => {
+    // console.log('delete comment')
+    console.log(comment._id,user.user._id,comment.postId)
+
+    dispatch(deleteComment({commentId:comment._id, commenterId:user.user._id, postId:comment.postId}))
+  }
 
   return (
+    
     <>
     {/* comments */}
           <div class="pb-5 flex justify-start items-center">
@@ -19,8 +41,35 @@ const Comment = () => {
             <h3 class="w-full text-lg p-2 rounded-xl resize-none border-solid border-2 border-base-200 bg-base-200 h-full"
             >
 
-              This is a comment.
+              {comment.desc} by {comment.user}
             </h3>
+
+
+            {/* triple dot dropdown */}
+            {comment.user === user.user._id &&
+              <div class="dropdown dropdown-end dropdown-hover ml-2">
+            
+                <button class="btn btn-ghost btn-circle ">
+
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="5" viewBox="0 0 23 5">
+                    <g id="Group_1" data-name="Group 1" transform="translate(-1547 -727)">
+                      <circle id="Ellipse_21" data-name="Ellipse 21" cx="2.5" cy="2.5" r="2.5" transform="translate(1547 727)" fill="#a7adb9"/>
+                      <circle id="Ellipse_22" data-name="Ellipse 22" cx="2.5" cy="2.5" r="2.5" transform="translate(1556 727)" fill="#a7adb9"/>
+                      <circle id="Ellipse_23" data-name="Ellipse 23" cx="2.5" cy="2.5" r="2.5" transform="translate(1565 727)" fill="#a7adb9"/>
+                    </g>
+                  </svg>
+
+                </button>
+              
+                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52">
+                  <li onClick={handleDeleteComment}><a><DeleteOutlineRoundedIcon/>Delete </a></li>
+                  
+                </ul>
+              </div>
+
+            
+            }
+          
               
           </div>
     </>

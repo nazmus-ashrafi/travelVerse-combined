@@ -58,10 +58,7 @@ const postSchema = new Schema(
       type: Array,
       default: [],
     },
-    comments: [{
-       type: Schema.Types.ObjectId,
-       ref: 'Comment'
-    }],
+    comments: [],
 
     date: {
       type: Date,

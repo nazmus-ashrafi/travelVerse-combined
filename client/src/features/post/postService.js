@@ -4,6 +4,8 @@ const API_URL = '/post/'
 
 // Get timeline posts for user
 // @route   GET /posts/id/timeline
+// @access  
+// updated (protection pending)
 const getTimelinePosts = async (userData) => {
 
   const token = userData.token
@@ -25,6 +27,8 @@ const getTimelinePosts = async (userData) => {
 
 // Create post
 // @route   POST /api/posts
+// @access  
+// updated (protection pending)
 const createPost = async (postData,token) => {
 
   // console.log(token)
@@ -79,8 +83,10 @@ const deletePost = async ( postId, token) => {
 }
 
 
-// Create comment
-// @route   POST /api/posts/:id/comment
+// @desc    Add comment to post
+// @route   POST /:postid/addcomment
+// @access  Private
+// updated
 const createComment = async ( commentData, postId, token) => {
 
   console.log(token)
@@ -91,7 +97,7 @@ const createComment = async ( commentData, postId, token) => {
     headers: { Authorization: `Bearer ${token}` }
   };
 
-  const response = await axios.post(API_URL +  postId + "/comment" , commentData, config)
+  const response = await axios.post(API_URL +  postId + "/addcomment" , commentData, config)
 
   return response.data
 }
@@ -112,8 +118,10 @@ const getCommentsForPost  = async (postId, token) => {
 }
 
 // Delete comment
-// @route   DELETE /api/posts/:id/deletecomment
-const deleteComment = async ( commentId, token) => {
+// @route   PUT /:commentid/deletecomment
+// @access  Private
+// updated
+const deleteComment = async ( commentData, token) => {
 
   console.log(token)
   
@@ -121,7 +129,7 @@ const deleteComment = async ( commentId, token) => {
     headers: { Authorization: `Bearer ${token}` }
   };
 
-  const response = await axios.delete(API_URL + commentId + "/deletecomment" , config)
+  const response = await axios.put(API_URL + commentData.commentId + "/deletecomment" ,commentData, config)
 
   return response.data
 }
@@ -129,6 +137,8 @@ const deleteComment = async ( commentId, token) => {
 
 // Like/Unlike post
 // @route   PUT post/:id/like
+// @access 
+// updated
 const likePost = async ( data) => {
 
   // console.log(data.postId)

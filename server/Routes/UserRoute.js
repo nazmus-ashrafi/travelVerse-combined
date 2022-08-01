@@ -5,7 +5,7 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get('/:id',protect, getUser)
+router.get('/:id', protect, getUser)
 router.put('/:id', updateUser)
 router.delete('/:id', deleteUser)
 

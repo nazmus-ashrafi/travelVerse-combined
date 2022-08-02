@@ -64,7 +64,7 @@ const AllPosts = ({socket}) => {
   return (
     <div>
         {timelinePosts ? timelinePosts.map((post, id) => {
-            return <Post data={post} key={id} socket={socket} />;
+            return <Post key={id} data={post}  socket={socket} hidden={false} />;
           }):null}
     </div>
   )

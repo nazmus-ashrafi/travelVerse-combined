@@ -155,6 +155,7 @@ const likePost = async ( data) => {
 
 
 
+
 const postService = {
   getTimelinePosts, 
   createPost,
@@ -166,6 +167,8 @@ const postService = {
   deleteComment,
 
   likePost,
+
+
  
   
 }

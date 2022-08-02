@@ -97,7 +97,15 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                 description: data.description,
                 latitude: newPlace.lat,
                 longitude: newPlace.long,
-                images: null
+                images: null,
+                
+                isSharedPost: false,
+                
+
+                // isSharedPost: true,
+                // sharedPostId: "62e6ac743c78d143c17d8165",
+                
+                
             };
 
             // console.log(newPost)

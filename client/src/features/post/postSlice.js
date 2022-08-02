@@ -5,6 +5,7 @@ import postService from './postService'
 const user = JSON.parse(localStorage.getItem('user'))
 
 const timelinePosts = []
+
 const comments = []
 const likes = []
 // const post = null
@@ -265,11 +266,6 @@ export const likePost = createAsyncThunk(
 
 
 
-
-
-
-
-
 export const postSlice = createSlice({
   name: 'post',
   initialState,
@@ -394,7 +390,7 @@ export const postSlice = createSlice({
         state.isSuccess = true
     
         state.comments = [...state.comments, ...action.payload]
-        console.log(state.comments)
+        // console.log(state.comments)
       })
       .addCase(getCommentsForPost.rejected, (state, action) => {
         state.isLoading = false
@@ -457,7 +453,6 @@ export const postSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
-
 
    }
 })

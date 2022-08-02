@@ -1,9 +1,12 @@
 import React from 'react'
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteComment } from '../features/post/postSlice';
+import { deleteComment,getAnyUser } from '../features/post/postSlice';
+
+import axios from 'axios'
+import { Skeleton } from '@mui/material';
 
 
 const Comment = ({comment}) => {
@@ -13,7 +16,12 @@ const Comment = ({comment}) => {
   const { user } = useSelector(
         (state) => state.auth
     )
+
+  const { users } = useSelector(
+        (state) => state.post
+    )
   //
+
 
   // console.log(comment)
 
@@ -23,6 +31,22 @@ const Comment = ({comment}) => {
 
     dispatch(deleteComment({commentId:comment._id, commenterId:user.user._id, postId:comment.postId}))
   }
+
+  // get commenter details
+  const [commenterUser, setCommenterUser] = useState(null);
+
+  const getCommenterUserDetails = async () => {
+    const response = await axios.get(process.env.REACT_APP_POST_URL + comment.user + "/getanyuser")
+    
+    setCommenterUser(response.data)
+    
+  }
+
+  useEffect(() => {
+    getCommenterUserDetails()
+  }, []);
+
+  //
 
   return (
     
@@ -41,7 +65,7 @@ const Comment = ({comment}) => {
             <h3 class="w-full text-lg p-2 rounded-xl resize-none border-solid border-2 border-base-200 bg-base-200 h-full"
             >
 
-              {comment.desc} by {comment.user}
+              {comment.desc} by {commenterUser ? commenterUser.username : <Skeleton/>}
             </h3>
 
 

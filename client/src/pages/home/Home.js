@@ -8,6 +8,7 @@ import UnExpandedPostMaker from '../../components/UnExpandedPostMaker'
 import AllPosts from '../../components/AllPosts'
 import NotificationBell from '../../components/NotificationBell'
 
+
 import { useSelector, useDispatch } from 'react-redux'
 import { useState, useEffect } from "react";
 
@@ -90,6 +91,7 @@ export default function Home({socket}) {
 
                 <UnExpandedPostMaker />
                 <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
+
 
                 {/* post */}
                 <AllPosts socket={socket}/>

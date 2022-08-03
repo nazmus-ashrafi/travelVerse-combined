@@ -28,6 +28,7 @@ import NotificationBell from './NotificationBell'
 import CommentMaker from './CommentMaker'
 import Comment from "./Comment"
 import Post from './Post';
+import ExpandedSharedPostMaker from './ExpandedSharedPostMaker'
 
 
 const SharedPost = ({ data, socket, hidden }) => {
@@ -35,6 +36,18 @@ const SharedPost = ({ data, socket, hidden }) => {
     // useEffect(() => {
   //   console.log(data)
   // },[]);
+
+    // share functionality-----------------------------------------------------
+  const [shareModalOpened, setShareModalOpened] = useState(false)
+
+  const onShareClick = () => {
+    setShareModalOpened(true)
+
+    console.log(sharedPost)
+  }
+
+
+  //-------------------------------------------------------------------------
 
   // get shared post details
   const [sharedPost, setSharedPost] = useState({});
@@ -139,6 +152,8 @@ const SharedPost = ({ data, socket, hidden }) => {
 
   //
 
+  const [hover, setHover] = useState(false)
+
 
 
   return (
@@ -148,9 +163,9 @@ const SharedPost = ({ data, socket, hidden }) => {
 
       {/* Shared post desc */}
       <div class="flex flex-col w-full border-opacity-50">
-        <div class="grid h-full card bg-base-100 rounded-box place-items-center">
 
-          <div class="xl:grid xl:grid-cols-10 gap-0 w-full p-0 bg-base-100 shadow-xl card  pr-10 pl-10 mt-5 items-start">
+        <div class="grid h-full card bg-base-100 rounded-box place-items-center">
+          <div class={`xl:grid xl:grid-cols-10 gap-0 w-full p-0 bg-base-100 shadow-xl card  pr-10 pl-10 mt-5 items-start ${hover && data.description.length<350?"h-28":""}`}>
 
             {/* avatar */}
             <div class="avatar pr-1 ">
@@ -164,19 +179,22 @@ const SharedPost = ({ data, socket, hidden }) => {
 
             
             {/* triple dot dropdown */}
-            <div class="dropdown dropdown-end dropdown-hover col-span-1 ">
+            <div class="dropdown dropdown-left dropdown-hover col-span-1" 
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+            >
             
-                <button class="btn btn-ghost btn-circle ">
+              <button class="btn btn-ghost btn-circle">
 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="5" viewBox="0 0 23 5">
-                    <g id="Group_1" data-name="Group 1" transform="translate(-1547 -727)">
-                      <circle id="Ellipse_21" data-name="Ellipse 21" cx="2.5" cy="2.5" r="2.5" transform="translate(1547 727)" fill="#a7adb9"/>
-                      <circle id="Ellipse_22" data-name="Ellipse 22" cx="2.5" cy="2.5" r="2.5" transform="translate(1556 727)" fill="#a7adb9"/>
-                      <circle id="Ellipse_23" data-name="Ellipse 23" cx="2.5" cy="2.5" r="2.5" transform="translate(1565 727)" fill="#a7adb9"/>
-                    </g>
-                  </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="5" viewBox="0 0 23 5">
+                  <g id="Group_1" data-name="Group 1" transform="translate(-1547 -727)">
+                    <circle id="Ellipse_21" data-name="Ellipse 21" cx="2.5" cy="2.5" r="2.5" transform="translate(1547 727)" fill="#a7adb9"/>
+                    <circle id="Ellipse_22" data-name="Ellipse 22" cx="2.5" cy="2.5" r="2.5" transform="translate(1556 727)" fill="#a7adb9"/>
+                    <circle id="Ellipse_23" data-name="Ellipse 23" cx="2.5" cy="2.5" r="2.5" transform="translate(1565 727)" fill="#a7adb9"/>
+                  </g>
+                </svg>
 
-                </button>
+              </button>
               
               <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52">
                 <li><a>Update</a></li>
@@ -187,6 +205,8 @@ const SharedPost = ({ data, socket, hidden }) => {
 
       
           </div>
+
+          
 
         </div>
 
@@ -222,7 +242,10 @@ const SharedPost = ({ data, socket, hidden }) => {
 
           <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline "><ModeCommentRoundedIcon fontSize='small'/><span class='ml-2' >Comment</span></button>
 
-          <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline"><ReplyRoundedIcon/><span class='ml-2' >Share</span></button>
+          
+          <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline" onClick={onShareClick}><ReplyRoundedIcon/><span class='ml-2' >Share</span></button>
+
+          
 
         </div>
 
@@ -245,6 +268,18 @@ const SharedPost = ({ data, socket, hidden }) => {
           <CommentMaker postId={data._id}/>
 
         </div>
+
+        {sharedPost.likes?
+          <ExpandedSharedPostMaker
+          showModal={shareModalOpened}
+          setShowModal={setShareModalOpened}
+          sharedPost = {sharedPost}
+
+          key={sharedPost._id} 
+          socket={socket} 
+          />
+        : null }
+        
 
 
         

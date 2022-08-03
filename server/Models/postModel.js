@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 const requiredNumber = {
   type: Number,
-  required: [true,'Please add a longitude and latitude'],
+  required: [false,'Please add a longitude and latitude'],
 };
 
 const postSchema = new Schema(
@@ -71,11 +71,15 @@ const postSchema = new Schema(
     },
 
     // a post may or maynot be a shared post
-    // sharedPost:{
-    //   type: Schema.Types.ObjectId,
-    //   // required: true,
-    //   ref: "Post",
-    // }
+    isSharedPost: {
+      type: Boolean,
+    },
+    sharedPostId:{
+      type: String,
+      // type: Schema.Types.ObjectId,
+      // ref: "Post",
+    },
+    
 
   },
   //---------------------

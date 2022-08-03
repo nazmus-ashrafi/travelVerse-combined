@@ -8,9 +8,13 @@ import PostRoute from './Routes/PostRoute.js'
 
 import {errorHandler} from "./middleware/errorMiddleware.js"
 
+import cors from 'cors'
+
 // Routes
 
 const app = express();
+app.use(cors())
+
 
 
 // Middleware
@@ -37,6 +41,7 @@ mongoose.connect(process.env.MONGO_DB, {
 app.use('/auth', AuthRoute)
 app.use('/user', UserRoute)
 app.use('/post', PostRoute)
+
 
 
 // error handler

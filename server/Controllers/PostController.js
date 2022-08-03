@@ -304,3 +304,59 @@ export const deleteComment = async (req, res, next) => {
   }
 };
 
+
+
+
+
+// -------------------------------- Functionality which will not change redux state
+// -------------------------------- To be called directly from the component
+
+// @desc    Get any user data
+// @route   GET post/:id/getanyuser
+// @access  
+export const getAnyUser = async (req, res) => {
+  const id = req.params.userid;
+  
+
+  try {
+    const user = await UserModel.findById(id);
+    // console.log(user)
+
+    if (user) {
+      const { password, ...otherDetails } = user._doc;
+      
+
+      res.status(200).json(otherDetails);
+
+    } else {
+      res.status(404).json("No such user exists");
+    }
+  } catch (error) {
+    res.status(500).json(error);
+    
+  }
+};
+
+// @desc    Get any post data
+// @route   GET post/:id/getanypost
+// @access  
+export const getAnyPost = async (req, res) => {
+  const id = req.params.postid;
+  
+
+  try {
+    const post = await PostModel.findById(id);
+    // console.log(user)
+
+    if (post) {
+      
+      res.status(200).json(post);
+
+    } else {
+      res.status(404).json("No such post exists");
+    }
+  } catch (error) {
+    res.status(500).json(error);
+    
+  }
+};

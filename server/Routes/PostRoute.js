@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost, deletePost, getPost, getTimelinePosts, likePost, updatePost, getUserPosts, addComment, deleteComment} from "../Controllers/PostController.js";
+import { createPost, deletePost, getPost, getTimelinePosts, likePost, updatePost, getUserPosts, addComment, deleteComment,getAnyUser, getAnyPost} from "../Controllers/PostController.js";
 const router = express.Router()
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -16,6 +16,11 @@ router.get("/:id/posts", getUserPosts)
 
 router.post("/:postid/addcomment", protect, addComment)
 router.put("/:commentid/deletecomment", protect, deleteComment)
+
+// Functionality which will not change redux state
+// To be called directly from the component
+router.get("/:userid/getanyuser", getAnyUser)
+router.get("/:postid/getanypost", getAnyPost)
 
 
 

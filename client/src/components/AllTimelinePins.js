@@ -13,20 +13,16 @@ import MarkerPin from './MarkerPin';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-const AllTimelinePins = () => {
+const AllTimelinePins = ({posts}) => {
   // redux 
   const dispatch = useDispatch();
   const { user } = useSelector(
-        (state) => state.auth
-    )
-
-  let { timelinePosts, isLoading } = useSelector((state) => state.post);
+    (state) => state.auth
+  )
 
   useEffect(() => {
-    dispatch(getTimeLinePosts(user.user._id));
 
-    
-    
+
   }, []);
 
   // console.log(timelinePosts)
@@ -39,7 +35,7 @@ const AllTimelinePins = () => {
       
       {
         
-        timelinePosts ? timelinePosts.map((post, id) => {
+        posts ? posts.map((post, id) => {
 
 
           if(post.isSharedPost === true){

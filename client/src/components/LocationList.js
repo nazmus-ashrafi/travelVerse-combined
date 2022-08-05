@@ -5,19 +5,30 @@ import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 
 
 
-const LocationList = ({ownPosts, onSelectLocation}) => {
+const LocationList = ({posts, onSelectLocation}) => {
+
+    const [check, setChecked] = useState();
+
+    useEffect(()=>{
+        
+  
+    },[])
 
 
 
   return (
     <div>
-        <div className="h-screen overflow-auto">
+        <div className="">
+
             
 
-            {ownPosts.map((post) => (
+            
+
+            {posts.map((post) => (
 
                 
                 <div className="">
+                    
                     
 
                     <div class="collapse mt-4 mb-2 rounded-xl mr-1 ml-5 ">
@@ -25,14 +36,21 @@ const LocationList = ({ownPosts, onSelectLocation}) => {
 
                         
                         
-                        <div class="collapse-title bg-base-300 text-primary-content peer-checked:bg-base-300 peer-checked:text-secondary-content flex justify-between">
-                            <div class='ml-9'>
-                                {post.isSharedPost?post.description:post.title}
+                        <div class="collapse-title bg-base-300 text-primary-content peer-checked:bg-base-300 peer-checked:text-secondary-content grid grid-flow-col grid-cols-7 gap-4">
+                            <div class=' col-start-1 col-span-5 ml-5 '>
+                                {post.isSharedPost ? post.description : post.title}
                             </div>
                             
-                            {post.isSharedPost? <div class="badge badge-success ml-96 mt-0.5">shared</div> : null}
+                            <div class='col-start-6 col-span-1  '>
+                                
+                                {post.isSharedPost? <div class="badge badge-success mt-0.5 mr-2">shared</div> : null}
+                                
+                                
+                            </div>
+                            <div class='col-start-7 col-span-1 '>
+                                <UnfoldMoreIcon className=''/>
+                            </div>
                             
-                            <UnfoldMoreIcon className=''/>
                             
                             
                         </div>
@@ -46,6 +64,7 @@ const LocationList = ({ownPosts, onSelectLocation}) => {
                                     type="radio"
                                     name="location"
                                     class="radio"
+                                    // checked={false}
                     
                                     // defaultChecked={post._id === ownPosts[0]._id}
                                     onClick={() => onSelectLocation(post)}

@@ -9,10 +9,16 @@ import LocationList from '../../components/LocationList';
 
 import { useDispatch, useSelector } from "react-redux";
 import { getTimeLinePosts } from '../../features/post/postSlice';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import ZoomOutRoundedIcon from '@mui/icons-material/ZoomOutRounded';
+
+import {useNavigate} from 'react-router-dom';
 
 
 
 const VisualizeCompare = () => {
+
+    const navigate = useNavigate();
 
     // redux
 
@@ -48,10 +54,20 @@ const VisualizeCompare = () => {
         pitch: 0
     };
 
-  const onSelectLocation = useCallback(({longitude, latitude}) => {
-    mapRef.current?.flyTo({center: [longitude, latitude], duration: 3000,zoom: 12});
+  const onSelectLocation = useCallback(({longitude, latitude,zoom}) => {
+    mapRef.current?.flyTo({center: [longitude, latitude], duration: 3000,zoom: zoom?zoom:12});
     // console.log(longitude, latitude)
   }, []);
+
+  const [isOn, setIsOn] = useState(false);
+
+  const swapOnClick = () => {
+    setIsOn(true);
+  }
+
+  const swapOffClick = () => {
+    setIsOn(false);
+  }
 
   return (
 
@@ -69,11 +85,48 @@ const VisualizeCompare = () => {
 
                 class="col-start-1 col-span-2 "
             >
-                <AllTimelinePins/>
+                {isOn?<AllTimelinePins posts={timelinePosts}/>: <AllTimelinePins posts={ownPosts}/>}
+                
             </Map>
+
+            
       
             {/* <ControlPanel onSelectCity={onSelectCity} /> */}
-            <LocationList ownPosts={ownPosts} onSelectLocation={onSelectLocation} class="col-start-2 col-span-2 "/>
+            <div class="col-start-2 col-span-2 h-screen overflow-auto ">
+
+                <div class="flex justify-between">
+                    <div class='flex'>
+                        <h1 class="mt-5 ml-6">Follower's posts:</h1>
+                
+                        <label class="swap mt-3 ml-2">
+                            <input type="checkbox" />
+                            <div class="swap-on" onClick={swapOnClick} >ON</div>
+                            <div class="swap-off" onClick={swapOffClick} >OFF</div>
+                        </label>
+                    </div>
+                    
+                    <div class='p-1 mt-3 flex gap-3'>
+                        
+                        <div class="cursor-pointer">
+                            <ZoomOutRoundedIcon fontSize='large' onClick={() => onSelectLocation(initialViewState)}/>
+                        </div>
+
+                        <div class="cursor-pointer">
+                            <AccountCircleRoundedIcon onClick={() => navigate(-1)} />
+                        </div>
+                        
+                    </div>
+
+                    
+                    
+                    
+                </div>
+                
+
+                <LocationList posts={isOn ? timelinePosts : ownPosts} onSelectLocation={onSelectLocation} class=""/>
+
+            </div>
+            
 
         </div>
       

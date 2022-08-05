@@ -45,6 +45,7 @@ const ProfilePage = () => {
     )
 
     const dispatch = useDispatch()
+    let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
     useEffect(()=>{
         
@@ -136,7 +137,7 @@ const ProfilePage = () => {
                 <motion.div class="card w-72 bg-base-100 shadow-xl grid place-items-center z-10">
 
                     {/* vertical slide button */}
-                    <button className='slideBtn rounded-md  btn-accent outline-transparent btn-sm mt-5 ml-5 absolute top-0 left-0' onClick={slideButtonClick}>
+                    <button className='slideBtn rounded-md  btn-secondary outline-transparent btn-sm mt-5 ml-5 absolute top-0 left-0' onClick={slideButtonClick}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="12.91" height="17.879" viewBox="0 0 12.91 17.879">
                         <path id="XMLID_225_" d="M12.739,75.172a.587.587,0,0,0-.83,0L6.456,80.625,1,75.172a.587.587,0,0,0-.83.83L6.041,81.87a.587.587,0,0,0,.83,0L12.739,76A.587.587,0,0,0,12.739,75.172Z" transform="translate(-0.001 -64.163)" fill="#fff"/>
                         <path id="XMLID_225_2" data-name="XMLID_225_" d="M12.738.172a.587.587,0,0,0-.83,0L6.455,5.625,1,.172A.587.587,0,0,0,.172,1L6.04,6.87a.587.587,0,0,0,.83,0L12.738,1A.587.587,0,0,0,12.738.172Z" transform="translate(12.91 7.042) rotate(-180)" fill="#fff"/>
@@ -219,7 +220,7 @@ const ProfilePage = () => {
                     mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                 >
 
-                    <AllTimelinePins/>
+                    <AllTimelinePins posts={timelinePosts}/>
 
                 </Map>
                 

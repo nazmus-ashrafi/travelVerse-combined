@@ -1,41 +1,72 @@
-{/* likes/comment/share section */}
-              <div class="col-span-3 row-start-5 flex place-items-center mt-2 h-10 space-x-4 ">
+import React from 'react'
+import {useRef, useCallback, useEffect, useState} from 'react';
+
+
+const LocationList = ({ownPosts, onSelectLocation}) => {
+
+
+
+  return (
+    <div>
+        <div className="control-panel">
+            {/* {CITIES.filter(city => city.state === 'California').map((city, index) => (
+                <div key={`btn-${index}`} className="input">
+                    <input
+                        type="radio"
+                        name="city"
+                        id={`city-${index}`}
+                        defaultChecked={city.city === 'San Francisco'}
+                        onClick={() => props.onSelectCity(city)}
+                    />
+                    <label htmlFor={`city-${index}`}>{city.city}</label>
+                </div>
+            ))} */}
+
+            {ownPosts.map((post) => (
+
                 
-                <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline z-20" onClick={handleLike}>
-                  
-                  <span class='mr-8'>
-                    {likes} {likes <= 1?"like":"likes"}
-                  </span>
-                  
+                <div className="">
+                    {/* <input
+                        type="radio"
+                        name="location"
+        
+                        // defaultChecked={post._id === ownPosts[0]._id}
+                        onClick={() => onSelectLocation(post)}
+                    />
+                    <label>{post.title}</label> */}
 
-                  {liked ? <ThumbUpAltRoundedIcon fontSize='small'/> : <ThumbUpAltOutlinedIcon fontSize='small'/> }
-                  
-                  <span class='ml-2' >Like</span>
-                </button>
+                    <div class="collapse mt-4 mb-2 rounded-md mr-3">
+                        <input type="checkbox" class="peer"  /> 
+                        
+                        <div class="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
 
+                            {post.title}
+                            
+                        </div>
+                        
 
-                <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline "><ModeCommentRoundedIcon fontSize='small'/><span class='ml-2' >Comment</span></button>
-
-                <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline"><ReplyRoundedIcon/><span class='ml-2' >Share</span></button>
-
-              </div>
-
-
-          
-              {/* comment section */}
-              <div class="col-span-3 row-start-6 row-span-4">
-                {/* {console.log(data.comments)} */}
+                        <div class="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content"> 
+                            <input
+                                type="radio"
+                                name="location"
                 
-                {/* comments */}
-                {data.comments ? data.comments.map((comment) => (
-                  <>
-                    <Comment comment={comment}/> 
-                    {/* comment is an id instead of an object*/}
-                
-                  </>
+                                // defaultChecked={post._id === ownPosts[0]._id}
+                                onClick={() => onSelectLocation(post)}
+                            />
 
-                )):null}
-                
-                <CommentMaker postId={data._id}/>
+                            <p>{post.description}</p>
 
-              </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            ))}
+
+
+        </div>
+    </div>
+  )
+}
+
+export default LocationList

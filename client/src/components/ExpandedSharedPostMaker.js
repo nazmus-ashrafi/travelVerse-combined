@@ -66,6 +66,9 @@ const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost}) => {
 
                 isSharedPost: true,
                 sharedPostId: sharedPost._id,
+
+                latitude: sharedPost.latitude,
+                longitude: sharedPost.longitude,
                 
                 
             };
@@ -203,7 +206,9 @@ const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost}) => {
 
                                 >
                                     <Marker longitude={sharedPost.longitude} latitude={sharedPost.latitude} anchor="bottom" >
-                                    <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
+
+                                     <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
+                                     
                                     </Marker>
                             </Map>
               

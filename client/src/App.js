@@ -3,6 +3,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register"
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile"
+import VisualizeCompare from "./pages/profile/VisualizeCompare";
 
 import { Routes, Route, Navigate, Router } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -66,6 +67,10 @@ function App() {
           <Route
             path="/register"
             element={user ? <Navigate to="../home" /> : <Register />}
+          />
+          <Route
+            path="/visualize"
+            element={user ? <VisualizeCompare/> : <Navigate to="../login" />}
           />
           <Route
             path="*"

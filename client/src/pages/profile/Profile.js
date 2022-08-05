@@ -6,6 +6,7 @@ import { UilPen } from "@iconscout/react-unicons";
 
 //material icons
 import HomeMaxOutlinedIcon from '@mui/icons-material/HomeMaxOutlined';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 
 import { useDimensions } from "../../dimentions/Dimentions"
 
@@ -26,10 +27,8 @@ import { createPost, updatePost, reset, getTimeLinePosts } from '../../features/
 
 
 
-
-
-
 const ProfilePage = () => {
+    
     const constraintsRef = useRef(null);
     const { width,height } = useDimensions(constraintsRef);
 
@@ -48,13 +47,20 @@ const ProfilePage = () => {
     const dispatch = useDispatch()
 
     useEffect(()=>{
-
-    
+        
   
     },[])
 
     //
 
+    const homeOnClick = () =>{
+        // Map.remove()
+    }
+
+
+    const visualizeOnClick = () =>{
+        
+    }
  
 
 
@@ -101,6 +107,8 @@ const ProfilePage = () => {
 
     
 
+    
+
   return (
 
     
@@ -135,29 +143,34 @@ const ProfilePage = () => {
                         </svg>
                     </button>
 
-                    {/* <UilPen
-                        width="2rem"
-                        height="1.2rem"
-
-                        // onClick={() => setProfileModalOpened(true)}
-                        // for="my-modal-3"
-                        // className='mt-6 mr-5 absolute top-0 right-0  btn modal-button'
-                    /> */}
-
+                    {/* side buttons */}
                     <div className='sideButtons'>
+
                         <label for="home" class="mt-6 mr-6 absolute top-0 right-0 modal-button cursor-pointer">
                             <Link to={'/home'}>
-                                <HomeMaxOutlinedIcon/>
+                                <HomeMaxOutlinedIcon onClick={homeOnClick}/>
+                                {/* map.remove */}
                             </Link>
                             
                         </label>
 
-                        <label for="profile-modal" class="mt-16 mr-5 absolute top-0 right-0 modal-button cursor-pointer">
+                        <label for="visualize-compare" class="mt-16 mr-6 absolute top-0 right-0 modal-button cursor-pointer">
+                            <Link to={'/visualize'}>
+                                <RadioButtonCheckedIcon onClick={visualizeOnClick}/>
+                            </Link>
+                            
+                        </label>
+
+                        <label for="profile-modal" class="mt-28 mr-5 absolute top-0 right-0 modal-button cursor-pointer">
                             <UilPen
                             width="2rem"
                             height="1.2rem"                
                             />
                         </label>
+
+                        
+
+
                     </div>
 
                     

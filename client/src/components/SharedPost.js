@@ -142,7 +142,7 @@ const SharedPost = ({ data, socket, hidden }) => {
     
     longitude: data.longitude,
     latitude: data.latitude,
-    zoom: 6
+    zoom: 11 // 6
                     
   })
 

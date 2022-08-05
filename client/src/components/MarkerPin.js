@@ -5,10 +5,10 @@ import {Marker} from 'react-map-gl'
 import "mapbox-gl/dist/mapbox-gl.css"
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded'
 
-const MarkerPin = ({data,color}) => {
+const MarkerPin = ({ data, color, size }) => {
 
     const [viewport, setViewport] = useState({
-        zoom: 8
+        zoom: size // 8 is normal
     });
 
     // console.log(color)
@@ -16,7 +16,7 @@ const MarkerPin = ({data,color}) => {
     
     return (
         <div>
-            <Marker longitude={data.longitude} latitude={data.latitude} anchor="bottom" >
+            <Marker longitude={data.longitude} latitude={data.latitude} anchor="bottom">
                 <RoomRoundedIcon style={{color:color,fontSize:viewport.zoom * 5}}/>
             </Marker>
         </div>

@@ -102,7 +102,7 @@ const Post = ({ data, socket, hidden }) => {
   const handleNotification = (type) => {
     //socket
   
-    socket.emit("sendNotification", {
+    socket && socket.emit("sendNotification", {
       senderId: user.user._id,
       receiverId: data.userId,
       data: data,
@@ -119,7 +119,7 @@ const Post = ({ data, socket, hidden }) => {
     
     longitude: data.longitude,
     latitude: data.latitude,
-    zoom: 6
+    zoom: 11 // 6
                     
   })
 
@@ -267,7 +267,9 @@ const Post = ({ data, socket, hidden }) => {
 
               <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline "><ModeCommentRoundedIcon fontSize='small'/><span class='ml-2' >Comment</span></button>
 
-              <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline" onClick={onShareClick}><ReplyRoundedIcon/><span class='ml-2' >Share</span></button>
+              { user.user._id === data.userId ? null :
+               <button class="btn btn-info hover:bg-slate-600 flex-grow rounded-full normal-case font-normal btn-outline" onClick={onShareClick}><ReplyRoundedIcon/><span class='ml-2' >Share</span></button>
+              }
 
             </div>
 

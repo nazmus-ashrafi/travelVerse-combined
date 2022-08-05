@@ -37,15 +37,37 @@ const AllTimelinePins = () => {
   return (
     <div>
       
-        {
-          
+      {
+        
         timelinePosts ? timelinePosts.map((post, id) => {
-            if(post.userId === user.user._id ){
-              return <MarkerPin data={post} key={id} color={"slategrey"} />;
-            }else{
-              return <MarkerPin data={post} key={id} color={"0EA5E9"} />;
-            }
-          }):null}
+
+
+          if(post.isSharedPost === true){
+            
+            return <MarkerPin data={post} key={id} color={"mediumseagreen"} size={9} />; // shared post
+            
+          }
+
+      
+
+          if(post.userId !== user.user._id){
+
+            return <MarkerPin data={post} key={id} color={"cornflowerblue"} size={8} />; // friend's post
+            
+            
+          }else{
+
+            return <MarkerPin data={post} key={id} color={"grey"} size={8} />; // your post
+
+          }
+
+          
+
+
+        }):null
+      
+      }
+      
     </div>
   )
 }

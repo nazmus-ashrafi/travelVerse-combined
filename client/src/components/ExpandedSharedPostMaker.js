@@ -21,7 +21,7 @@ import app from "../firebase";
 
 import Post from './Post';
 
-const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost}) => {
+const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost, socket}) => {
 
    
 
@@ -67,14 +67,33 @@ const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost}) => {
                 isSharedPost: true,
                 sharedPostId: sharedPost._id,
 
+                // details needed for share notifications
+                originalPostId: sharedPost.userId,
+                sharedPostTitle: sharedPost.title,
+                //
                 latitude: sharedPost.latitude,
                 longitude: sharedPost.longitude,
                 
                 
             };
+            // console.log(newPost)
 
-                // console.log(newPost)
-
+            
+            // notify 
+            // handleNotifiication() was not working
+            try {
+                socket.emit("sendNotification", {
+                senderId: user.user._id,
+                receiverId: sharedPost.userId,
+                
+                });
+                // console.log(sharedPost.userId)
+                // console.log(user.user._id)
+            } catch (error) {
+                console.log(error)
+            }
+            //
+            
 
 
             // create post 
@@ -88,6 +107,9 @@ const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost}) => {
             setShowModal(false)
 
             resetShare()
+
+
+            
 
             window.location.reload() // timeline sorting bug
 

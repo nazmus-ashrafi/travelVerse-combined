@@ -22,7 +22,7 @@ export const getUser = createAsyncThunk(
   async (user, thunkAPI) => {
     try {
 
-      console.log(user)
+      // console.log(user)
       
       return await userService.getUser(user)
 

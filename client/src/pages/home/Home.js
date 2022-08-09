@@ -51,7 +51,7 @@ export default function Home({socket}) {
 
     
     
-    <div class='window dark' data-theme='dark'>
+    <div class='window dark' data-theme={process.env.REACT_APP_THEME}>
 
 
       {/* nav bar */}
@@ -94,7 +94,7 @@ export default function Home({socket}) {
 
 
                 {/* post */}
-                <AllPosts socket={socket}/>
+                <AllPosts socket={socket} userId={user.user._id}/>
 
               </div>
 

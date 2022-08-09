@@ -43,7 +43,7 @@ const SharedPost = ({ data, socket, hidden }) => {
   const onShareClick = () => {
     setShareModalOpened(true)
 
-    console.log(sharedPost)
+    // console.log(sharedPost)
   }
 
 
@@ -58,7 +58,7 @@ const SharedPost = ({ data, socket, hidden }) => {
   
     setSharedPost(response.data)
 
-    console.log(response.data)
+    // console.log(response.data)
     
   }
 
@@ -265,7 +265,7 @@ const SharedPost = ({ data, socket, hidden }) => {
 
           )):null}
           
-          <CommentMaker postId={data._id}/>
+          <CommentMaker postId={data._id} handleNotification={handleNotification}/>
 
         </div>
 
@@ -277,6 +277,10 @@ const SharedPost = ({ data, socket, hidden }) => {
 
           key={sharedPost._id} 
           socket={socket} 
+
+          handleNotification={handleNotification}
+
+          originalPosterId={data.userId}
           />
         : null }
         

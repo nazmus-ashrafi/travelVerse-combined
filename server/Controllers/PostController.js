@@ -15,26 +15,37 @@ import multer from 'multer'
 export const createPost = async (req, res) => {
   const newPost = new PostModel(req.body);
 
-  // if (!req.body.title) {
-  //       // res.status(400)
-  //       // throw new Error('Please add a title')
-        
-  //   } else if (!req.body.description) {
-  //       res.status(400)
-  //       throw new Error('Please add a description')
-  //   }else if (!req.body.latitude) {
-  //       res.status(400)
-  //       throw new Error('Please add a latitude')
-  //   }else if (!req.body.longitude) {
-  //       res.status(400)
-  //       throw new Error('Please add a longitude')
-  //   }
 
   try {
+
+    // notify if post is shared
+    if(req.body.isSharedPost){
+      
+      try {
+        const originalPoster = await UserModel.findById(req.body.originalPostId)
+        const currentUser = await UserModel.findById(req.body.userId);
+
+        originalPoster.notifications.push({
+          "message" :currentUser.username +" shared a post you made: "+ req.body.sharedPostTitle,"currentUserUsername":currentUser.username,
+          "postDescription": req.body.sharedPostTitle,
+          "interaction":" shared the post: ",
+          "currentUserId":currentUser._id
+        })
+
+        originalPoster.save()
+        
+      } catch (error) {
+        console.log(error)
+        
+      }
+
+    }
+    //
+    
+
     await newPost.save();
     
 
-    
     res.status(200).json(newPost);
   } catch (error) {
     res.status(500).json(error);
@@ -43,7 +54,6 @@ export const createPost = async (req, res) => {
 }; 
 
 // Get a post
-
 export const getPost = async (req, res) => {
   const id = req.params.id;
 
@@ -107,18 +117,19 @@ export const likePost = async (req, res) => {
         const originalPoster = await UserModel.findById(post.userId)
         const currentUser = await UserModel.findById(userId);
 
-      originalPoster.notifications.push({"message" :currentUser.username +" likes a post you made: "+ post.description,"currentUserUsername":currentUser.username,"postDescription":post.description,"interaction":" liked the post: ","currentUserId":currentUser._id})
+        originalPoster.notifications.push({
+          "message" :currentUser.username +" likes a post you made: "+ post.title,"currentUserUsername":currentUser.username,
+          "postDescription":post.title,
+          "interaction":" liked the post: ",
+          "currentUserId":currentUser._id
+        })
 
-      originalPoster.save()
-
-    
+        originalPoster.save()
         
       } catch (error) {
         console.log(error)
         
       }
-      
-      
       //
 
       res.status(200).json(post);
@@ -132,7 +143,12 @@ export const likePost = async (req, res) => {
 
       // originalPoster.notifications.pull(currentUser.username +" likes a post you made: "+ post.description)
 
-      originalPoster.notifications.push({"message" :currentUser.username +" likes a post you made: "+ post.description,"currentUserUsername":currentUser.username,"postDescription":post.description,"interaction":" unliked the post: ","currentUserId":currentUser._id})
+      originalPoster.notifications.push({
+        "message" :currentUser.username +" likes a post you made: "+ post.title,"currentUserUsername":currentUser.username,
+        "postDescription":post.title,
+        "interaction":" unliked the post: ",
+        "currentUserId":currentUser._id
+      })
 
       originalPoster.save()
 
@@ -193,7 +209,7 @@ export const likePost = async (req, res) => {
 // };
 
 // @desc    Get all timeline posts
-// @route   GET /id/timeline
+// @route   GET /:id/timeline
 // @access  
 export const getTimelinePosts = async(req,res) =>{
     try {
@@ -254,6 +270,29 @@ export const addComment = async (req, res, next) => {
       comments: savedComment
                 
     } }, { timestamps: false });
+
+    //notify
+    try {
+        const originalPoster = await UserModel.findById(post.userId)
+        const currentUser = await UserModel.findById(req.body.userId);
+
+      originalPoster.notifications.push(
+      {
+        "message" :currentUser.username +" commented on a post you made: "+ post.title,
+        "currentUserUsername":currentUser.username,
+        "postDescription":post.title,
+        "interaction":" commented on the post: ",
+        "currentUserId":currentUser._id
+      })
+
+      originalPoster.save()
+
+    
+        
+      } catch (error) {
+        console.log(error)
+        
+      }
           
 
     res.status(200).send(savedComment);

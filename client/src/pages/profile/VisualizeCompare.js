@@ -55,11 +55,11 @@ const VisualizeCompare = () => {
     };
 
   const onSelectLocation = useCallback(({longitude, latitude,zoom}) => {
-    mapRef.current?.flyTo({center: [longitude, latitude], duration: 3000,zoom: zoom?zoom:12});
+    mapRef.current?.flyTo({center: [longitude, latitude], duration: 6000 ,zoom: zoom?zoom:12});
     // console.log(longitude, latitude)
   }, []);
 
-  const [isOn, setIsOn] = useState(false);
+  const [isOn, setIsOn] = useState(false); // Following's posts: on/off
 
   const swapOnClick = () => {
     setIsOn(true);
@@ -85,7 +85,7 @@ const VisualizeCompare = () => {
 
                 class="col-start-1 col-span-2 "
             >
-                {isOn?<AllTimelinePins posts={timelinePosts}/>: <AllTimelinePins posts={ownPosts}/>}
+                {isOn?<AllTimelinePins posts={timelinePosts} userId={user.user._id}/>: <AllTimelinePins posts={ownPosts} userId={user.user._id}/>}
                 
             </Map>
 
@@ -96,7 +96,7 @@ const VisualizeCompare = () => {
 
                 <div class="flex justify-between">
                     <div class='flex'>
-                        <h1 class="mt-5 ml-6">Follower's posts:</h1>
+                        <h1 class="mt-5 ml-6">Following's posts:</h1>
                 
                         <label class="swap mt-3 ml-2">
                             <input type="checkbox" />
@@ -104,6 +104,7 @@ const VisualizeCompare = () => {
                             <div class="swap-off" onClick={swapOffClick} >OFF</div>
                         </label>
                     </div>
+                    
                     
                     <div class='p-1 mt-3 flex gap-3'>
                         

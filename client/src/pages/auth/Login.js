@@ -70,7 +70,8 @@ const Login = () => {
         exit={{ scaleX: 0 }}
       >
         <div>
-          <section class="text-gray-600 bg-base-100 body-font flex h-screen">
+          {/* <section class="text-gray-600 bg-base-100 body-font flex h-screen"> */}
+          <section class='window dark body-font flex h-screen' data-theme={process.env.REACT_APP_THEME}>
 
             <div class="container px-5 py-24 mx-auto flex flex-wrap items-center">
               <div class="lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0 text-center md:text-left">

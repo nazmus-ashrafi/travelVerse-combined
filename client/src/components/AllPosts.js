@@ -10,38 +10,33 @@ import { useEffect } from "react";
 import { getUser } from '../features/user/userSlice';
 
 
-const AllPosts = ({socket}) => {
+const AllPosts = ({socket, userId}) => {
 
   // redux 
-  const dispatch = useDispatch();
-  const { user } = useSelector(
-        (state) => state.auth
-    )
+    const dispatch = useDispatch();
+    const { user } = useSelector(
+          (state) => state.auth
+      )
 
-  let { timelinePosts, isLoading } = useSelector((state) => state.post);
-
-
-
-  useEffect(()=>{
-
-
-
-    //running the api call on first render/refresh 
-    dispatch(getTimeLinePosts(user.user._id))
-    dispatch(getUser(user)) // this populated the user state when the app first loads
-
-
-
-    //running the api call every one minute
-
-    // const interval = setInterval(() => {
-    //  dispatch(getTimeLinePosts(user.user._id))
-    // dispatch(getUser(user.user._id))
-    // console.log("bye")
-    // }, 10000);
-    // return () => clearInterval(interval);
   
-  },[])
+
+
+
+    useEffect(()=>{
+
+
+      //running the api call on first render/refresh 
+
+      // getTimeLinePosts() = Get logged in user's timeline posts
+
+      dispatch(getTimeLinePosts(userId)) 
+      dispatch(getUser(user)) // this populated the user state when the app first loads
+
+
+    
+    },[])
+
+    let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
   
   

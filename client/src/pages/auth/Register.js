@@ -82,7 +82,8 @@ const Register = () => {
 
   return (
 
-      <div class="text-gray-600 bg-base-100 body-font relative h-screen">
+      // <div class="text-gray-600 bg-base-100 body-font relative h-screen">
+      <div class='window dark body-font flex h-screen' data-theme={process.env.REACT_APP_THEME}>
 
         <form class="container px-5 py-5 mx-auto infoForm authForm" onSubmit={handleSubmit} >
 

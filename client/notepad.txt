@@ -1,72 +1,45 @@
-import React from 'react'
-import {useRef, useCallback, useEffect, useState} from 'react';
-
-
-const LocationList = ({ownPosts, onSelectLocation}) => {
-
-
-
-  return (
+return (
     <div>
-        <div className="control-panel">
-            {/* {CITIES.filter(city => city.state === 'California').map((city, index) => (
-                <div key={`btn-${index}`} className="input">
-                    <input
-                        type="radio"
-                        name="city"
-                        id={`city-${index}`}
-                        defaultChecked={city.city === 'San Francisco'}
-                        onClick={() => props.onSelectCity(city)}
-                    />
-                    <label htmlFor={`city-${index}`}>{city.city}</label>
-                </div>
-            ))} */}
+      
+      {
 
-            {ownPosts.map((post) => (
+        userId === user.user._id ? // id from params === id from auth 
+        // this is the case if user is visiting his own profile
+          <>
+            {posts ? posts.map((post, id) => {
 
-                
-                <div className="">
-                    {/* <input
-                        type="radio"
-                        name="location"
+
+          if(post.isSharedPost === true){
+            
+            return <MarkerPin data={post} key={id} color={"mediumseagreen"} size={9} />; // shared post
+            
+          }
+
+      
+
+          if(post.userId !== user.user._id){ 
+
+            return <MarkerPin data={post} key={id} color={"cornflowerblue"} size={8} />; // friend's post
+            
+            
+          }else{
+
+            return <MarkerPin data={post} key={id} color={"grey"} size={8} />; // your post
+
+          }
+
+          
+
+
+        }):null}
+          </> : null // show followers pins
+
+          // Follow to show pins, timeline posts and also compare
         
-                        // defaultChecked={post._id === ownPosts[0]._id}
-                        onClick={() => onSelectLocation(post)}
-                    />
-                    <label>{post.title}</label> */}
 
-                    <div class="collapse mt-4 mb-2 rounded-md mr-3">
-                        <input type="checkbox" class="peer"  /> 
-                        
-                        <div class="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
-
-                            {post.title}
-                            
-                        </div>
-                        
-
-                        <div class="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content"> 
-                            <input
-                                type="radio"
-                                name="location"
-                
-                                // defaultChecked={post._id === ownPosts[0]._id}
-                                onClick={() => onSelectLocation(post)}
-                            />
-
-                            <p>{post.description}</p>
-
-                        </div>
-
-                    </div>
-                </div>
-
-            ))}
-
-
-        </div>
+        
+      
+      }
+      
     </div>
   )
-}
-
-export default LocationList

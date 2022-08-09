@@ -22,16 +22,17 @@ const initialState = {
   message: '',
 }
 
-// Get timeline posts for user
+// Get any user's timeline posts
 // updated
 export const getTimeLinePosts = createAsyncThunk(
     'post/timelinePosts',
-    async ( _ , thunkAPI) => {
+    async ( userId , thunkAPI) => {
 
       try {
 
-      const user = thunkAPI.getState().auth.user
-      return await postService.getTimelinePosts(user)
+      const user = thunkAPI.getState().auth.user 
+
+      return await postService.getTimelinePosts(userId) 
 
       
     } catch (error) {

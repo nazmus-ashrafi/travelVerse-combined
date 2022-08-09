@@ -7,7 +7,7 @@ const API_URL = '/user/'
 // Private route
 const getUser = async (user) => {
 
-    console.log(user.user._id)
+    // console.log(user.user._id)
 
     const id = user.user._id
     const token = user.token

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { createComment } from '../features/post/postSlice';
 import { useSelector, useDispatch } from "react-redux";
 
-const CommentMaker = ({postId}) => {
+const CommentMaker = ({postId, handleNotification}) => {
 
     // redux
     const dispatch = useDispatch();
@@ -27,6 +27,9 @@ const CommentMaker = ({postId}) => {
             length:0,
             value:"",
         })
+
+        // socket
+        handleNotification()
 
     }
 

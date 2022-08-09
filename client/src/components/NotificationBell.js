@@ -29,38 +29,11 @@ const NotificationBell = ({socket}) => {
 
       socket.on("getNotification", (data) => {
 
-          setNotifications((prev) => [...prev, data]);
-          setIsOn(true)
-          
-
-
-        // if(notifications.length > 0) {
-        //   notifications.map((notification) => {
-        //   if (notification.senderId === data.senderId && notification.data._id === data.data._id) {
-        //     const index = notifications.findIndex((notification) => notification.senderId === data.senderId && notification.data.id === data.data.id)
-
-        //     notifications.splice(index, 1)
-        //     console.log(index)
-        //   }else{
-        //     setNotifications((prev) => [...prev, data]);
-            
-        //   }
-        // })
-
-        // }
-        // else{
-        //   setNotifications((prev) => [...prev, data]);
-        //   console.log(notifications)
-        // }
-
-
+        setNotifications((prev) => [...prev, data]);
+        setIsOn(true)
 
       
       });
-
-      
-
-      
       
     } catch (error) {
 

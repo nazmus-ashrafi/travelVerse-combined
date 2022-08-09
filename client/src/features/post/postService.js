@@ -2,19 +2,20 @@ import axios from 'axios'
 
 const API_URL = '/post/'
 
-// Get timeline posts for user
+// Get any user's timeline posts
 // @route   GET /posts/id/timeline
-// @access  
-// updated (protection pending)
-const getTimelinePosts = async (userData) => {
+// @access  Public
+// updated (not protected)
+const getTimelinePosts = async (userId) => { 
 
-  const token = userData.token
-  const id = userData.user._id
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  };
   
-  const response = await axios.get(API_URL + `${id}/timeline`, config)
+  const id = userId
+  // const token = userData.token
+  // const config = {
+  //   headers: { Authorization: `Bearer ${token}` }
+  // };
+  
+  const response = await axios.get(API_URL + `${id}/timeline`)
   
 
 //   if (response.data) {

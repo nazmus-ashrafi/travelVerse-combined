@@ -289,7 +289,7 @@ const Post = ({ data, socket, hidden }) => {
 
               )):null}
               
-              <CommentMaker postId={data._id}/>
+              <CommentMaker postId={data._id} handleNotification={handleNotification}/>
 
             </div>
             

@@ -25,6 +25,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, updatePost, reset, getTimeLinePosts } from '../../features/post/postSlice'
 
+import { useParams } from "react-router-dom";
+
 
 
 const ProfilePage = () => {
@@ -53,6 +55,8 @@ const ProfilePage = () => {
     },[])
 
     //
+
+    const { id } = useParams() // getting user id from url
 
     const homeOnClick = () =>{
         // Map.remove()
@@ -114,10 +118,10 @@ const ProfilePage = () => {
 
     
       
-    <div class='window dark' data-theme='dark' > 
+    <div class='window dark' data-theme={process.env.REACT_APP_THEME} > 
     {/* cupcake dark coffee */}
         {/* 1st section */}
-        <div class="grid place-items-center md:grid-cols-3 pt-10 mt-5 "  >
+        <div class="grid place-items-center md:grid-cols-3 pt-10 mt-4 "  >
 
 
             {/* profile card */}
@@ -155,6 +159,8 @@ const ProfilePage = () => {
                             
                         </label>
 
+
+                        {/* TODO : if following show */}
                         <label for="visualize-compare" class="mt-16 mr-6 absolute top-0 right-0 modal-button cursor-pointer">
                             <Link to={'/visualize'}>
                                 <RadioButtonCheckedIcon onClick={visualizeOnClick}/>
@@ -220,7 +226,7 @@ const ProfilePage = () => {
                     mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                 >
 
-                    <AllTimelinePins posts={timelinePosts}/>
+                    <AllTimelinePins posts={timelinePosts} userId={id}/>
 
                 </Map>
                 
@@ -262,7 +268,8 @@ const ProfilePage = () => {
                 <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
                 {/* posts */}
-                <AllPosts />
+                {/* no need to pass socket because we dont care about live notifications in this page */}
+                <AllPosts userId={id}/>
             </div>
              
 

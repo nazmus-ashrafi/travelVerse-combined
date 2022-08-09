@@ -136,14 +136,14 @@ function refreshPage() {
                 
                 
                 
-                <div className="flex-shrink-0 flex items-center sm:ml-6">
+                <Link to={`/profile/${user.user._id}`} onClick={refreshPage}  className="flex-shrink-0 flex items-center sm:ml-6">
 
                   <Logo size={'20'}/>
 
-
-                  <h1 class="font-['Abril'] italic font-medium text-2xl text-sky-600 pb-0 flex flex-col text-center w-full mr-10 sm:mr-5 ml-1">Travelverse</h1>
+                  
+                  <h1 class="font-['Abril'] italic font-medium text-2xl text-sky-600 pb-0 flex flex-col text-center w-full mr-10 sm:mr-5 ml-3">Travelverse</h1>
                   {/* <h1 class="font-['Abril'] font-bold italic text-5xl text-sky-500">Around the world</h1> */}
-                </div>
+                </Link>
                   
                 {/* refresh button */}
                 <div className="hidden sm:block sm:ml-5">

@@ -18,8 +18,6 @@ const AllPosts = ({socket, userId}) => {
           (state) => state.auth
       )
 
-  
-
 
 
     useEffect(()=>{

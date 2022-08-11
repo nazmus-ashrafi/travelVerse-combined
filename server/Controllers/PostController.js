@@ -18,7 +18,7 @@ export const createPost = async (req, res) => {
 
   try {
 
-    // notify if post is shared
+    // notify if post is a shared post
     if(req.body.isSharedPost){
       
       try {

@@ -1,110 +1,196 @@
 import React from 'react'
+import Modal from "../components/Modal";
+import ModalHeader from "../components/ModalHeader";
 
-const ProfileModal = () => {
+import { useRef, useState, useEffect } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
+
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
+import { updateUser } from "../features/user/userSlice";
+
+const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
+
+  const [formData, setFormData] = useState(data);
+  useEffect(() => {
+    setFormData(data);
+  } , [data]);
+
+  
+  
+  console.log(data);
+  console.log(formData)
+  const [profileImage, setProfileImage] = useState(null);
+
+  const dispatch = useDispatch();
+  const param = useParams();
+
+  
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      let img = event.target.files[0];
+      setProfileImage(img)
+        
+    }
+  };
+
+
+  // form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let UserData = formData;
+
+    if (profileImage) {
+      const storage = getStorage();
+      const fileName = Date.now() + profileImage.name;
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, profileImage);
+
+
+      // Listen for state changes, errors, and completion of the upload.
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        }, 
+        (error) => {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+            case 'storage/unauthorized':
+              // User doesn't have permission to access the object
+              break;
+            case 'storage/canceled':
+              // User canceled the upload
+              break;
+
+            // ...
+
+            case 'storage/unknown':
+              // Unknown error occurred, inspect error.serverResponse
+              break;
+          }
+        }, 
+        () => {
+          // Upload completed successfully, now we can get the download URL
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+
+            // setFormData({ ...formData, profileImage: downloadURL });
+            formData.profileImage = downloadURL;
+
+            
+          });
+        }
+      );
+
+      
+    }
+    
+    // console.log(formData);
+    dispatch(updateUser(formData));
+    
+
+    setShowProfileModal(false);
+  };
+  
+
   return (
-    <div>
-      <input type="checkbox" id="profile-modal" class="modal-toggle" />
-      <div class="modal">
-
-
-        <div class="modal-box relative bg-base-100">
-
-
-          <label for="profile-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-
-
-          <div class="mt-10 sm:mt-0 ">
-            <div class="md:grid md:grid-cols-3 md:gap-6">
-              
-              <div class="mt-5 md:mt-0 md:col-span-3">
-                <form action="#" method="POST">
-                  <div class=" overflow-hidden sm:rounded-md">
-                    <div class="px-4 py-5 bg-base-100 sm:p-6">
-
-                      <div class="grid grid-cols-6 gap-6">
-                        <div class="col-span-6 sm:col-span-3">
-                          <label for="first-name" class="block text-sm font-medium text-zinc-300">First name</label>
-                          <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-3">
-                          <label for="last-name" class="block text-sm font-medium text-zinc-300">Last name</label>
-                          <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-4">
-                          <label for="email-address" class="block text-sm font-medium text-zinc-300">Email address</label>
-                          <input type="text" name="email-address" id="email-address" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                        </div>
-
-                        {/* <div class="col-span-6 sm:col-span-3">
-                          <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
-                          <select id="country" name="country" autocomplete="country-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
-                            <option>United States</option>
-                            <option>Canada</option>
-                            <option>Mexico</option>
-                          </select>
-                        </div> */}
-
-                        <div class="col-span-6">
-                          <label for="street-address" class="block text-sm font-medium text-zinc-300">Street address</label>
-                          <input type="text" name="street-address" id="street-address" autocomplete="street-address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                          <label for="city" class="block text-sm font-medium text-zinc-300">City</label>
-                          <input type="text" name="city" id="city" autocomplete="address-level2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                          <label for="region" class="block text-sm font-medium text-zinc-300">State / Province</label>
-                          <input type="text" name="region" id="region" autocomplete="address-level1" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                          <label for="postal-code" class="block text-sm font-medium text-zinc-300">ZIP / Postal code</label>
-                          <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div class="ml-6">
-                        <label class="block text-sm font-medium text-zinc-300"> Photo </label>
-                        <div class="mt-1 flex items-center ">
-                          <span class="md:inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100 hidden">
-                            <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                          </span>
-
-                          <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"><input type="file" name='profileImg'/></button>
-
-                          {/* <div>
-                            Profile Image 
-                            <input type="file" name='profileImg'/>
-                            Cover Image
-                            <input type="file" name="coverImg" />
-                          </div> */}
-                        </div>
-                    </div>
-
-
-                    <div class="px-4 py-3 bg-base-100 text-right sm:px-6">
-                      <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">Save</button>
-                    </div>
-
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-
+    <>
+        
+        <Modal size="" id="defaultModal" active={showProfileModal} toggler={() => setShowProfileModal(false)} aria-hidden="true" >
 
         
-      </div>
-    </div>
+
+          <div class="grid place-items-center bg-base-100"> 
+            {/* form */}
+
+            <ModalHeader toggler={() => setShowProfileModal(false)}/>
+
+            
+            <article class="prose">
+  
+              <h3 for="" class="mt-3 mb-3">Update profile details</h3>
+            </article>
+
+            {/* profile image */}
+            
+            <div class="form-control mt-5 mb-5 ml-5 mr-5 flex flex-row justify-between">
+
+              <div class="avatar">
+                <div class="w-24 mask mask-squircle">
+                    <img src={require('../img/default.png')}/>
+                </div>
+              </div>
+
+              <input type="file" id="img" name="profileImage" class="cursor-pointer mt-6 ml-6" onChange={onImageChange}/>
+
+            </div>
+                  
+
+            {/* infos */}
+
+            <div class="form-control mt-4">
+
+              <label class="input-group">
+                <span>First Name</span>
+                <input type="text" name='firstname' placeholder="Lorem" class="input input-bordered" onChange={handleChange} value={formData.firstname} />
+              </label>
+            </div>
+
+            <div class="form-control mt-4">
+
+              <label class="input-group">
+                <span>Last Name</span>
+                <input type="text" placeholder="Ipsum" class="input input-bordered" onChange={handleChange} name='lastname' value={formData.lastname} />
+              </label>
+            </div>
+              
+              
+
+            <textarea id="description" name='description' type="text" rows="4" placeholder="Write something about yourself...." class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200 mt-8 " onChange={handleChange} value={formData.description}></textarea>
+            {/* Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's. */}
+
+              
+            
+                  
+            {
+                    (formData.lastname && formData.firstname)?(
+                        
+                        
+                        <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-8 mb-2 w-full" onClick={handleSubmit} >Update</button>
+                    ):(
+                        <button data-modal-toggle="defaultModal" type="button" class="btn no-animation mb-2 w-full pointer-events-none opacity-20 mt-8" >Update</button>
+                        
+                    )
+
+                }
+                      
+                  
+
+          </div>
+
+        </Modal>
+        
+    </>
   )
 }
 

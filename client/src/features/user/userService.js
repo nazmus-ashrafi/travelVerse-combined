@@ -41,11 +41,21 @@ const dismissNotifications = async (userData) => {
   
 }
 
+// -------------------------------------------------
+
+const updateUser = async (userData) => {
+  const response = await axios.put(API_URL + userData._id, userData)
+
+  return response.data
+}
+
 
 
 const userService = {
   getUser,
-  dismissNotifications
+  dismissNotifications,
+
+  updateUser,
   
 }
 

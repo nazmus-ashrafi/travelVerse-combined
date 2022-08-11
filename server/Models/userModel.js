@@ -22,7 +22,7 @@ const UserSchema = mongoose.Schema(
             type: Boolean,
             default: false,
         },
-        profilePicture: String,
+        profileImage: String,
         coverPicture: String,
         about: String,
         livesin: String,
@@ -32,7 +32,8 @@ const UserSchema = mongoose.Schema(
         following: [] ,
         notifications: {
             type: Array
-        }
+        },
+        description: String,
     },
     {timestamps: true}
 )

@@ -8,7 +8,6 @@ import RoomRoundedIcon from '@mui/icons-material/RoomRounded'
 import { useState, useEffect } from "react";
 
 
-
 import { likePost } from "../features/post/postSlice";
 import { getUser } from '../features/user/userSlice'
 import { useSelector, useDispatch } from "react-redux";

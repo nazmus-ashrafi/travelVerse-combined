@@ -60,7 +60,7 @@ const AllTimelinePins = ({posts, userId}) => {
 
               if(post.isSharedPost === true){
                 
-                return <MarkerPin data={post} key={id} color={"mediumseagreen"} size={9} />; // shared post
+                return <MarkerPin data={post} key={id} color={"salmon"} size={9} />; // shared post
                 
               }
 

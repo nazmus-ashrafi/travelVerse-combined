@@ -183,7 +183,6 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                                 window.location.reload()
                             }
 
-                    
 
                         })
                     }

@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createPost, updatePost, reset, getTimeLinePosts } from '../../features/post/postSlice'
 
 import { useParams } from "react-router-dom";
+import axios from 'axios'
 
 
 
@@ -35,10 +36,13 @@ const ProfilePage = () => {
     const { width,height } = useDimensions(constraintsRef);
 
     const [showModal, setShowModal] = useState(false)
+    const [showProfileModal, setShowProfileModal] = useState(false)
 
     const [viewport, setViewport] = useState({
         zoom: 8
     });
+
+    
 
     // redux
 
@@ -46,13 +50,17 @@ const ProfilePage = () => {
         (state) => state.auth
     )
 
+    const { userDetails } = useSelector(
+        (state) => state.user
+    )
+
     const dispatch = useDispatch()
     let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
     useEffect(()=>{
-        
+        console.log(userDetails)
   
-    },[])
+    },[userDetails])
 
     //
 
@@ -66,6 +74,30 @@ const ProfilePage = () => {
     const visualizeOnClick = () =>{
         
     }
+
+    // Logic for seeing whose profile is being viewed
+    const profileUserId = id; // from params
+    const [profileUser, setProfileUser] = useState({});
+
+    useEffect(() => {
+        const fetchProfileUser = async () => {
+        if (profileUserId === user.user._id) {
+            setProfileUser(userDetails);
+        } else {
+            console.log("fetching")
+            const profileUser = await axios.get(process.env.REACT_APP_POST_URL + profileUserId + "/getanyuser")
+
+            setProfileUser(profileUser.data);
+            
+            console.log(profileUser)
+        }
+        };
+        fetchProfileUser();
+    }, [user,userDetails]);
+
+
+
+    //
  
 
 
@@ -110,9 +142,7 @@ const ProfilePage = () => {
 
     }
 
-    
-
-    
+  
 
   return (
 
@@ -121,7 +151,7 @@ const ProfilePage = () => {
     <div class='window dark' data-theme={process.env.REACT_APP_THEME} > 
     {/* cupcake dark coffee */}
         {/* 1st section */}
-        <div class="grid place-items-center md:grid-cols-3 pt-10 mt-4 "  >
+        <div class={`grid place-items-center md:grid-cols-3 pt-10 mb-10 ${user.user.description?"":" mt-10"} `}  >
 
 
             {/* profile card */}
@@ -160,50 +190,59 @@ const ProfilePage = () => {
                         </label>
 
 
-                        {/* TODO : if following show */}
-                        <label for="visualize-compare" class="mt-16 mr-6 absolute top-0 right-0 modal-button cursor-pointer">
-                            <Link to={'/visualize'}>
-                                <RadioButtonCheckedIcon onClick={visualizeOnClick}/>
-                            </Link>
-                            
-                        </label>
+                        
+                        
 
-                        <label for="profile-modal" class="mt-28 mr-5 absolute top-0 right-0 modal-button cursor-pointer">
-                            <UilPen
-                            width="2rem"
-                            height="1.2rem"                
-                            />
-                        </label>
+                        {user.user._id === profileUserId ? ( // show if own profile
+                        <>
+                            <label for="visualize-compare" class="mt-16 mr-6 absolute top-0 right-0 modal-button cursor-pointer">
+                                <Link to={'/visualize'}>
+                                    <RadioButtonCheckedIcon onClick={visualizeOnClick}/>
+                                </Link>
+                                
+                            </label>
+                            <label for="" class="mt-28 mr-5 absolute top-0 right-0 modal-button cursor-pointer">
+                                <UilPen
+                                width="2rem"
+                                height="1.2rem" 
+                                onClick={()=>setShowProfileModal(true)}               
+                                />
+                            </label>
+                        </>
+                        
+                        ) : (null)}
 
                         
 
 
                     </div>
 
-                    
 
-                    
-
-                    <ProfileModal/>
+                    <ProfileModal showProfileModal={showProfileModal} setShowProfileModal={setShowProfileModal} data={userDetails} />
 
                     {/* avatar */}
                     <div class="avatar pt-10">
                         <div class="w-24 mask mask-squircle">
-                            <img src="https://api.lorem.space/image/face?hash=92048"/>
+                            <img src={user.user.profilePicture?user.user.profilePicture:require('../../img/default.png')}/>
                         </div>
                     </div>
 
                 
                     {/* name, description and follow button */}
                     <div class="card-body items-center text-center">
-                        <h2 class="text-lg font-extrabold">Simon Polokson</h2>
+                        <h2 class="text-lg font-extrabold">{profileUser.firstname+" "+ profileUser.lastname}</h2>
 
-                        <div class="text-base-content my-3 text-sm text-opacity-60">Strategic Art Manager,Strategic Art Manager, Strategic Art Manager</div>
+                        <div class="text-base-content my-3 text-sm text-opacity-60">{profileUser.description?profileUser.description:""}</div>
+                        {/* Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's. */}
                     
-                        
+                        {user.user._id != profileUser._id &&
                         <div class="card-actions">
                             <button class="btn btn-primary text-white  btn-sm ">Follow</button>
                         </div>
+                        }
+                        
+
+
                     </div>
                 
                 </motion.div>

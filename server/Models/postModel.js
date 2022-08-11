@@ -10,8 +10,7 @@ const requiredNumber = {
 
 const postSchema = new Schema(
   {
-
-    
+ 
     userId: { type: String, required: true },
 
     title: {

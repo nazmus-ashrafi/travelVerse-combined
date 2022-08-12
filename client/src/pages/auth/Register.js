@@ -10,19 +10,68 @@ import { useSelector, useDispatch } from 'react-redux'
 import { register, reset } from '../../features/auth/authSlice'
 import { getUser } from '../../features/user/userSlice'
 
+import { useFormik } from "formik";
+import { registerSchema } from "../../formSchemas";
+
 
 const Register = () => {
 
-  const initialState = {
-    firstname: "",
-    lastname: "",
-    username: "",
-    password: "",
-    confirmpass: "",
+
+  const onSubmit = (e) => {
+
+    // setConfirmPass(true);
+    // e.preventDefault();
+
+    // if(data.password !== data.confirmpass){
+    //   setConfirmPass(false);
+
+    // }else{
+    //   dispatch(register(data))
+      
+    // }
+
+    
+    console.log(values)
+    dispatch(register(values))
+    
   };
 
-  const [data, setData] = useState(initialState);
-  const [confirmPass, setConfirmPass] = useState(true);
+
+  // Formik
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  }  = useFormik({
+    initialValues: {
+      firstname: "",
+      lastname: "",
+      username: "",
+      password: "",
+      confirmpass: "",
+    },
+    validationSchema: registerSchema,
+    onSubmit,
+    
+  })
+
+  //
+
+  // const initialState = {
+  //   firstname: "",
+  //   lastname: "",
+  //   username: "",
+  //   password: "",
+  //   confirmpass: "",
+  // };
+
+  // const [data, setData] = useState(initialState);
+  // const [confirmPass, setConfirmPass] = useState(true);
 
 
   // redux
@@ -34,27 +83,25 @@ const Register = () => {
 
 
   // Handle change in input
-  const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setData({ ...data, [e.target.name]: e.target.value });
+  // };
 
   // Form submission
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
 
-    setConfirmPass(true);
-    e.preventDefault();
+  //   setConfirmPass(true);
+  //   e.preventDefault();
 
-    
-    if(data.password !== data.confirmpass){
-      setConfirmPass(false);
+  //   if(data.password !== data.confirmpass){
+  //     setConfirmPass(false);
 
-    }else{
-      dispatch(register(data))
+  //   }else{
+  //     dispatch(register(data))
       
-    }
-  
+  //   }
     
-  };
+  // };
 
 
   useEffect(() => {
@@ -106,30 +153,46 @@ const Register = () => {
 
             <div class="relative mb-4">
               <label for="username" class="leading-7 text-sm text-zinc-400">First name</label>
-              <input type="name" id="firstname" name="firstname" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.firstname}/>
+
+              <input type="name" id="firstname" name="firstname" class={`w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.firstname ?'input-error focus:border-red-700 focus:ring-red-400  ':""}`} onChange={handleChange} value={values.firstname} onBlur={handleBlur} />
+
+
+              {errors.firstname && touched.firstname && <p className="text-orange-700 error">{errors.firstname}</p>}
             </div>
 
             <div class="relative mb-4">
               <label for="username" class="leading-7 text-sm text-zinc-400">Last name</label>
-              <input type="name" id="lastname" name="lastname" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.lastname}/>
+              <input type="name" id="lastname" name="lastname" class={`w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.lastname ?'input-error focus:border-red-700 focus:ring-red-400  ':""}`} onChange={handleChange} value={values.lastname} onBlur={handleBlur} />
+
+
+              {errors.lastname && touched.lastname && <p className="text-orange-700 error">{errors.lastname}</p>}
             </div>
 
             <div class="relative mb-4">
               <label for="username" class="leading-7 text-sm text-zinc-400">Username</label>
-              <input type="name" id="username" name="username" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.username}/>
+              <input type="name" id="username" name="username" class={`w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.username ?'input-error focus:border-red-700 focus:ring-red-400  ':""}`} onChange={handleChange} value={values.username} onBlur={handleBlur} />
+
+
+              {errors.username && touched.username && <p className="text-orange-700 error">{errors.username}</p>}
             </div>
 
             <div class="relative mb-4">
               <label for="password" class="leading-7 text-sm text-zinc-400">Password</label>
-              <input type="password" id="password" name="password" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.password}/>
+              <input type="password" id="password" name="password" class={`w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.password ?'input-error focus:border-red-700 focus:ring-red-400  ':""}`} onChange={handleChange} value={values.password} onBlur={handleBlur} />
+
+
+              {errors.password && touched.password && <p className="text-orange-700 error">{errors.password}</p>}
             </div>
 
             <div class="relative mb-4">
               <label for="confirmpassword" class="leading-7 text-sm text-zinc-400">Confirm password</label>
-              <input type="password" id="password" name="confirmpass" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-600 focus:ring-2 focus:ring-purple-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.confirmpass}/>
+              <input type="password" id="confirmpass" name="confirmpass" class={`w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.confirmpass ?'input-error focus:border-red-700 focus:ring-red-400  ':""}`} onChange={handleChange} value={values.confirmpass} onBlur={handleBlur} />
+
+
+              {errors.confirmpass && touched.confirmpass && <p className="text-orange-700 error">{errors.confirmpass}</p>}
             </div>
 
-            <span
+            {/* <span
             style={{
               color: "red",
               fontSize: "12px",
@@ -139,7 +202,7 @@ const Register = () => {
             }}
             >
               *Confirm password is not same
-            </span>
+            </span> */}
 
 
             <button class="text-white bg-cyan-700 hover:bg-cyan-800 border-0 py-2 px-8 focus:outline-none rounded text-lg mt-5" type="submit">Sign Up</button>

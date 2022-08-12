@@ -12,6 +12,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 
 import { updateUser } from "../features/user/userSlice";
 
+
 const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
 
   const [formData, setFormData] = useState(data);
@@ -21,9 +22,11 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
 
   
   
-  console.log(data);
-  console.log(formData)
+  // console.log(data);
+  // console.log(formData)
   const [profileImage, setProfileImage] = useState(null);
+  // const [imgUrl, setImgUrl] = useState(null);
+  let imgUrl = []
 
   const dispatch = useDispatch();
   const param = useParams();
@@ -47,7 +50,7 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let UserData = formData;
+    let userData = {...formData, profileImage:null};
 
     if (profileImage) {
       const storage = getStorage();
@@ -94,22 +97,35 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
 
+            
+
             // setFormData({ ...formData, profileImage: downloadURL });
-            formData.profileImage = downloadURL;
+            imgUrl.push(`${downloadURL}`)
+            // console.log(imgUrl);
+            // formData.profileImage = []
+            
 
             
-          });
+          }).then(() => {
+            userData.profileImage = imgUrl
+            dispatch(updateUser(userData));
+            setShowProfileModal(false);
+          } )
         }
       );
 
       
+    }else {
+      console.log(userData);
+      dispatch(updateUser(userData));
+      setShowProfileModal(false);
+
     }
     
-    // console.log(formData);
-    dispatch(updateUser(formData));
+
     
 
-    setShowProfileModal(false);
+    
   };
   
 

@@ -10,8 +10,48 @@ import { login, reset } from '../../features/auth/authSlice'
 
 import Logo from '../../components/Logo'
 
+import { useFormik } from "formik";
+import { loginSchema } from "../../formSchemas";
+
 
 const Login = () => {
+
+  // Form submission
+  const onSubmit = (e) => {
+
+    // e.preventDefault();
+
+    dispatch(login(values))
+
+    // console.log(values)
+  
+    
+  };
+
+  // Formik
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  }  = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit,
+    
+  })
+
+  //
+
+
+
 
   // redux
   const navigate = useNavigate()
@@ -29,19 +69,11 @@ const Login = () => {
   const [data, setData] = useState(initialState);
 
   // Handle change in input
-  const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setData({ ...data, [e.target.name]: e.target.value });
+  // };
 
-  // Form submission
-  const handleSubmit = (e) => {
 
-    e.preventDefault();
-
-    dispatch(login(data))
-  
-    
-  };
 
   useEffect(() => {
     if (isError) {
@@ -93,12 +125,21 @@ const Login = () => {
                 
                 <div class="relative mb-4">
                   <label for="username" class="leading-7 text-sm text-zinc-400">Username</label>
-                  <input type="name" id="username" name="username" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.username}/>
+                  <input type="name" id="username" name="username" onBlur={handleBlur} class={`w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.username ?'input-error focus:border-red-700 focus:ring-red-400 ':""}`} onChange={handleChange} value={values.username} />
+
+                  {errors.username && touched.username && <p className="text-orange-700 error">{errors.username}</p>}
+
+                  {/* {message && <p className="text-orange-700 error">{message}</p>} */}
                 </div>
+                
+
                 <div class="relative mb-4">
                   <label for="password" class="leading-7 text-sm text-zinc-400">Password</label>
-                  <input type="password" id="password" name="password" class="w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange} value={data.password}/>
+                  <input type="password" id="password" name="password" onBlur={handleBlur} class={`w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.password ?'input-error focus:border-red-700 focus:ring-red-400 ':""}`} onChange={handleChange} value={values.password}/>
+
+                  {errors.password && touched.password && <p className="text-orange-700 error">{errors.password}</p>}
                 </div>
+                {console.log(errors)}
 
                 {/* <Link to="/dashboard"> */}
                   <button class="glass text-white bg-cyan-700 hover:bg-cyan-800 border-0 py-2 mt-3 w-full focus:outline-none rounded text-lg" type="submit">

@@ -58,7 +58,7 @@ const ProfilePage = () => {
     let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
     useEffect(()=>{
-        console.log(userDetails)
+        // console.log(userDetails)
   
     },[userDetails])
 
@@ -190,8 +190,6 @@ const ProfilePage = () => {
                         </label>
 
 
-                        
-                        
 
                         {user.user._id === profileUserId ? ( // show if own profile
                         <>
@@ -223,7 +221,8 @@ const ProfilePage = () => {
                     {/* avatar */}
                     <div class="avatar pt-10">
                         <div class="w-24 mask mask-squircle">
-                            <img src={user.user.profilePicture?user.user.profilePicture:require('../../img/default.png')}/>
+                            <img src={profileUser.profileImage ? profileUser.profileImage[0] : require('../../img/default.png')}/>
+                            {/* <img src={require('../../img/default.png')}/> */}
                         </div>
                     </div>
 

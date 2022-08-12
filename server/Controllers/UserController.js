@@ -34,13 +34,15 @@ export const updateUser = async (req, res) => {
   const id = req.params.id;
   // const { currentUserId, currentUserAdminStatus, password } = req.body;
 
+  console.log(req.body)
+
   
   const user = await UserModel.findByIdAndUpdate(id, req.body, {
     new: true,
   });
 
   res.status(200).json(user);
-  console.log(user)
+  // console.log(user)
 
   // if (id === currentUserId || currentUserAdminStatus) {
 

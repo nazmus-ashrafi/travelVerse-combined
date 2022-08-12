@@ -221,9 +221,10 @@ const ProfilePage = () => {
                     {/* avatar */}
                     <div class="avatar pt-10">
                         <div class="w-24 mask mask-squircle">
-                            <img src={profileUser.profileImage ? profileUser.profileImage[0] : require('../../img/default.png')}/>
+                            <img src={profileUser.profileImage != undefined && profileUser.profileImage.length>0 ? profileUser.profileImage[0] : require('../../img/default.png')}/>
                             {/* <img src={require('../../img/default.png')}/> */}
                         </div>
+                        {console.log(profileUser.profileImage != undefined)}
                     </div>
 
                 

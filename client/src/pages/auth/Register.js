@@ -17,7 +17,7 @@ import { registerSchema } from "../../formSchemas";
 const Register = () => {
 
 
-  const onSubmit = (e) => {
+  const onSubmit = (values,actions) => {
 
     // setConfirmPass(true);
     // e.preventDefault();
@@ -33,6 +33,7 @@ const Register = () => {
     
     console.log(values)
     dispatch(register(values))
+    actions.resetForm()
     
   };
 

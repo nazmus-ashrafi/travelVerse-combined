@@ -17,11 +17,12 @@ import { loginSchema } from "../../formSchemas";
 const Login = () => {
 
   // Form submission
-  const onSubmit = (e) => {
+  const onSubmit = (values,actions) => {
 
     // e.preventDefault();
 
     dispatch(login(values))
+    actions.resetForm()
 
     // console.log(values)
   
@@ -49,8 +50,6 @@ const Login = () => {
   })
 
   //
-
-
 
 
   // redux
@@ -165,6 +164,7 @@ const Login = () => {
                 
                 <div class="m-auto yellow-600 ">
                   <Link to="/register">
+                    
                     <button class="text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:bg-yellow-700 rounded text-lg mt-3 w-40 content-center glass">Register</button>
                   </Link>
                   

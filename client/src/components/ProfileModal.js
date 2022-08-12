@@ -20,6 +20,8 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
     setFormData(data);
   } , [data]);
 
+
+  const [progressFull,setProgressFull]= useState(false)
   
   
   // console.log(data);
@@ -50,7 +52,8 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let userData = {...formData, profileImage:null};
+    // let userData = {...formData, profileImage:null};
+    let userData = {...formData};
 
     if (profileImage) {
       const storage = getStorage();
@@ -64,6 +67,11 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
         (snapshot) => {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+          if(progress === 100){
+            setProgressFull(true);
+          }
+
           console.log('Upload is ' + progress + '% done');
           switch (snapshot.state) {
             case 'paused':
@@ -108,8 +116,13 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
             
           }).then(() => {
             userData.profileImage = imgUrl
+
             dispatch(updateUser(userData));
+
             setShowProfileModal(false);
+            setProfileImage(null);
+
+            window.location.reload();
           } )
         }
       );
@@ -117,13 +130,16 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
       
     }else {
       console.log(userData);
-      dispatch(updateUser(userData));
-      setShowProfileModal(false);
 
+      dispatch(updateUser(userData));
+
+      setShowProfileModal(false);
+      setProfileImage(null);
+
+      window.location.reload();
     }
     
 
-    
 
     
   };
@@ -143,20 +159,24 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
 
             
             <article class="prose">
-  
-              <h3 for="" class="mt-3 mb-3">Update profile details</h3>
+              <h2 for="" class="mt-3 mb-3 tracking-wider ">Edit profile</h2>
+              
             </article>
+
+            
+
 
             {/* profile image */}
             
             <div class="form-control mt-5 mb-5 ml-5 mr-5 flex flex-row justify-between">
 
+
               <div class="avatar">
                 <div class="w-24 mask mask-squircle">
-                    <img src={require('../img/default.png')}/>
+                    <img src={profileImage ? URL.createObjectURL(profileImage) : (formData.profileImage != undefined && formData.profileImage.length>0 ? formData.profileImage[0] : require('../img/default.png'))}/>
                 </div>
               </div>
-
+              
               <input type="file" id="img" name="profileImage" class="cursor-pointer mt-6 ml-6" onChange={onImageChange}/>
 
             </div>
@@ -190,6 +210,8 @@ const ProfileModal = ({setShowProfileModal, showProfileModal, data}) => {
                   
             {
                     (formData.lastname && formData.firstname)?(
+
+                      (progressFull)?(<button data-modal-toggle="defaultModal" class="btn loading mt-8 mb-2 w-full">Update</button>) :
                         
                         
                         <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-8 mb-2 w-full" onClick={handleSubmit} >Update</button>

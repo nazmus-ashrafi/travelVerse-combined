@@ -42,7 +42,7 @@ const Nav = ({dark,setDark, socket}) => {
 
   // navbell lag
   const [isHide, setIsHide] = useState(true);
-  setTimeout(() => setIsHide(false), 2000);
+  setTimeout(() => setIsHide(false), 4000);
   //
 
 

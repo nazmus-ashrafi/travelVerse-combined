@@ -41,7 +41,7 @@ const dismissNotifications = async (userData) => {
   
 }
 
-// -------------------------------------------------
+// ------------------------------------------------- ??
 
 const updateUser = async (userData) => {
   const response = await axios.put(API_URL + userData._id, userData)
@@ -50,12 +50,50 @@ const updateUser = async (userData) => {
 }
 
 
+// Follow user
+// @route   PUT /user/:id
+const followUser = async (followUserId,userId) => {
+
+  const followId = followUserId
+  const currentUserId = userId
+
+  // console.log(API_URL + `${followId}` + "/follow", {currentUserId})
+  const response = await axios.put(API_URL + `${followId}` + "/follow", {currentUserId})
+
+  // console.log(response)
+  return response.data
+   
+  
+}
+
+// Unfollow user
+// @route   PUT /user/:id
+const unfollowUser = async (followUserId,userId) => {
+
+  const followId = followUserId
+  const currentUserId = userId
+
+  // console.log(API_URL + `${followId}` + "/unfollow", {currentUserId})
+  const response = await axios.put(API_URL + `${followId}` + "/unfollow", {currentUserId})
+
+  // console.log(response)
+  return response.data
+   
+  
+}
+
+
+
+
 
 const userService = {
   getUser,
   dismissNotifications,
 
   updateUser,
+
+  followUser,
+  unfollowUser,
   
 }
 

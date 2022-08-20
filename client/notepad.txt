@@ -1,45 +1,133 @@
-return (
+import { motion } from "framer-motion"
+
+
+import React from 'react'
+import { useRef, useState } from "react";
+
+import { useEffect } from "react";
+import axios from 'axios'
+import { useSelector, useDispatch } from "react-redux";
+
+const FollowerCard = () => {
+
+    const { user } = useSelector(
+      (state) => state.auth
+    )
+
+    //-------------------------------------------------------------------------
+
+  // get shared post details
+  const [allUsers, setAllUsers] = useState();
+
+  const getAllUsers = async () => {
+    const response = await axios.get(process.env.REACT_APP_POST_URL + user.user._id  + "/getallusers")
+
+  
+    setAllUsers(response.data)
+    console.log(allUsers)
+
+    allUsers && allUsers.map((globaluser) => {
+
+      user.user.following.map((follow) => {
+        if (follow === globaluser._id) {
+          allUsers.splice(allUsers.indexOf(globaluser), 1)
+        }
+      })
+
+      if(globaluser._id === user.user._id){
+        allUsers.splice(allUsers.indexOf(globaluser), 1)
+      }
+
+      
+    })
+
+    console.log(allUsers)
+
+    
+
+    
+  }
+
+  useEffect(() => {
+    getAllUsers()
+    
+  }, []);
+
+  //
+
+
+  return (
     <div>
-      
-      {
+      <div class="w-64 carousel rounded-box">
 
-        userId === user.user._id ? // id from params === id from auth 
-        // this is the case if user is visiting his own profile
-          <>
-            {posts ? posts.map((post, id) => {
+        {allUsers && allUsers.map((user, index) => {
+            return (
+              <div class="carousel-item w-full">
+              {/* follower card */}
+                <div
+                  
+                  key="modal"
+                  
+                  // drag
+                  // dragConstraints={{ left: 0, right: 0,top: 0,bottom:0 }}
+                  // dragConstraints={constraintsRef}
+                  
+                  className='z-10 xl:col-start-3 xl:col-span-1 md:col-start-2 md:col-span-1'
+                  
+                  
+                >
+                  {/* follow card */}
+                  <div class="card w-56 h-60 bg-base-100 shadow-xl grid place-items-center z-10 space-y-0">
+
+                      
+
+                    {/* avatar */}
+                    <div class="avatar pt-4">
+                        <div class="w-20 mask mask-squircle">
+                            <img src="https://api.lorem.space/image/face?hash=92048"/>
+                        </div>
+                    </div>
+
+                  
+                    {/* name, description and follow button */}
+                    <div class="card-body items-center text-center ">
+                        
+                      <h2 class="text-lg font-extrabold">{user.username}</h2>
+
+                      <div class="text-base-content text-sm text-opacity-60">20 fellow travellers</div>
+                  
+                      
+                      <div class="card-actions">
+                        <button class="btn btn-info btn-sm">Follow</button>
+                      </div>
+                        
+                  </div>
+
+                  
+                </div>
+                      
 
 
-          if(post.isSharedPost === true){
-            
-            return <MarkerPin data={post} key={id} color={"mediumseagreen"} size={9} />; // shared post
-            
-          }
+              </div>
+              </div> 
 
-      
+              
 
-          if(post.userId !== user.user._id){ 
-
-            return <MarkerPin data={post} key={id} color={"cornflowerblue"} size={8} />; // friend's post
-            
-            
-          }else{
-
-            return <MarkerPin data={post} key={id} color={"grey"} size={8} />; // your post
-
-          }
+            )
+        })}
+    
+ 
+    
+      </div>
 
           
-
-
-        }):null}
-          </> : null // show followers pins
-
-          // Follow to show pins, timeline posts and also compare
-        
-
-        
-      
-      }
-      
     </div>
+
+    
   )
+}
+
+export default FollowerCard
+
+
+       

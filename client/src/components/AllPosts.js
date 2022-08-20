@@ -15,8 +15,8 @@ const AllPosts = ({socket, userId}) => {
   // redux 
     const dispatch = useDispatch();
     const { user } = useSelector(
-          (state) => state.auth
-      )
+      (state) => state.auth
+    )
 
 
 
@@ -37,23 +37,6 @@ const AllPosts = ({socket, userId}) => {
     let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
   
-  
-
-  // const sortedTimelinePosts = arrayForSort.sort(function(a,b){
-
-  //   // console.log(a.updatedAt)
-  //   // console.log(b.updatedAt)
-
-  //   return b.createdAt.localeCompare(a.createdAt);  
-    
-
-  // })
-
-  //\
-  
-  
-
-
   return (
     <div>
         {timelinePosts ? timelinePosts.map((post, id) => {

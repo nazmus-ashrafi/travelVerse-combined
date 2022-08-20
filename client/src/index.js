@@ -8,6 +8,9 @@ import { Provider } from "react-redux";
 import { store } from "./app/store";
 
 
+// import 'tw-elements';
+
+
 ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>

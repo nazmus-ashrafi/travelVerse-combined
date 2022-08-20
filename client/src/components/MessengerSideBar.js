@@ -1,7 +1,50 @@
 import React from 'react'
+import { useSelector, useDispatch } from "react-redux";
+
+import { useState, useEffect } from "react";
+import axios from 'axios'
 
 const MessengerSideBar = () => {
+
+    // redux
+    const { userDetails } = useSelector(
+        (state) => state.user
+    )
+
+    const [allFollows, setAllFollows] = useState([])
+
+    // let allFollows=[]
+
+    // get each follow detail
+    useEffect(() => {
+        const fetchFollowingsDetails = async () => {
+        
+            console.log("fetching")
+
+            // console.log(userDetails.following)
+
+            userDetails && userDetails.following.forEach(async (follow) => {
+              const follows = await axios.get(process.env.REACT_APP_POST_URL + follow + "/getanyuser")
+
+              console.log(follows.data)
+
+                setAllFollows(current => [...current, follows.data])
+            })
+
+            // console.log(allFollows)
+       
+            
+        }
+
+        fetchFollowingsDetails();
+        // console.log(allFollows)
+        
+    }, [userDetails]);
+
+
   return (
+
+    
     <>
 
     <div class="messengerSidebarController md:relative transition duration-100 ease-in-out">
@@ -20,31 +63,36 @@ const MessengerSideBar = () => {
         
         <div class="flex flex-col justify-between flex-1 mt-6">
             <nav>
-                <a class="flex items-center px-4 py-2 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                {allFollows && allFollows.map((user, index) => {
+                    return(
+                      <a class="flex items-center px-4 py-2 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href={`profile/${user._id}`}>
 
-                    <img class="object-cover mx-1 rounded-full h-6 w-6" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar"/>
+                        <img class="object-cover mx-1 rounded-full h-6 w-6" src={user && user.profileImage != undefined && user.profileImage.length>0 ? user.profileImage[0] : require('../img/default.png')} alt="avatar"/>
 
-                    <span class="mx-2 font-medium">Walkin Phoenix</span>
-                </a>
+                        <span class="mx-2 font-medium">{user.username}</span>
+                      </a>
+                    )
+
+                })}
 
             
 
                 <hr class="my-6 border-gray-200 dark:border-gray-600" />
 
 
-                <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                {/* <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
 
                     <img class="object-cover mx-1 rounded-full h-6 w-6" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar"/>
 
                     <span class="mx-2 font-medium">Walkin Phoenix</span>
-                </a>
+                </a> */}
 
-                <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                {/* <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
 
                     <img class="object-cover mx-1 rounded-full h-6 w-6" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar"/>
 
                     <span class="mx-2 font-medium">Walkin Phoenix</span>
-                </a>
+                </a> */}
 
 
                 

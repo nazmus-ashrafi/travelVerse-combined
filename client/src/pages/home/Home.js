@@ -12,6 +12,8 @@ import NotificationBell from '../../components/NotificationBell'
 import { useSelector, useDispatch } from 'react-redux'
 import { useState, useEffect } from "react";
 
+import { getUser } from '../../features/user/userSlice'
+
 
 export default function Home({socket}) {
 
@@ -38,9 +40,9 @@ export default function Home({socket}) {
 
 
   useEffect(()=>{
+    // dispatch(getUser(user))
 
-
-  },[])
+  },[user])
 
   //
 

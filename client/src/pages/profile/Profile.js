@@ -24,6 +24,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, updatePost, reset, getTimeLinePosts } from '../../features/post/postSlice'
+import { followUser, unfollowUser } from '../../features/user/userSlice'
 
 import { useParams } from "react-router-dom";
 import axios from 'axios'
@@ -58,9 +59,25 @@ const ProfilePage = () => {
     let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
     useEffect(()=>{
-        // console.log(userDetails)
+       
   
-    },[userDetails])
+    },[])
+
+
+    //mapbox component saves the previously initialized map to the DOM (bug)
+    // reload page once on load 
+    const reloadCount = sessionStorage.getItem('reloadCount');
+    useEffect(() => {
+        if(reloadCount < 2) {
+        sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+        window.location.reload();
+        } else {
+        sessionStorage.removeItem('reloadCount');
+        }
+    }, []);
+    //
+
+
 
     //
 
@@ -68,6 +85,36 @@ const ProfilePage = () => {
 
     const homeOnClick = () =>{
         // Map.remove()
+        
+    }
+
+    // Follow user logic
+
+    const onFollowClick = () => {
+        dispatch(followUser({followUser: profileUserId, userId: user.user._id}))
+        // user.user._id != profileUser._id
+    }
+
+    //
+
+    // Unfollow user logic
+    const onUnfollowClick = () => {
+        dispatch(unfollowUser({followUser: profileUserId, userId: user.user._id}))
+
+    }
+
+    //
+
+    
+    function refreshPage() {
+
+        setTimeout(()=>{
+
+            window.location.reload(false);
+
+        }, 500);
+        console.log('page to reload')
+
     }
 
 
@@ -83,6 +130,7 @@ const ProfilePage = () => {
         const fetchProfileUser = async () => {
         if (profileUserId === user.user._id) {
             setProfileUser(userDetails);
+            console.log('user details', userDetails)
         } else {
             console.log("fetching")
             const profileUser = await axios.get(process.env.REACT_APP_POST_URL + profileUserId + "/getanyuser")
@@ -96,8 +144,11 @@ const ProfilePage = () => {
     }, [user,userDetails]);
 
 
-
     //
+
+    
+
+
  
 
 
@@ -182,7 +233,7 @@ const ProfilePage = () => {
                     <div className='sideButtons'>
 
                         <label for="home" class="mt-6 mr-6 absolute top-0 right-0 modal-button cursor-pointer">
-                            <Link to={'/home'}>
+                            <Link to={'/home'} onClick={refreshPage} >
                                 <HomeMaxOutlinedIcon onClick={homeOnClick}/>
                                 {/* map.remove */}
                             </Link>
@@ -215,30 +266,40 @@ const ProfilePage = () => {
 
                     </div>
 
-
-                    <ProfileModal showProfileModal={showProfileModal} setShowProfileModal={setShowProfileModal} data={userDetails} />
+                    
+                    {profileUser && user.user._id === profileUser._id && // show if own profile
+                        <ProfileModal showProfileModal={showProfileModal} setShowProfileModal={setShowProfileModal} data={userDetails} /> 
+                    }
 
                     {/* avatar */}
                     <div class="avatar pt-10">
                         <div class="w-24 mask mask-squircle">
-                            <img src={profileUser.profileImage != undefined && profileUser.profileImage.length>0 ? profileUser.profileImage[0] : require('../../img/default.png')}/>
+                            <img src={profileUser && profileUser.profileImage != undefined && profileUser.profileImage.length>0 ? profileUser.profileImage[0] : require('../../img/default.png')}/>
                             {/* <img src={require('../../img/default.png')}/> */}
                         </div>
-                        {console.log(profileUser.profileImage != undefined)}
+                        {/* {console.log(profileUser.profileImage != undefined)} */}
                     </div>
 
                 
                     {/* name, description and follow button */}
                     <div class="card-body items-center text-center">
-                        <h2 class="text-lg font-extrabold">{profileUser.firstname+" "+ profileUser.lastname}</h2>
+                        <h2 class="text-lg font-extrabold">{profileUser && profileUser.firstname+" "+ profileUser.lastname}</h2>
 
-                        <div class="text-base-content my-3 text-sm text-opacity-60">{profileUser.description?profileUser.description:""}</div>
+                        <div class="text-base-content my-3 text-sm text-opacity-60">{profileUser && profileUser.description?profileUser.description:""}</div>
                         {/* Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's. */}
                     
-                        {user.user._id != profileUser._id &&
-                        <div class="card-actions">
-                            <button class="btn btn-primary text-white  btn-sm ">Follow</button>
-                        </div>
+                        {profileUser && user.user._id != profileUser._id &&
+
+                            (
+                                userDetails && userDetails.following.includes(profileUser._id) ? 
+                                    <div class="card-actions">
+                                       <button class="btn btn-error text-white  btn-sm " onClick={onUnfollowClick}>Unfollow</button>
+                                    </div>    :
+                                
+                                    <div class="card-actions">
+                                        <button class="btn btn-primary text-white  btn-sm " onClick={onFollowClick}>Follow</button>
+                                    </div>
+                            )
                         }
                         
 
@@ -292,24 +353,31 @@ const ProfilePage = () => {
             <FriendsBlock/>
 
             {/* tab */}
-            <div class=" tabs pb-5 xl:col-start-2 xl:col-span-3 ">
+            {/* <div class=" tabs pb-5 xl:col-start-2 xl:col-span-3 ">
                 
                 <a class="tab tab-bordered tab-active">Timeline</a> 
                 <a class="tab tab-bordered">Shares</a> 
                 <a class="tab tab-bordered">Posts</a>
 
                 
-            </div>
+            </div> */}
 
+            
             {/* 'unexpanded post' card */}
             <div class="xl:col-start-1 xl:col-span-3 w-full">
-                <UnExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
+
+                {user.user._id === profileUserId ? ( // show if own profile
+                    <UnExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
+                ):null}
+
                 <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
                 {/* posts */}
                 {/* no need to pass socket because we dont care about live notifications in this page */}
                 <AllPosts userId={id}/>
+
             </div>
+            
              
 
 

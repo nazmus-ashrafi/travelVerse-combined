@@ -1,10 +1,15 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
+  // './node_modules/tw-elements/dist/js/**/*.js'],
   darkMode: 'class',
   theme: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/typography"), require("daisyui")],
+  plugins: [
+  require("@tailwindcss/typography"), 
+  require("daisyui"), 
+  // require('tw-elements/dist/plugin'),
+  ],
 
   daisyui: {
     themes: ["cupcake", "dark", "coffee",

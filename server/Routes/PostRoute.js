@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost, deletePost, getPost, getTimelinePosts, likePost, updatePost, getUserPosts, addComment, deleteComment,getAnyUser, getAnyPost} from "../Controllers/PostController.js";
+import { createPost, deletePost, getPost, getTimelinePosts, likePost, updatePost, getUserPosts, addComment, deleteComment,getAnyUser, getAnyPost, getAllUsers} from "../Controllers/PostController.js";
 const router = express.Router()
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -21,6 +21,7 @@ router.put("/:commentid/deletecomment", protect, deleteComment)
 // To be called directly from the component
 router.get("/:userid/getanyuser", getAnyUser)
 router.get("/:postid/getanypost", getAnyPost)
+router.get("/:userid/getallusers", getAllUsers)
 
 
 

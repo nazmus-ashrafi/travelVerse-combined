@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion"
 
 
@@ -8,11 +9,20 @@ import { useEffect } from "react";
 import axios from 'axios'
 import { useSelector, useDispatch } from "react-redux";
 
+import { followUser, unfollowUser } from '../features/user/userSlice'
+
 const FollowerSlider = () => {
 
     const { user } = useSelector(
       (state) => state.auth
     )
+
+    const { userDetails } = useSelector(
+        (state) => state.user
+    )
+    
+
+    const dispatch = useDispatch()
 
     //-------------------------------------------------------------------------
 
@@ -22,7 +32,7 @@ const FollowerSlider = () => {
   
 
   const getAllUsers = async () => {
-    const response = await axios.get(process.env.REACT_APP_POST_URL + user.user._id  + "/getallusers")
+    const response = await axios.get(process.env.REACT_APP_POST_URL + user.user._id  + "/getallnotfollowedusers")
     
     setAllUsers(response.data)
     // console.log(response.data)
@@ -41,7 +51,8 @@ const FollowerSlider = () => {
     
   }, []);
 
-  //
+
+  
 
 
   return (
@@ -49,7 +60,7 @@ const FollowerSlider = () => {
       {/* h-64  h-72 */}
 
       <article class="prose ">
-        <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3 ">People you may know</p>
+        <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3"><b>People You May Know</b></p>
               
       </article>
 
@@ -57,7 +68,7 @@ const FollowerSlider = () => {
 
       <div class="w-64 carousel rounded-box">
 
-        {allUsers && allUsers.map((user, index) => {
+        {allUsers && allUsers.map((currUser, index) => {
             return (
 
               <div class="carousel-item w-full">
@@ -80,9 +91,9 @@ const FollowerSlider = () => {
                     
 
                   {/* avatar */}
-                  <a class="avatar pt-4" href={`profile/${user._id}`}>
+                  <a class="avatar pt-4" href={`profile/${currUser._id}`}>
                     <div class="w-20 mask mask-squircle">
-                      <img src={user.profileImage != undefined && user.profileImage.length>0 ? user.profileImage[0] : require('../img/default.png')}/>
+                      <img src={currUser.profileImage != undefined && currUser.profileImage.length>0 ? currUser.profileImage[0] : require('../img/default.png')}/>
                     </div>
                   </a>
 
@@ -90,14 +101,32 @@ const FollowerSlider = () => {
                   {/* name, description and follow button */}
                   <div class="card-body items-center text-center ">
                       
-                    <h2 class="text-lg font-extrabold">{user.username}</h2>
+                    <h2 class="text-lg font-extrabold">{currUser.username}</h2>
 
-                    <div class="text-base-content text-sm text-opacity-60">{user.description}</div>
+                    <div class="text-base-content text-sm text-opacity-60">{currUser.description}</div>
                 
                     
-                    <div class="card-actions">
+                    {/* <div class="card-actions">
                       <button class="btn btn-info btn-sm">Follow</button>
-                    </div>
+                    </div> */}
+
+                    {user && user.user._id != currUser._id &&
+
+                            (
+                                userDetails && userDetails.following.includes(currUser._id) ? 
+                                    <div class="card-actions">
+                                       <button class="btn btn-error text-white  btn-sm " onClick={()=>{
+                                        dispatch(unfollowUser({followUser: currUser._id, userId: user.user._id}))
+                                       }}>Unfollow</button>
+                                    </div>    :
+                                
+                                    <div class="card-actions">
+                                        <button class="btn btn-primary text-white  btn-sm " onClick={()=>{
+                                          dispatch(followUser({followUser: currUser._id, userId: user.user._id}))
+                                        }}>Follow</button>
+                                    </div>
+                            )
+                        }
                       
                   </div>
 
@@ -126,5 +155,3 @@ const FollowerSlider = () => {
 
 export default FollowerSlider
 
-
-       

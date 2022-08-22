@@ -400,10 +400,10 @@ export const getAnyPost = async (req, res) => {
   }
 };
 
-// @desc    Get all users except current user
+// @desc    Get all users except current user and current user's follows
 // @route   GET post/getallusers
 // @access  
-export const getAllUsers = async (req, res) => {
+export const getAllNotFollowedUsers = async (req, res) => {
 
   // console.log("get all users")
   const userId = req.params.userid;

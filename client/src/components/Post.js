@@ -27,6 +27,8 @@ import Comment from "./Comment"
 import SharedPost from './SharedPost'
 import ExpandedSharedPostMaker from './ExpandedSharedPostMaker'
 
+import axios from 'axios'
+
 
 const Post = ({ data, socket, hidden }) => {
 
@@ -128,6 +130,24 @@ const Post = ({ data, socket, hidden }) => {
   //
 
 
+  // Logic for getting the user who made this post
+    const postMakerUserId = data.userId; // from params
+    const [postMakerUser, setPostMakerUser] = useState({});
+
+    useEffect(() => {
+      const fetchPostMakerUser = async () => {
+      const profileUser = await axios.get(process.env.REACT_APP_POST_URL + postMakerUserId + "/getanyuser")
+
+      setPostMakerUser(profileUser.data);
+      }
+
+      fetchPostMakerUser();
+    }, [user]);
+
+
+  //
+
+
   if ( !data.isSharedPost ) {
     return (
 
@@ -162,7 +182,8 @@ const Post = ({ data, socket, hidden }) => {
           {/* avatar */}
           <div class="avatar pr-5 ">
               <div class="md:w-10 w-8 mask mask-squircle">
-                  <img src="https://api.lorem.space/image/face?hash=92048"/>
+                  {/* <img src="https://api.lorem.space/image/face?hash=92048"/> */}
+                  <img src={postMakerUser && postMakerUser.profileImage != undefined && postMakerUser.profileImage.length>0 ? postMakerUser.profileImage[0] : require('../img/default.png')}/>
               </div>
           </div>
           

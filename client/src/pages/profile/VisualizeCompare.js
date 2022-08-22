@@ -49,7 +49,7 @@ const VisualizeCompare = () => {
         // longitude: ownPosts[0].longitude, // 90.38149930538287 
         latitude: 23.77783437646191,
         longitude: 90.38149930538287,
-        zoom: 1, // 11
+        zoom: 3, // 11
         bearing: 0,
         pitch: 0
     };
@@ -85,7 +85,9 @@ const VisualizeCompare = () => {
 
                 class="col-start-1 col-span-2 "
             >
-                {isOn?<AllTimelinePins posts={timelinePosts} userId={user.user._id}/>: <AllTimelinePins posts={ownPosts} userId={user.user._id}/>}
+                {/* {isOn?<AllTimelinePins posts={timelinePosts} userId={user.user._id}/>: <AllTimelinePins posts={ownPosts} userId={user.user._id}/>} */}
+
+                <AllTimelinePins posts={timelinePosts} userId={user.user._id}/>
                 
             </Map>
 
@@ -95,7 +97,8 @@ const VisualizeCompare = () => {
             <div class="col-start-2 col-span-2 h-screen overflow-auto ">
 
                 <div class="flex justify-between">
-                    <div class='flex'>
+
+                    {/* <div class='flex'>
                         <h1 class="mt-5 ml-6">Following's posts:</h1>
                 
                         <label class="swap mt-3 ml-2">
@@ -103,6 +106,16 @@ const VisualizeCompare = () => {
                             <div class="swap-on" onClick={swapOnClick} >ON</div>
                             <div class="swap-off" onClick={swapOffClick} >OFF</div>
                         </label>
+                    </div> */}
+
+                    <div class='flex'>
+                        <h1 class="mt-5 ml-6"><b>Timeline posts:</b></h1>
+                
+                        {/* <label class="swap mt-3 ml-2">
+                            <input type="checkbox" />
+                            <div class="swap-on" onClick={swapOnClick} >ON</div>
+                            <div class="swap-off" onClick={swapOffClick} >OFF</div>
+                        </label> */}
                     </div>
                     
                     
@@ -124,7 +137,10 @@ const VisualizeCompare = () => {
                 </div>
                 
 
-                <LocationList posts={isOn ? timelinePosts : ownPosts} onSelectLocation={onSelectLocation} class=""/>
+                {/* <LocationList posts={isOn ? timelinePosts : ownPosts} onSelectLocation={onSelectLocation} class=""/> */}
+
+                <LocationList timelinePosts={timelinePosts} ownPosts={ownPosts} onSelectLocation={onSelectLocation} class=""/>
+
 
             </div>
             

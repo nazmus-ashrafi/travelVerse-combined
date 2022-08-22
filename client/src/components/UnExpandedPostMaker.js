@@ -6,9 +6,15 @@ import { useState } from "react";
 
 import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
 
+import { useSelector, useDispatch } from "react-redux";
+
 const UnExpandedPostMaker = ({showModal,setShowModal}) => {
 
     const [modalOpened, setModalOpened] = useState(false)
+
+    const { userDetails } = useSelector(
+        (state) => state.user
+    )
 
   return (
     <>
@@ -16,14 +22,14 @@ const UnExpandedPostMaker = ({showModal,setShowModal}) => {
         {/* avatar */}
                 <div class="avatar pr-10">
                     <div class="md:w-20 w-16 mask mask-squircle">
-                        <img src="https://api.lorem.space/image/face?hash=92048"/>
+                        <img class="object-cover mx-1 rounded-full h-6 w-6" src={userDetails && userDetails.profileImage != undefined && userDetails.profileImage.length>0 ? userDetails.profileImage[0] : require('../img/default.png')} alt="avatar"/>
                     </div>
                 </div>
                 
                 {/* buttons */}
                 <div class='flex-grow pt-4'>
 
-                    <div class=" btn-outline cursor-pointer rounded-full p-2 bg-slate-600 hover:bg-slate-500 hover:text-slate-50 "  data-modal-toggle="defaultModal" type="button" onClick= {()=> setModalOpened(true)}><span class='text-lg pl-3'>Where did you go, Simon?</span></div>
+                    <div class=" btn-outline cursor-pointer rounded-full p-2 bg-slate-600 hover:bg-slate-500 hover:text-slate-50 "  data-modal-toggle="defaultModal" type="button" onClick= {()=> setModalOpened(true)}><span class='text-lg pl-3'>{`Where did you go${userDetails ? ', '+ userDetails.firstname + ' ?':'..'}`}</span></div>
 
                     {/* <label for="post-modal" class="mt-6 mr-5 absolute top-0 right-0 modal-button">
                         <UilPen

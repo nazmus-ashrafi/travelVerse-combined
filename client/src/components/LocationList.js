@@ -5,14 +5,15 @@ import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 
 
 
-const LocationList = ({posts, onSelectLocation}) => {
+const LocationList = ({timelinePosts, onSelectLocation, ownPosts}) => {
 
-    const [check, setChecked] = useState();
+    // const [posts, setPosts] = useState(timelinePosts);
 
-    useEffect(()=>{
-        
-  
-    },[])
+    
+    
+    // useEffect(() => {
+    //     setPosts(timelinePosts);
+    // }, [isOn]);
 
 
 
@@ -21,10 +22,7 @@ const LocationList = ({posts, onSelectLocation}) => {
         <div className="">
 
             
-
-            
-
-            {posts.map((post) => (
+            {timelinePosts.map((post) => (
 
                 
                 <div className="">
@@ -83,6 +81,8 @@ const LocationList = ({posts, onSelectLocation}) => {
                 </div>
 
             ))}
+            
+            
 
 
         </div>

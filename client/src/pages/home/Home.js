@@ -30,6 +30,19 @@ export default function Home({socket}) {
 
   // },[setDark])
 
+
+  // reload page once on load 
+    const reloadCount = sessionStorage.getItem('reloadCount');
+    useEffect(() => {
+        if(reloadCount < 2) {
+        sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+        window.location.reload();
+        } else {
+        sessionStorage.removeItem('reloadCount');
+        }
+    }, []);
+  //
+
   // redux
   const dispatch = useDispatch()
 

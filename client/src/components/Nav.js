@@ -16,7 +16,7 @@ import Logo from './Logo'
 
 
 const navigation = [
-  { name: 'Refresh', href: '#', current: true },
+  { name: 'Refresh', href: '', current: true, onClick: () => { window.location.reload() } },
   // { name: 'Team', href: '#', current: false },
   // { name: 'Projects', href: '#', current: false },
   // { name: 'Calendar', href: '#', current: false },
@@ -136,7 +136,8 @@ function refreshPage() {
                 
                 
                 
-                <Link to={`/profile/${user.user._id}`} onClick={refreshPage}  className="flex-shrink-0 flex items-center sm:ml-6">
+                {/* <Link to={`/profile/${user.user._id}`} onClick={refreshPage}  className="flex-shrink-0 flex items-center sm:ml-6"> */}
+                <Link to={`/profile/${user.user._id}`} className="flex-shrink-0 flex items-center sm:ml-6">
 
                   <Logo size={'20'}/>
 
@@ -152,6 +153,7 @@ function refreshPage() {
                       <a
                         key={item.name}
                         href={item.href}
+                        onClick={item.onClick}
                         className={classNames(
                           item.current ? 'bg-gray-100 text-gray-400 dark:bg-gray-900 dark:text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                           'px-3 py-2 rounded-md text-sm font-medium'
@@ -170,7 +172,7 @@ function refreshPage() {
 
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
-                <h1 class="font-['Abril'] italic font-medium text-2xl text-zinc-400 mr-3">{user.user.username}</h1>
+                <h1 class="font-['Abril'] italic font-medium text-2xl text-zinc-400 mr-3">@{user.user.username}</h1>
 
 
 
@@ -206,7 +208,8 @@ function refreshPage() {
                       <Menu.Item>
                         {({ active }) => (
                           <>
-                          <Link to={`/profile/${user.user._id}`} onClick={refreshPage} >
+                          {/* <Link to={`/profile/${user.user._id}`} onClick={refreshPage} > */}
+                          <Link to={`/profile/${user.user._id}`} >
                             <a
                               href="#"
                               className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}

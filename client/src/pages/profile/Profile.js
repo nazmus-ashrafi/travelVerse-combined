@@ -233,7 +233,8 @@ const ProfilePage = () => {
                     <div className='sideButtons'>
 
                         <label for="home" class="mt-6 mr-6 absolute top-0 right-0 modal-button cursor-pointer">
-                            <Link to={'/home'} onClick={refreshPage} >
+                            {/* <Link to={'/home'} onClick={refreshPage} > */}
+                            <Link to={'/home'}>
                                 <HomeMaxOutlinedIcon onClick={homeOnClick}/>
                                 {/* map.remove */}
                             </Link>
@@ -350,7 +351,10 @@ const ProfilePage = () => {
         <div class="section-2 grid xl:grid-cols-4 grid-cols-1 pt-10 xl:pl-28 xl:pr-28 xl:relative transition duration-200 ease-in-out pl-7 pr-7 mt-3 xl:place-items-stretch place-items-center">
 
             {/* friends block */}
-            <FriendsBlock/>
+            {user.user._id === profileUserId ? ( // show if own profile
+                <FriendsBlock/>
+            ):null}
+            
 
             {/* tab */}
             {/* <div class=" tabs pb-5 xl:col-start-2 xl:col-span-3 ">

@@ -156,7 +156,7 @@ const NotificationBell = ({socket}) => {
 
                             <span 
                             className={classNames(isOn ? 'badge p-1.5 bg-red-600 text-white  opacity-100 absolute ' :  'badge p-1.5 bg-red-600 text-white  opacity-100 absolute hidden')}
-                            >{userDetails.notifications ? userDetails.notifications.length + notifications.length:  notifications.length}</span>
+                            >{userDetails ? userDetails.notifications ? userDetails.notifications.length + notifications.length:  notifications.length:null}</span>
 
                             {/* {user.notifications ? user.notifications.length + notifications.length: notifications.length} */}
 

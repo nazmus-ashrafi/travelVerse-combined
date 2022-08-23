@@ -52,7 +52,7 @@ const createPost = async (postData,token) => {
 
 // Update post
 // @route   PUT /api/posts/:id
-const updatePost = async ( postId, post, token) => {
+const updatePost = async ( newPost, token) => {
 
   console.log(token)
   
@@ -61,7 +61,7 @@ const updatePost = async ( postId, post, token) => {
     headers: { Authorization: `Bearer ${token}` }
   };
 
-  const response = await axios.put(API_URL + postId , post, config)
+  const response = await axios.put(API_URL + newPost.postId , newPost, config)
 
   return response.data
 }
@@ -168,6 +168,8 @@ const postService = {
   deleteComment,
 
   likePost,
+
+  
 
 
  

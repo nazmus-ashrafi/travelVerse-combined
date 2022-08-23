@@ -10,7 +10,7 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 
 import { useDispatch, useSelector } from "react-redux";
-import { createPost, updatePost, reset, getTimeLinePosts } from '../features/post/postSlice'
+import { createPost, updatePost, reset, getTimeLinePosts} from '../features/post/postSlice'
 import Spinner from './Spinner';
 
 import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
@@ -21,9 +21,11 @@ import app from "../firebase";
 
 import Post from './Post';
 
+import axios from 'axios'
+
+
 const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost, socket}) => {
 
-   
 
     // const desc = useRef();
 
@@ -48,6 +50,25 @@ const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost, socket}) =>
     const { user } = useSelector(
         (state) => state.auth
     )
+    //
+
+    // get shared post user
+
+    const [sharedPostUser, setSharedPostUser] = useState({})
+    
+    useEffect(()=>{
+
+        const fetchSharedPostUser = async () => {
+       
+            const profileUser = await axios.get(process.env.REACT_APP_POST_URL + sharedPost.userId + "/getanyuser")
+
+            setSharedPostUser(profileUser.data)
+        }
+
+        fetchSharedPostUser()
+    },[])
+
+    //
 
 
 
@@ -171,7 +192,7 @@ const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost, socket}) =>
                 <div class="flex justify-start items-center pt-3 pb-4">
                     <div class="avatar pr-5">
                         <div class="md:w-16 w-14 mask mask-squircle">
-                            <img src="https://api.lorem.space/image/face?hash=92048"/>
+                            <img src={user && user.user.profileImage != undefined && user.user.profileImage.length>0 ? user.user.profileImage[0] : require('../img/default.png')}/>
 
                             {/* <img
                                 src={
@@ -187,7 +208,7 @@ const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost, socket}) =>
 
                     <div class="avatar pr-5">
                         <div class="md:w-16 w-14 mask mask-squircle">
-                            <img src="https://api.lorem.space/image/face?hash=92048"/>
+                            <img src={sharedPostUser && sharedPostUser.profileImage != undefined && sharedPostUser.profileImage.length>0 ? sharedPostUser.profileImage[0] : require('../img/default.png')}/>
 
                             {/* <img
                                 src={
@@ -220,7 +241,7 @@ const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost, socket}) =>
 
                                     // style={{width: "w-full", height: 250}}
                                     attributionControl="none"
-                                    mapStyle="mapbox://styles/mapbox/streets-v9"
+                                    mapStyle = {process.env.REACT_APP_MAPBOX_STYLE}
                                     mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                                     
                                     style={{flex: 1, height: '100%', width: '100%', borderRadius: 10, }}

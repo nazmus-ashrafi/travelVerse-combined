@@ -29,6 +29,11 @@ import ExpandedSharedPostMaker from './ExpandedSharedPostMaker'
 
 import axios from 'axios'
 
+import UpdatePostMaker from './UpdatePostMaker'
+
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+
 
 const Post = ({ data, socket, hidden }) => {
 
@@ -147,6 +152,12 @@ const Post = ({ data, socket, hidden }) => {
 
   //
 
+  // logic for update post
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const onUpdateClick = () => {
+    setShowUpdateModal(true)
+  }
+
 
   if ( !data.isSharedPost ) {
     return (
@@ -163,7 +174,7 @@ const Post = ({ data, socket, hidden }) => {
 
                 // style={{width: "w-full", height: 250}}
                 attributionControl="none"
-                mapStyle="mapbox://styles/mapbox/streets-v9"
+                mapStyle = {process.env.REACT_APP_MAPBOX_STYLE}
                 mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                 
                 style={{flex: 1, height: '100%', width: '100%', borderRadius: 10, }}
@@ -194,6 +205,7 @@ const Post = ({ data, socket, hidden }) => {
 
             <>
               {/* triple dot dropdown */}
+              {postMakerUserId === user.user._id ?
               <div class="dropdown dropdown-end dropdown-hover">
               
                   <button class="btn btn-ghost btn-circle ">
@@ -209,10 +221,36 @@ const Post = ({ data, socket, hidden }) => {
                   </button>
                 
                 <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52">
-                  <li><a>Update</a></li>
-                  <li><a>Delete</a></li>
+                  
+                    
+                  <li class="flex">
+                    <div class="">
+                      <EditRoundedIcon color='primary'/>
+                      <a onClick={onUpdateClick} class='flex-grow'>Edit</a>
+                    </div>
+                    
+                  </li>
+                
+                  <li class="flex">
+                    <div class="">
+                      <DeleteRoundedIcon color='warning'/>
+                      <a class='flex-grow'>Delete</a>
+                    </div>
+                    
+                  </li>
+                  
+                  
                 </ul>
-              </div>
+              </div>:null
+              }
+      
+              
+
+              <UpdatePostMaker
+                showModal={showUpdateModal}
+                setShowModal={setShowUpdateModal}
+                data={data}
+              />
 
             </>
           

@@ -82,17 +82,17 @@ export const createPost = createAsyncThunk(
 // Update post
 export const updatePost = createAsyncThunk(
     'post/updatePost',
-    async ({postId, post}, thunkAPI) => {
+    async (newPost, thunkAPI) => {
 
       try {
       
       const token = thunkAPI.getState().auth.user.token
       
-      console.log(postId)
-      console.log(post)
+     
+      console.log(newPost)
       
 
-      return await postService.updatePost(postId, post, token)
+      return await postService.updatePost(newPost, token)
 
       
     } catch (error) {
@@ -263,6 +263,7 @@ export const likePost = createAsyncThunk(
     }
   }
 )
+
 
 
 

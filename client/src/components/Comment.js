@@ -1,5 +1,5 @@
 import React from 'react'
-import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
 import { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -86,7 +86,7 @@ const Comment = ({comment}) => {
                 </button>
               
                 <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52">
-                  <li onClick={handleDeleteComment}><a><DeleteOutlineRoundedIcon/>Delete </a></li>
+                  <li onClick={handleDeleteComment}><a><DeleteRoundedIcon color='warning'/>Delete </a></li>
                   
                 </ul>
               </div>

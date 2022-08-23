@@ -78,7 +78,7 @@ const VisualizeCompare = () => {
                 ref={mapRef}
                 initialViewState={initialViewState}
                 // mapStyle="mapbox://styles/mapbox/light-v9"
-                mapStyle="mapbox://styles/mapbox/streets-v9"
+                mapStyle = {process.env.REACT_APP_MAPBOX_STYLE}
                 mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                 // style={{width: "60vw", height: "100vh"}}
                 style={{height: "100vh"}}

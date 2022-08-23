@@ -323,7 +323,7 @@ const ProfilePage = () => {
                         zoom: 2
                     }}
                     style={{width: "90vw", height: 400}}
-                    mapStyle="mapbox://styles/mapbox/streets-v9"
+                    mapStyle = {process.env.REACT_APP_MAPBOX_STYLE}
                     mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                 >
 

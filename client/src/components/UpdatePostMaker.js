@@ -19,10 +19,25 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../firebase";
 
-const ExpandedPostMaker = ({showModal,setShowModal}) => {
+import { isWebUri } from 'valid-url';
+
+const UpdatePostMaker = ({showModal,setShowModal,data}) => {
 
     const constraintsRef = useRef(null);
     const { width,height } = useDimensions(constraintsRef);
+
+    function validURL(str) {
+        if (!isWebUri(str)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+        setFormData(data);
+    } , [data]);
 
     // const desc = useRef();
 
@@ -32,26 +47,26 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
     
     };
 
-    const [data, setData] = useState(initialState);
+    // const [data, setData] = useState(initialState);
 
     // Handle change in input
     const handleChange = (e) => {
-        setData({ ...data, [e.target.name]: e.target.value });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const [initialViewState,setInitialViewState]= useState({
         
-        longitude: 103.38149930538287,
-        latitude: 23.77783437646191,
-        zoom: 4
+        longitude: formData.longitude + 0.67,
+        latitude: formData.latitude,
+        zoom: 9
                         
     })
     const [viewport, setViewport] = useState({
         zoom: 6
     });
     const [newPlace,setNewPlace]= useState({
-        lat: 23.77783437646191,
-        long: 90.38149930538287
+        lat: formData.latitude,
+        long: formData.longitude
     })
 
     const [progressFull,setProgressFull]= useState(false)
@@ -90,11 +105,12 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
         e.preventDefault();
 
         // post data
-        if(data.description && data.title && newPlace.lat && newPlace.long){
+        if(formData.description && formData.title && newPlace.lat && newPlace.long){
             const newPost = {
+                postId: formData._id,
                 userId: user.user._id,
-                title: data.title,
-                description: data.description,
+                title: formData.title,
+                description: formData.description,
                 latitude: newPlace.lat,
                 longitude: newPlace.long,
                 images: null,
@@ -111,9 +127,12 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
             // console.log(newPost)
 
 
-            if (images) { // if there is an image with post
+            if (images.length>0) { // if there is an image with post
 
-                images.map((image) => {
+                if(!validURL(images[0])){
+                        images.map((image) => {
+
+                    
                     
 
                     const storage = getStorage();
@@ -174,7 +193,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                             
                             if(codedImages.length === images.length){
                                 newPost.images = codedImages;
-                                dispatch(createPost(newPost))
+                                dispatch(updatePost(newPost))
                                 
                                 setShowModal(false)
 
@@ -190,12 +209,29 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
 
                 }) 
+                }else{
+                    images.map((image) => {
+                        codedImages.push(image);
+                    })
+                    if(codedImages.length === images.length){
+                                newPost.images = codedImages;
+                                dispatch(updatePost(newPost))
+                                
+                                setShowModal(false)
+
+                                resetShare()
+
+                                window.location.reload()
+                            }
+                }
+
+                
                 
                 
             } else { // if there is no image with post
 
                 // create post 
-                dispatch(createPost(newPost,user))
+                dispatch(updatePost(newPost))
 
         
 
@@ -224,7 +260,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
     const resetShare = () => {
         
         // reset description and title
-        setData(initialState)
+        setFormData(initialState)
 
         // reset map market
         setNewPlace({
@@ -246,9 +282,22 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
 
     // handle image upload
-    const [images, setImages] = useState(null);
+    const [images, setImages] = useState();
     const imageRef = useRef();
     const currImages = []
+
+    // view prev image logic
+     useEffect(() => {
+        if(formData.images){
+            setImages(formData.images)
+        }
+
+        console.log(images)
+    } , [data]);
+
+    //
+
+    
 
 
 
@@ -322,7 +371,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                     {/* <h3>Maluha is feeling good at Sibui.</h3> */}
                     {/* <input type="text" placeholder="Write a title" /> */}
 
-                    <input type="text" name='title' placeholder="Mini title for your trip" class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200" maxlength="20" onChange={handleChange} value={data.title}></input>
+                    <input type="text" name='title' placeholder="Mini title for your trip" class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200" maxlength="20" onChange={handleChange} value={formData.title}></input>
                 </div>
 
                 
@@ -346,7 +395,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                         {...initialViewState}
                         onMove={evt => setInitialViewState(evt.initialViewState)}
                         style={{width: "90vw", height: 400}}
-                        mapStyle = {process.env.REACT_APP_MAPBOX_STYLE}
+                        mapStyle="mapbox://styles/mapbox/streets-v9"
                         mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                         onDblClick={handleMapClick}
                     >
@@ -360,7 +409,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                     
                 </div>
 
-                <textarea id="description" name='description' type="text" rows="5" placeholder="Write something about your trip...." class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200 " onChange={handleChange} value={data.description} required></textarea>
+                <textarea id="description" name='description' type="text" rows="5" placeholder="Write something about your trip...." class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200 " onChange={handleChange} value={formData.description} required></textarea>
 
                 <div class='flex flex-row justify-between items-center xl:p-3 p-1 space-x-3 w-full border-solid border-2 border-base-200 rounded-xl mt-4 pb-1'>
 
@@ -413,7 +462,9 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
                             }}/>
 
-                            <img src={URL.createObjectURL(image)} class="rounded-box w-60 h-60"  />
+                            {validURL(image)?<img src={image} class="rounded-box w-60 h-60"  />:<img src={URL.createObjectURL(image)} class="rounded-box w-60 h-60"  />}
+
+                            {/* <img src={URL.createObjectURL(image)} class="rounded-box w-60 h-60"  /> */}
                             
                         </div>
 
@@ -424,13 +475,13 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                 {/* <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-4 mb-2 w-full" onClick={handleUpload}>Post</button> */}
 
                 {
-                    (newPlace && data.description && data.title)?(
-                        (progressFull)?(<button data-modal-toggle="defaultModal" class="btn loading mt-4 mb-2 w-full">Post</button>) :
+                    (newPlace && formData.description && formData.title)?(
+                        (progressFull)?(<button data-modal-toggle="defaultModal" class="btn loading mt-4 mb-2 w-full">Update</button>) :
                         
 
-                        <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-4 mb-2 w-full" onClick={handleUpload}>Post</button>
+                        <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-4 mb-2 w-full" onClick={handleUpload}>Update</button>
                     ):(
-                        <button data-modal-toggle="defaultModal" type="button" class="btn no-animation mt-4 mb-2 w-full pointer-events-none opacity-20" >Post</button>
+                        <button data-modal-toggle="defaultModal" type="button" class="btn no-animation mt-4 mb-2 w-full pointer-events-none opacity-20" >Update</button>
                         
                     )
 
@@ -445,4 +496,4 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 }
 
 
-export default ExpandedPostMaker
+export default UpdatePostMaker

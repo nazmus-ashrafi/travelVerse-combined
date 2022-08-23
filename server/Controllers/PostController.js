@@ -347,7 +347,7 @@ export const deleteComment = async (req, res, next) => {
 
 
 
-// -------------------------------- Functionality which will not change redux state
+// -------------------------------- Functionality which will not change redux state -----
 // -------------------------------- To be called directly from the component  --------------------
 
 // @desc    Get any user data
@@ -376,6 +376,7 @@ export const getAnyUser = async (req, res) => {
   }
 };
 
+
 // @desc    Get any post data
 // @route   GET post/:id/getanypost
 // @access  
@@ -399,6 +400,11 @@ export const getAnyPost = async (req, res) => {
     
   }
 };
+
+// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+
+
 
 // @desc    Get all users except current user and current user's follows
 // @route   GET post/getallusers

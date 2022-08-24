@@ -180,7 +180,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
                                 resetShare()
 
-                                window.location.reload()
+                                // window.location.reload()
                             }
 
 
@@ -206,7 +206,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
                 resetShare()
 
-                window.location.reload() // timeline sorting bug
+                // window.location.reload() 
 
             }
 

@@ -52,6 +52,7 @@ const createPost = async (postData,token) => {
 
 // Update post
 // @route   PUT /api/posts/:id
+// @access  Private
 const updatePost = async ( newPost, token) => {
 
   console.log(token)
@@ -69,16 +70,18 @@ const updatePost = async ( newPost, token) => {
 
 // Delete post
 // @route   DELETE /api/posts/:id
-const deletePost = async ( postId, token) => {
+// @access  Private
+const deletePost = async ( data, token) => {
 
   console.log(token)
+  console.log(data.userId)
   
   
   const config = {
     headers: { Authorization: `Bearer ${token}` }
   };
 
-  const response = await axios.delete(API_URL + postId , config)
+  const response = await axios.delete(API_URL + data._id , config)
 
   return response.data
 }

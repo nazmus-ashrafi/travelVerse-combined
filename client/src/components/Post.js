@@ -30,6 +30,7 @@ import ExpandedSharedPostMaker from './ExpandedSharedPostMaker'
 import axios from 'axios'
 
 import UpdatePostMaker from './UpdatePostMaker'
+import DeletePost from './DeletePost'
 
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
@@ -63,6 +64,10 @@ const Post = ({ data, socket, hidden }) => {
 
   const { user} = useSelector(
     (state) => state.auth
+  )
+
+  const { timelinePosts} = useSelector(
+    (state) => state.post
   )
 
 
@@ -135,7 +140,7 @@ const Post = ({ data, socket, hidden }) => {
   //
 
 
-  // Logic for getting the user who made this post
+  // Logic for getting the user who made this post and others
     const postMakerUserId = data.userId; // from params
     const [postMakerUser, setPostMakerUser] = useState({});
 
@@ -147,7 +152,14 @@ const Post = ({ data, socket, hidden }) => {
       }
 
       fetchPostMakerUser();
-    }, [user]);
+
+      // view is fetched everytime timelinePosts changes
+      setViewState({
+        longitude: data.longitude,
+        latitude: data.latitude,
+        zoom: 11 // 6
+      })
+    }, [user,timelinePosts]);
 
 
   //
@@ -157,6 +169,14 @@ const Post = ({ data, socket, hidden }) => {
   const onUpdateClick = () => {
     setShowUpdateModal(true)
   }
+  //
+
+  // logic for delete post
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const onDeleteClick = () => {
+    setShowDeleteModal(true)
+  }
+  //
 
 
   if ( !data.isSharedPost ) {
@@ -234,7 +254,7 @@ const Post = ({ data, socket, hidden }) => {
                   <li class="flex">
                     <div class="">
                       <DeleteRoundedIcon color='warning'/>
-                      <a class='flex-grow'>Delete</a>
+                      <a onClick={onDeleteClick} class='flex-grow'>Delete</a>
                     </div>
                     
                   </li>
@@ -243,12 +263,17 @@ const Post = ({ data, socket, hidden }) => {
                 </ul>
               </div>:null
               }
-      
-              
+    
 
               <UpdatePostMaker
                 showModal={showUpdateModal}
                 setShowModal={setShowUpdateModal}
+                data={data}
+              />
+
+              <DeletePost
+                showModal={showDeleteModal}
+                setShowModal={setShowDeleteModal}
                 data={data}
               />
 

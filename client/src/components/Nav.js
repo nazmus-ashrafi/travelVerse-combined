@@ -58,6 +58,10 @@ const Nav = ({dark,setDark, socket}) => {
     (state) => state.auth
   )
 
+  const { userDetails } = useSelector(
+        (state) => state.user
+    )
+
   const onLogout = () =>{
     dispatch(logout())
     dispatch(reset())
@@ -186,11 +190,8 @@ function refreshPage() {
                     <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-400 dark:focus:ring-offset-gray-800 dark:focus:ring-white z-50">
                       <span className="sr-only">Open user menu</span>
                       {/* profile picture */}
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
+
+                      <img className="h-8 w-8 rounded-full" src={userDetails && userDetails.profileImage != undefined && userDetails.profileImage.length>0 ? userDetails.profileImage[0] : require('../img/default.png')} alt="avatar"/>
                     </Menu.Button>
                   </div>
 
@@ -229,8 +230,7 @@ function refreshPage() {
 
 
                           </>
-                          
-
+                        
                           
                         )}
                       </Menu.Item>

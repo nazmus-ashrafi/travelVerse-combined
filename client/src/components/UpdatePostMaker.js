@@ -127,7 +127,7 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
             // console.log(newPost)
 
 
-            if (images.length>0) { // if there is an image with post
+            if (images && images.length>0) { // if there is an image with post
 
                 if(!validURL(images[0])){
                         images.map((image) => {

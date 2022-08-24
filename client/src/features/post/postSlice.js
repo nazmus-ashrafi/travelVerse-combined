@@ -116,15 +116,15 @@ export const updatePost = createAsyncThunk(
 // Delete post
 export const deletePost = createAsyncThunk(
     'post/deletePost',
-    async (postId, thunkAPI) => {
+    async (data, thunkAPI) => {
 
       try {
       
       const token = thunkAPI.getState().auth.user.token
       
-      console.log(postId)
+      console.log(data)
     
-      return await postService.deletePost(postId, token)
+      return await postService.deletePost(data, token)
 
       
     } catch (error) {
@@ -352,7 +352,8 @@ export const postSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         console.log(action.payload)
-        state.timelinePosts.push(action.payload)
+        // state.timelinePosts.push(action.payload)
+        state.timelinePosts = state.timelinePosts.filter(post => post._id !== action.payload._id)
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.isLoading = false

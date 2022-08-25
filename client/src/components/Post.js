@@ -38,9 +38,10 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
 const Post = ({ data, socket, hidden }) => {
 
+  // const [data, setData] = useState(post)
   // useEffect(() => {
-  //   console.log(data)
-  // },[]);
+  //   setData(post)
+  // },[post]);
 
   // share functionality-----------------------------------------------------
   const [shareModalOpened, setShareModalOpened] = useState(false)

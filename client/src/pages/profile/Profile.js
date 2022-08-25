@@ -1,5 +1,7 @@
 import React from 'react'
 import Map from 'react-map-gl';
+
+
 import { motion } from "framer-motion"
 import { useRef, useState, useEffect } from "react";
 import { UilPen } from "@iconscout/react-unicons";
@@ -328,6 +330,8 @@ const ProfilePage = () => {
                 >
 
                     <AllTimelinePins posts={timelinePosts} userId={id}/>
+
+                    
 
                 </Map>
                 

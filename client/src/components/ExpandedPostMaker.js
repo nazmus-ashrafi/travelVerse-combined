@@ -1,11 +1,14 @@
 import React from 'react'
 import { useDimensions } from "../dimentions/Dimentions"
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect,useCallback  } from "react";
 
 import Modal from "../components/Modal";
 import ModalHeader from "../components/ModalHeader";
 
-import Map, {Marker} from 'react-map-gl';
+import Map, {Marker}  from 'react-map-gl';
+import GeocoderControl from './geocoder-control';
+
+
 import "mapbox-gl/dist/mapbox-gl.css"
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 
@@ -39,13 +42,34 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
 
+    
+
     const [initialViewState,setInitialViewState]= useState({
         
         longitude: 103.38149930538287,
         latitude: 23.77783437646191,
-        zoom: 4
+        zoom: 14 //4
                         
     })
+
+    // Using geo location to set initial location to the current location of the user
+
+        navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+            enableHighAccuracy: true
+        })
+
+        function successLocation(position) {
+            setInitialViewState({longitude:position.coords.longitude, latitude:position.coords.latitude})
+            setNewPlace({lat:position.coords.latitude,long:position.coords.longitude})
+        }
+
+        function errorLocation() {
+            setInitialViewState({longitude:-2.24, latitude:53.48})
+            setNewPlace({lat:53.48,long:-2.24})
+        }
+
+    //
+
     const [viewport, setViewport] = useState({
         zoom: 6
     });
@@ -55,6 +79,12 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
     })
 
     const [progressFull,setProgressFull]= useState(false)
+
+    //
+
+   
+
+   
 
     // redux
     const dispatch = useDispatch()
@@ -329,7 +359,9 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                 {/* map */}
                 <div class=" card w-full bg-base-100 shadow-xl grid place-items-center mr-5 ml-5 mb-5" ref={constraintsRef}>
 
-                    <input type="text" placeholder="Where did you go?" class="absolute z-10 input input-bordered text-lg w-8/12 rounded-full mb-80 opacity-90"></input>
+                    {/* <input type="text" placeholder="Where did you go?" class="absolute z-10 input input-bordered text-lg w-8/12 rounded-full mb-80 opacity-90">
+                        
+                    </input> */}
 
                     {/* <Map
                         initialViewState={{
@@ -345,15 +377,21 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                     <Map
                         {...initialViewState}
                         onMove={evt => setInitialViewState(evt.initialViewState)}
-                        style={{width: "90vw", height: 400}}
+                        style={{width: "40vw", height: 400}}
                         mapStyle = {process.env.REACT_APP_MAPBOX_STYLE}
                         mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                         onDblClick={handleMapClick}
+                        // addControl={geocoder}
+                        
+                        
                     >
                         
                         <Marker longitude={newPlace.long} latitude={newPlace.lat} anchor="bottom" >
                          <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
                         </Marker>
+
+                       <GeocoderControl mapboxAccessToken={process.env.REACT_APP_MAPBOX} position="top-left" />
+                        
                         
 
                     </Map>

@@ -55,14 +55,14 @@ const createPost = async (postData,token) => {
 // @access  Private
 const updatePost = async ( newPost, token) => {
 
-  console.log(token)
+  // console.log(token)
   
   
   const config = {
     headers: { Authorization: `Bearer ${token}` }
   };
 
-  const response = await axios.put(API_URL + newPost.postId , newPost, config)
+  const response = await axios.put(API_URL + newPost._id , newPost, config)
 
   return response.data
 }

@@ -9,6 +9,7 @@
     "@headlessui/react": "^1.6.5",
     "@heroicons/react": "^1.0.6",
     "@iconscout/react-unicons": "^1.1.6",
+    "@mapbox/mapbox-gl-geocoder": "^5.0.1",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.7",
     "@reduxjs/toolkit": "^1.8.3",

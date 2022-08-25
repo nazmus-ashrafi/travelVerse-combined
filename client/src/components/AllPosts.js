@@ -18,6 +18,10 @@ const AllPosts = ({socket, userId}) => {
       (state) => state.auth
     )
 
+    const { timelinePosts } = useSelector(
+      (state) => state.post
+    )
+
 
 
     useEffect(()=>{
@@ -34,7 +38,17 @@ const AllPosts = ({socket, userId}) => {
     
     },[])
 
-    let { timelinePosts, isLoading } = useSelector((state) => state.post);
+    // useEffect(()=>{
+
+
+    //   dispatch(getTimeLinePosts(userId)) 
+      
+
+
+    
+    // },[timelinePosts])
+
+    
 
   
   return (

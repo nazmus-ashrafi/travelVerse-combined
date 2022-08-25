@@ -333,7 +333,20 @@ export const postSlice = createSlice({
         console.log(action.payload)
         
         // state.timelinePosts.reduce(timelinePosts.filter(action.payload._id))
-        state.timelinePosts.push(action.payload)
+        // state.timelinePosts[state.timelinePosts.findIndex(post => post._id.toString === action.payload._id.toString)] = action.payload
+
+        // console.log(timelinePosts.filter(post => post._id.toString === action.payload._id.toString))
+
+        // state.timelinePosts.findIndex(post => post._id.toString === action.payload.postId.toString)
+
+
+        state.timelinePosts = state.timelinePosts.map(post => {
+          if (post._id === action.payload._id) {
+            return action.payload
+          } else {
+            return post
+          }
+        })
         
       })
       .addCase(updatePost.rejected, (state, action) => {

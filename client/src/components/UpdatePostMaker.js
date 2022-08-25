@@ -37,7 +37,25 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
     const [formData, setFormData] = useState(data);
     useEffect(() => {
         setFormData(data);
+
+        
+
+        
     } , [data]);
+
+    // useEffect(() => {
+    //     setInitialViewState(
+    //         {longitude: formData.longitude + 0.67,
+    //     latitude: formData.latitude,
+    //     zoom: 9}
+    //     )
+
+    //     setNewPlace(
+    //         {lat: formData.latitude,
+    //     long: formData.longitude
+    //     }
+    //     )
+    // } , []);
 
     // const desc = useRef();
 
@@ -107,13 +125,18 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
         // post data
         if(formData.description && formData.title && newPlace.lat && newPlace.long){
             const newPost = {
-                postId: formData._id,
+                
+                _id: formData._id,
                 userId: user.user._id,
                 title: formData.title,
                 description: formData.description,
+                images: null,
                 latitude: newPlace.lat,
                 longitude: newPlace.long,
-                images: null,
+
+                likes: formData.likes,
+                comments: formData.comments,
+                shares: formData.shares,
                 
                 isSharedPost: false,
                 
@@ -242,7 +265,7 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
 
                 resetShare()
 
-                window.location.reload() // timeline sorting bug
+                window.location.reload() 
 
             }
 
@@ -292,7 +315,7 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
             setImages(formData.images)
         }
 
-        console.log(images)
+        // console.log(images)
     } , [data]);
 
     //

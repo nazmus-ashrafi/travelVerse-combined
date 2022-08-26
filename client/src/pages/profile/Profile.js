@@ -31,6 +31,8 @@ import { followUser, unfollowUser } from '../../features/user/userSlice'
 import { useParams } from "react-router-dom";
 import axios from 'axios'
 
+import {themeChange} from "theme-change";
+
 
 
 const ProfilePage = () => {
@@ -195,14 +197,24 @@ const ProfilePage = () => {
 
     }
 
+
+
+    useEffect(()=> {
+    themeChange(false)
+  });
+
   
 
   return (
 
     
       
-    <div class='window dark' data-theme={process.env.REACT_APP_THEME} > 
+    // <div class='window dark' data-theme={process.env.REACT_APP_THEME} > 
+    <div class='window dark' > 
     {/* cupcake dark coffee */}
+
+
+
         {/* 1st section */}
         <div class={`grid place-items-center md:grid-cols-3 pt-10 mb-10 ${user.user.description?"":" mt-10"} `}  >
 

@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 
@@ -13,11 +13,41 @@ import NotificationBell from './NotificationBell'
 import { useRef, useState } from "react";
 import Logo from './Logo'
 
+import {themeChange} from "theme-change";
+
+const themeValues = [
+        "Dark",
+        "Cupcake",
+        "Bumblebee",
+        "Emerald",
+        "Corporate",
+        "Synthwave",
+        "Retro",
+        "Cyberpunk",
+        "Valentine",
+        "Halloween",
+        "Garden",
+        "Forest",
+        "Aqua",
+        "Lofi",
+        "Pastel",
+        "Fantasy",
+        "Wireframe",
+        "Black",
+        "Luxury",
+        "Dracula",
+        "Cmyk",
+        "travelverseTheme",
+        "travelverseThemeSecondary",
+    ]
+
+    
+
 
 
 const navigation = [
   { name: 'Refresh', href: '', current: true, onClick: () => { window.location.reload() } },
-  // { name: 'Team', href: '#', current: false },
+  // { name: 'Theme', href: '#', current: false, onClick: () => {} },
   // { name: 'Projects', href: '#', current: false },
   // { name: 'Calendar', href: '#', current: false },
 ]
@@ -39,6 +69,10 @@ function classNames(...classes) {
 }
 
 const Nav = ({dark,setDark, socket}) => {
+
+  useEffect(()=> {
+    themeChange(false)
+  });
 
   // navbell lag
   const [isHide, setIsHide] = useState(true);
@@ -167,7 +201,34 @@ function refreshPage() {
                         {item.name}
                       </a>
                     ))}
+
+                    {/* <select className="text-primary" data-choose-theme>
+                      <option className="text-primary" option value="">Default Value</option>
+                      {themeValues.map((value) => (
+                        <option className="text-primary" key={value.toLowerCase()} value={value.toLowerCase()}>{value}</option>
+                      ))}
+                    </select> */}
+
+                    <div class="dropdown mt-1 ">
+                      <label tabindex="0" class="bg-gray-100 text-gray-400 dark:bg-gray-900 dark:text-white px-3 py-2 rounded-md text-sm font-medium">Theme</label>
+                      <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-300 rounded-box w-72 ">
+                        <li>
+                          <a>
+                            <select className="select w-full max-w-xs " data-choose-theme>
+                              <option className="text-primary" option value="">Default Value</option>
+                              {themeValues.map((value) => (
+                                <option className="text-primary" key={value.toLowerCase()} value={value.toLowerCase()}>{value}</option>
+                              ))}
+                            </select>
+                          </a>
+                        </li>
+                        {/* <li><a>Item 2</a></li> */}
+                      </ul>
+                    </div>
+
                   </div>
+
+                  
                 </div>
               </div>
               

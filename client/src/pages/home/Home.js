@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useState, useEffect } from "react";
 
 import { getUser } from '../../features/user/userSlice'
+import {themeChange} from "theme-change";
 
 
 export default function Home({socket}) {
@@ -59,14 +60,17 @@ export default function Home({socket}) {
 
   //
 
-
+useEffect(()=> {
+    themeChange(false)
+  });
 
 
   return (
 
     
     
-    <div class='window dark' data-theme={process.env.REACT_APP_THEME}>
+    // <div class='window dark' data-theme={process.env.REACT_APP_THEME}>
+    <div class='window dark'>
 
 
       {/* nav bar */}
@@ -78,8 +82,8 @@ export default function Home({socket}) {
   
       
       {/* body */}
-      <div className='bg-gray-200 text-gray-600 dark:text-gray-300 dark:bg-base-100 ' >
-        
+      {/* <div className='bg-gray-200 text-gray-600 dark:text-gray-300 dark:bg-base-100 ' > */}
+      <div className=' ' >
 
         <div class="grid xl:grid-cols-5 md:grid-cols-4 grid-cols-1">
 

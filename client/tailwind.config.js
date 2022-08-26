@@ -12,9 +12,29 @@ module.exports = {
   ],
 
   daisyui: {
-    themes: ["cupcake", "dark", "coffee",
+    themes: ["cupcake", "dark", "coffee", 
+        
+        "bumblebee",
+        "emerald",
+        "corporate",
+        "synthwave",
+        "retro",
+        "cyberpunk",
+        "valentine",
+        "halloween",
+        "garden",
+        "forest",
+        "aqua",
+        "lofi",
+        "pastel",
+        "fantasy",
+        "wireframe",
+        "black",
+        "luxury",
+        "dracula",
+        "cmyk",
 
-    { travelverseTheme : {
+    { travelversetheme : {
           
         "primary": "#0E7490",
           
@@ -36,7 +56,7 @@ module.exports = {
       }
     },
     {
-      travelverseThemeSecondary: {
+      travelversethemesecondary: {
       
         "primary": "#0E7490",
           

@@ -21,6 +21,8 @@ import app from "../firebase";
 
 import { isWebUri } from 'valid-url';
 
+import GeocoderControl from './geocoder-control';
+
 const UpdatePostMaker = ({showModal,setShowModal,data}) => {
 
     const constraintsRef = useRef(null);
@@ -74,9 +76,9 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
 
     const [initialViewState,setInitialViewState]= useState({
         
-        longitude: formData.longitude + 0.67,
+        longitude: formData.longitude,
         latitude: formData.latitude,
-        zoom: 9
+        zoom: 14
                         
     })
     const [viewport, setViewport] = useState({
@@ -401,7 +403,7 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
                 {/* map */}
                 <div class=" card w-full bg-base-100 shadow-xl grid place-items-center mr-5 ml-5 mb-5" ref={constraintsRef}>
 
-                    <input type="text" placeholder="Where did you go?" class="absolute z-10 input input-bordered text-lg w-8/12 rounded-full mb-80 opacity-90"></input>
+                    {/* <input type="text" placeholder="Where did you go?" class="absolute z-10 input input-bordered text-lg w-8/12 rounded-full mb-80 opacity-90"></input> */}
 
                     {/* <Map
                         initialViewState={{
@@ -417,7 +419,7 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
                     <Map
                         {...initialViewState}
                         onMove={evt => setInitialViewState(evt.initialViewState)}
-                        style={{width: "90vw", height: 400}}
+                        style={{width: "40vw", height: 400}}
                         mapStyle="mapbox://styles/mapbox/streets-v9"
                         mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                         onDblClick={handleMapClick}
@@ -426,6 +428,8 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
                         <Marker longitude={newPlace.long} latitude={newPlace.lat} anchor="bottom" >
                          <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
                         </Marker>
+
+                        <GeocoderControl mapboxAccessToken={process.env.REACT_APP_MAPBOX} position="top-left" />
                         
 
                     </Map>

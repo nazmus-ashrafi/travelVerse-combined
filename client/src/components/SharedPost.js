@@ -55,13 +55,6 @@ const SharedPost = ({ data, socket, hidden }) => {
   //-------------------------------------------------------------------------
 
 
-  
-  // eho is sharing this post
-
-    const postMakerUserId = data.userId; // from params
-    
-  //
-
   // get shared post details
   const [sharedPost, setSharedPost] = useState({});
 
@@ -95,9 +88,34 @@ const SharedPost = ({ data, socket, hidden }) => {
     (state) => state.auth
   )
 
+  const { timelinePosts} = useSelector(
+    (state) => state.post
+  )
+
+  //
+
+  // Logic for getting the user who made this post and others
+    const postMakerUserId = data.userId; // from params
+    const [postMakerUser, setPostMakerUser] = useState({});
+
+    useEffect(() => {
+      const fetchPostMakerUser = async () => {
+      const profileUser = await axios.get(process.env.REACT_APP_POST_URL + postMakerUserId + "/getanyuser")
+
+      setPostMakerUser(profileUser.data);
+      }
+
+      fetchPostMakerUser();
+
+      
+    }, [user,timelinePosts]);
 
 
   //
+
+
+
+  
 
   // const thisPostIndex = timelinePosts.findIndex((post)=> post._id === data._id)
   // const thisPost = timelinePosts[thisPostIndex]
@@ -198,7 +216,7 @@ const SharedPost = ({ data, socket, hidden }) => {
             {/* avatar */}
             <div class="avatar pr-1 ">
                 <div class="md:w-10 w-8 mask mask-squircle">
-                    <img src="https://api.lorem.space/image/face?hash=92048"/>
+                    <img src={postMakerUser && postMakerUser.profileImage != undefined && postMakerUser.profileImage.length>0 ? postMakerUser.profileImage[0] : require('../img/default.png')}/>
                 </div>
             </div>
     

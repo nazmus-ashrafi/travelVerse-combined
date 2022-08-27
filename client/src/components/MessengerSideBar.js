@@ -66,7 +66,7 @@ const MessengerSideBar = () => {
 
     <div class="messengerSidebarController md:relative transition duration-100 ease-in-out">
         <div class="flex flex-col w-64 h-screen px-4 py-8 bg-white border-r dark:bg-base-200 dark:border-base-100 translate-x-full md:translate-x-0 transform  md:relative transition duration-100 ease-in-out">
-        <h2 class="text-1xl font-regular text-gray-800 dark:text-white">Your Follows</h2>
+        <h2 class="text-1xl font-regular ">Your Follows</h2>
 
         <div class="relative mt-6">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -75,7 +75,7 @@ const MessengerSideBar = () => {
                 </svg>
             </span>
 
-            <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"  onChange={(e) => setQuery(e.target.value.toLowerCase())}/>
+            <input type="text" class="w-full py-2 pl-10 pr-4 input" placeholder="Search"  onChange={(e) => setQuery(e.target.value.toLowerCase())}/>
         </div>
         
         <div class="flex flex-col justify-between flex-1 mt-6">
@@ -86,7 +86,7 @@ const MessengerSideBar = () => {
 
                     
                     return(
-                      <a class="flex items-center px-4 py-2 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href={`profile/${user._id}`}>
+                      <a class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring " href={`profile/${user._id}`}>
 
                         <img class="object-cover mx-1 rounded-full h-6 w-6" src={user && user.profileImage != undefined && user.profileImage.length>0 ? user.profileImage[0] : require('../img/default.png')} alt="avatar"/>
 

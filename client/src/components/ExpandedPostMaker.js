@@ -54,6 +54,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
 
     // Using geo location to set initial location to the current location of the user
 
+    useEffect(() => {
         navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
             enableHighAccuracy: true
         })
@@ -67,6 +68,10 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
             setInitialViewState({longitude:-2.24, latitude:53.48})
             setNewPlace({lat:53.48,long:-2.24})
         }
+        
+    }, []);
+
+        
 
     //
 

@@ -141,13 +141,13 @@ const NotificationBell = ({socket}) => {
     <div>
         <Menu as="div" className="mr-3 relative">
                   <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-400 dark:focus:ring-offset-gray-800 dark:focus:ring-white z-50">
+                    <Menu.Button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-400  dark:focus:ring-white z-50">
 
                       <span className="sr-only">Open notification menu</span>
                       {/* bell */}
                       <button
                         type="button"
-                        className="bg-gray-100 dark:bg-gray-800 p-1 rounded-full text-gray-400 hover:text-gray-500 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 focus:ring-offset-gray-400 dark:focus:ring-white"
+                        className="shadow-md  p-1 rounded-full text-gray-400 hover:text-gray-500 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-offset-gray-400 dark:focus:ring-white"
 
                         onClick={handleClick}
                     

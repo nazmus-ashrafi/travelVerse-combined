@@ -187,7 +187,7 @@ function refreshPage() {
                 {/* refresh button */}
                 <div className="hidden sm:block sm:ml-5">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
+                    {/* {navigation.map((item) => (
                       <a
                         key={item.name}
                         href={item.href}
@@ -200,7 +200,7 @@ function refreshPage() {
                       >
                         {item.name}
                       </a>
-                    ))}
+                    ))} */}
 
                     {/* <select className="text-primary" data-choose-theme>
                       <option className="text-primary" option value="">Default Value</option>
@@ -210,7 +210,7 @@ function refreshPage() {
                     </select> */}
 
                     <div class="dropdown mt-1 ">
-                      <label tabindex="0" class="bg-gray-100 text-gray-400 dark:bg-gray-900 dark:text-white px-3 py-2 rounded-md text-sm font-medium">Theme</label>
+                      <label tabindex="0" class="btn btn-sm ">Theme</label>
                       <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-300 rounded-box w-72 ">
                         <li>
                           <a>

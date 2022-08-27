@@ -30,6 +30,11 @@ import Comment from "./Comment"
 import Post from './Post';
 import ExpandedSharedPostMaker from './ExpandedSharedPostMaker'
 
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import UpdateSharedPostMaker from './UpdateSharedPostMaker'
+import DeletePost from './DeletePost'
+
 
 const SharedPost = ({ data, socket, hidden }) => {
 
@@ -48,6 +53,14 @@ const SharedPost = ({ data, socket, hidden }) => {
 
 
   //-------------------------------------------------------------------------
+
+
+  
+  // eho is sharing this post
+
+    const postMakerUserId = data.userId; // from params
+    
+  //
 
   // get shared post details
   const [sharedPost, setSharedPost] = useState({});
@@ -155,6 +168,21 @@ const SharedPost = ({ data, socket, hidden }) => {
   const [hover, setHover] = useState(false)
 
 
+  // logic for update post
+  const [showUpdateModal, setShowUpdateModal] = useState(false)
+  const onUpdateClick = () => {
+    setShowUpdateModal(true)
+  }
+  //
+
+  // logic for delete post
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const onDeleteClick = () => {
+    setShowDeleteModal(true)
+  }
+  //
+
+
 
   return (
 
@@ -179,6 +207,7 @@ const SharedPost = ({ data, socket, hidden }) => {
 
             
             {/* triple dot dropdown */}
+            {postMakerUserId === user.user._id ?
             <div class="dropdown dropdown-left dropdown-hover col-span-1" 
               onMouseEnter={() => setHover(true)}
               onMouseLeave={() => setHover(false)}
@@ -197,14 +226,46 @@ const SharedPost = ({ data, socket, hidden }) => {
               </button>
               
               <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52">
-                <li><a>Update</a></li>
-                <li><a>Delete</a></li>
+                <li class="flex">
+                  <div class="">
+                    <EditRoundedIcon color='primary'/>
+                    <a onClick={onUpdateClick} class='flex-grow'>Edit</a>
+                  </div>
+                  
+                </li>
+                <li class="flex">
+                    <div class="">
+                      <DeleteRoundedIcon color='warning'/>
+                      <a onClick={onDeleteClick} class='flex-grow'>Delete</a>
+                    </div>
+                    
+                </li>
               </ul>
             </div>
+            :null}
+
+            
+          {sharedPost.likes?
+          <UpdateSharedPostMaker
+              showModal={showUpdateModal}
+              setShowModal={setShowUpdateModal}
+              data={data}
+              sharedPost={sharedPost}
+            />:null
+          }
+            
+
+            <DeletePost
+              showModal={showDeleteModal}
+              setShowModal={setShowDeleteModal}
+              data={data}
+            />
+            
           
 
       
           </div>
+          
 
           
 

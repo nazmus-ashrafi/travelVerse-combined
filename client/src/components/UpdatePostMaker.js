@@ -117,7 +117,7 @@ const UpdatePostMaker = ({showModal,setShowModal,data}) => {
 
     let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
-    // handle post upload
+    // handle post update
     let codedImages = [];
     const handleUpload = async (e) => {
         e.preventDefault();

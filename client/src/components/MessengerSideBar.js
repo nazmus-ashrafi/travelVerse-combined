@@ -149,7 +149,7 @@ const MessengerSideBar = () => {
                             <a href={`profile/${currUser._id}`}>
                                 <img class="object-cover mx-1 rounded-full h-6 w-6 ml-4" src={currUser && currUser.profileImage != undefined && currUser.profileImage.length>0 ? currUser.profileImage[0] : require('../img/default.png')} alt="avatar"/>
 
-                                <span class="mx-2 font-medium">@{currUser.username}</span>
+                                <span class="font-medium">@{currUser.username}</span>
                             </a>
 
                             

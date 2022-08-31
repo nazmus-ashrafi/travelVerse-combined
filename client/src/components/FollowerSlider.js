@@ -75,7 +75,7 @@ const FollowerSlider = () => {
         }}
         navigation={true}
         modules={[Pagination, Navigation]}
-        className="mySwiper h-80"
+        className="mySwiper h-full"
       >
 
         {allUsers && allUsers.map((currUser, index) => {

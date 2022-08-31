@@ -126,7 +126,10 @@ const VisualizeCompare = () => {
                         </div>
 
                         <div class="cursor-pointer">
-                            <AccountCircleRoundedIcon onClick={() => navigate(-1)} />
+                            {/* <AccountCircleRoundedIcon onClick={() => navigate(-1)} /> */}
+                            <div class="w-8 mask mask-squircle">
+                                <img src={user.user.profileImage != undefined && user.user.profileImage.length>0 ? user.user.profileImage[0] : require('../../img/default.png')} onClick={() => navigate(-1)}/>
+                            </div>
                         </div>
                         
                     </div>

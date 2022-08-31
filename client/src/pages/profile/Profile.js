@@ -1,5 +1,6 @@
 import React from 'react'
 import Map from 'react-map-gl';
+import StaticMap from 'react-map-gl'
 
 
 import { motion } from "framer-motion"
@@ -68,7 +69,7 @@ const ProfilePage = () => {
     },[])
 
 
-    //mapbox component saves the previously initialized map to the DOM (bug)
+    // mapbox component saves the previously initialized map to the DOM (bug)
     // reload page once on load 
     const reloadCount = sessionStorage.getItem('reloadCount');
     useEffect(() => {
@@ -203,6 +204,39 @@ const ProfilePage = () => {
     themeChange(false)
   });
 
+
+  // Using geo location to set initial location to the current location of the user
+
+    const [initialViewState,setInitialViewState]= useState({
+        
+        longitude: 103.38149930538287,
+        latitude: 23.77783437646191,
+        zoom: 4 //4
+                        
+    })
+
+    
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+            enableHighAccuracy: true
+        })
+
+        function successLocation(position) {
+            setInitialViewState({longitude:position.coords.longitude, latitude:position.coords.latitude})
+            
+        }
+
+        function errorLocation() {
+            setInitialViewState({longitude:-2.24, latitude:53.48})
+            
+        }
+        
+    }, []);
+ 
+
+    //
+
   
 
   return (
@@ -216,7 +250,7 @@ const ProfilePage = () => {
 
 
         {/* 1st section */}
-        <div class={`grid place-items-center md:grid-cols-3 pt-10 mb-10 ${user.user.description?"":" mt-10"} `}  >
+        <div class={`grid place-items-center md:grid-cols-3 pt-10 mb-10 mt-10 ${user.user.description?"":" mt-15"} `}  >
 
 
             {/* profile card */}
@@ -331,11 +365,16 @@ const ProfilePage = () => {
             {/* map */}
             <div class=" absolute card w-100 bg-base-100 shadow-xl grid place-items-center" ref={constraintsRef}>
                 <Map
-                    initialViewState={{
-                        longitude: 103.8342,
-                        latitude: 36.0614,
-                        zoom: 2
-                    }}
+                    // initialViewState={{
+                    //     longitude: 103.8342,
+                    //     latitude: 36.0614,
+                    //     zoom: 2
+                    // }}
+
+                    {...initialViewState}
+                    onMove={evt => setInitialViewState(evt.initialViewState)}
+                    onRender={evt => setInitialViewState(initialViewState)}
+
                     style={{width: "90vw", height: 400}}
                     mapStyle = {process.env.REACT_APP_MAPBOX_STYLE}
                     mapboxAccessToken={process.env.REACT_APP_MAPBOX}
@@ -346,6 +385,21 @@ const ProfilePage = () => {
                     
 
                 </Map>
+
+                
+
+                {/* <StaticMap
+                    width={400}
+                    height={400}
+                    longitude= {103.38149930538287}
+                    latitude= {23.77783437646191}
+                    zoom= {4 }
+                    style={{width: "90vw", height: 400}}
+                    mapStyle = {process.env.REACT_APP_MAPBOX_STYLE}
+                    mapboxAccessToken={process.env.REACT_APP_MAPBOX}
+                >
+                    <AllTimelinePins posts={timelinePosts} userId={id}/>
+                </StaticMap> */}
                 
             </div>
             

@@ -34,7 +34,7 @@ const LocationList = ({timelinePosts, onSelectLocation, ownPosts}) => {
 
                         
                         
-                        <div class="collapse-title bg-base-300 text-primary-content peer-checked:bg-base-300 peer-checked:text-secondary-content grid grid-flow-col grid-cols-7 gap-4">
+                        <div class="collapse-title bg-base-300  grid grid-flow-col grid-cols-7 gap-4">
                             <div class=' col-start-1 col-span-5 ml-5 '>
                                 {post.isSharedPost ? post.description : post.title}
                             </div>
@@ -55,7 +55,7 @@ const LocationList = ({timelinePosts, onSelectLocation, ownPosts}) => {
                         
 
 
-                        <div class="collapse-content bg-base-300 text-primary-content peer-checked:bg-base-300 peer-checked:text-secondary-content"> 
+                        <div class="collapse-content bg-base-300 "> 
 
                             <div class="flex">
                                 <input

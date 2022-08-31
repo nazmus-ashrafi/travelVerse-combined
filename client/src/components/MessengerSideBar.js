@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import axios from 'axios'
 
+import { followUser, unfollowUser } from '../features/user/userSlice'
+
 const MessengerSideBar = () => {
 
     // redux
@@ -11,7 +13,16 @@ const MessengerSideBar = () => {
         (state) => state.user
     )
 
+    const { user } = useSelector(
+      (state) => state.auth
+    )
+    
+
+    const dispatch = useDispatch()
+    //
+
     const [allFollows, setAllFollows] = useState([])
+    const [allFollowers, setAllFollowers] = useState([])
 
     // let allFollows=[]
 
@@ -50,7 +61,41 @@ const MessengerSideBar = () => {
             
         }
 
+        const fetchFollowersDetails = async () => {
+        
+            console.log("fetching")
+
+            // console.log(userDetails.following)
+
+            setAllFollowers([])
+
+            userDetails && userDetails.followers.forEach(async (follow) => {
+              const followerDetails = await axios.get(process.env.REACT_APP_POST_URL + follow + "/getanyuser")
+
+            //   console.log(follows.data)
+
+                // setAllFollows(current => [...current, follows.data])
+
+                let currFollowers = allFollowers.includes(followerDetails.data) ? null : followerDetails.data
+
+                // console.log(currFollow+"hi this is currFollow")
+                
+
+                setAllFollowers(current => 
+                    // allFollows.includes(current)? null : [...current, follows.data]
+                    [...current, currFollowers]
+                )
+
+                
+            })
+
+            // console.log(allFollows)
+       
+            
+        }
+
         fetchFollowingsDetails();
+        fetchFollowersDetails();
         // console.log(allFollows)
         
     }, [userDetails]);
@@ -65,8 +110,9 @@ const MessengerSideBar = () => {
     <>
 
     <div class="messengerSidebarController md:relative transition duration-100 ease-in-out">
+
         <div class="flex flex-col w-64 h-screen px-4 py-8 bg-white border-r dark:bg-base-200 dark:border-base-100 translate-x-full md:translate-x-0 transform  md:relative transition duration-100 ease-in-out">
-        <h2 class="text-1xl font-regular ">Your Follows</h2>
+        
 
         <div class="relative mt-6">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -77,48 +123,112 @@ const MessengerSideBar = () => {
 
             <input type="text" class="w-full py-2 pl-10 pr-4 input" placeholder="Search"  onChange={(e) => setQuery(e.target.value.toLowerCase())}/>
         </div>
-        
-        <div class="flex flex-col justify-between flex-1 mt-6">
-            <nav>
-                {allFollows && allFollows.filter((user) =>
-                user.username.toLowerCase().includes(query)
-                ).map((user, index) => {
 
-                    
-                    return(
-                      <a class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring " href={`profile/${user._id}`}>
+        <div class="overflow-y-auto no-scrollbar">
 
-                        <img class="object-cover mx-1 rounded-full h-6 w-6" src={user && user.profileImage != undefined && user.profileImage.length>0 ? user.profileImage[0] : require('../img/default.png')} alt="avatar"/>
 
-                        <span class="mx-2 font-medium">{user.username}</span>
-                      </a>
-                    )
+            <hr class="my-6 border-gray-200 dark:border-gray-600" />
 
-                })}
-
+            <article class="prose ">
+                <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3"><b>Following</b></p>
+                
+            </article>
             
+            
+            <div class=" mt-6 ">
+                
+                <nav>
+                    {allFollows && allFollows.filter((user) =>
+                    user.username.toLowerCase().includes(query)
+                    ).map((currUser, index) => {
 
-                <hr class="my-6 border-gray-200 dark:border-gray-600" />
+                        
+                        return(
+                        <div class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring justify-between" >
 
+                            <a href={`profile/${currUser._id}`}>
+                                <img class="object-cover mx-1 rounded-full h-6 w-6 ml-4" src={currUser && currUser.profileImage != undefined && currUser.profileImage.length>0 ? currUser.profileImage[0] : require('../img/default.png')} alt="avatar"/>
 
-                {/* <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                                <span class="mx-2 font-medium">@{currUser.username}</span>
+                            </a>
 
-                    <img class="object-cover mx-1 rounded-full h-6 w-6" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar"/>
+                            
 
-                    <span class="mx-2 font-medium">Walkin Phoenix</span>
-                </a> */}
+                            {user && user.user._id != currUser._id &&
 
-                {/* <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                                (
+                                    userDetails && userDetails.following.includes(currUser._id) ? 
+                                        <div class="card-actions">
+                                            <button class="btn btn-error text-white  btn-xs " onClick={()=>{
+                                            dispatch(unfollowUser({followUser: currUser._id, userId: user.user._id}))
+                                            }}>Unfollow</button>
+                                        </div>    :
+                                    
+                                        <div class="card-actions">
+                                            <button class="btn btn-primary text-white  btn-xs " onClick={()=>{
+                                                dispatch(followUser({followUser: currUser._id, userId: user.user._id}))
+                                            }}>Follow</button>
+                                        </div>
+                                )
+                            }
 
-                    <img class="object-cover mx-1 rounded-full h-6 w-6" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar"/>
+                            
+                        </div>
 
-                    <span class="mx-2 font-medium">Walkin Phoenix</span>
-                </a> */}
+                        )
+
+                    })}
 
                 
-            </nav>
+
+                    <hr class="my-6 border-gray-200 dark:border-gray-600" />
+
+
+                    
+
+                    
+                </nav>
+
+                
+            </div>
 
             
+            <article class="prose ">
+                <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3"><b>Followers</b></p>
+                
+            </article>
+            
+            
+            <div class="flex flex-col justify-between flex-1 mt-6">
+                
+                <nav>
+                    {allFollowers && allFollowers.filter((user) =>
+                    user.username.toLowerCase().includes(query)
+                    ).map((user, index) => {
+
+                        
+                        return(
+                        <a class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring " href={`profile/${user._id}`}>
+
+                            <img class="object-cover mx-1 rounded-full h-6 w-6" src={user && user.profileImage != undefined && user.profileImage.length>0 ? user.profileImage[0] : require('../img/default.png')} alt="avatar"/>
+
+                            <span class="mx-2 font-medium">@{user.username}</span>
+                        </a>
+                        )
+
+                    })}
+
+                
+
+                    <hr class="my-6 border-gray-200 dark:border-gray-600" />
+
+
+                    
+                </nav>
+
+            
+            </div>
+
         </div>
     </div>
 

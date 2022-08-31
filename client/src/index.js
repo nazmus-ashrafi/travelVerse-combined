@@ -11,6 +11,10 @@ import { store } from "./app/store";
 // import 'tw-elements';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
+import 'swiper/css';
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 
 ReactDOM.render(
     <Provider store={store}>

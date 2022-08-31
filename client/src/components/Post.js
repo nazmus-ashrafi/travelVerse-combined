@@ -1,5 +1,6 @@
 import React from 'react'
 import Map from 'react-map-gl'
+import StaticMap from 'react-map-gl'
 
 import {Marker} from 'react-map-gl'
 import "mapbox-gl/dist/mapbox-gl.css"
@@ -34,6 +35,8 @@ import DeletePost from './DeletePost'
 
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+
+
 
 
 const Post = ({ data, socket, hidden }) => {
@@ -131,7 +134,7 @@ const Post = ({ data, socket, hidden }) => {
     
     longitude: data.longitude,
     latitude: data.latitude,
-    zoom: 11 // 6
+    zoom: 14 // 6
                     
   })
 
@@ -158,7 +161,7 @@ const Post = ({ data, socket, hidden }) => {
       setViewState({
         longitude: data.longitude,
         latitude: data.latitude,
-        zoom: 11 // 6
+        zoom: 14 // 6
       })
     }, [user,timelinePosts]);
 
@@ -178,6 +181,8 @@ const Post = ({ data, socket, hidden }) => {
     setShowDeleteModal(true)
   }
   //
+
+  var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
 
   if ( !data.isSharedPost ) {
@@ -206,6 +211,21 @@ const Post = ({ data, socket, hidden }) => {
                   <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
                 </Marker>
           </Map>
+
+        {/* <StaticMap
+          width={400}
+          height={400}
+          longitude= {data.longitude}
+          latitude= {data.latitude}
+          zoom= {14 }
+          style={{flex: 1, height: '100%', width: '100%', borderRadius: 10, }} 
+          mapStyle = {process.env.REACT_APP_MAPBOX_STYLE}
+          mapboxAccessToken={process.env.REACT_APP_MAPBOX}
+        >
+          <Marker longitude={data.longitude} latitude={data.latitude} anchor="bottom" >
+            <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
+          </Marker>
+        </StaticMap> */}
               
         </div>
 
@@ -294,11 +314,15 @@ const Post = ({ data, socket, hidden }) => {
 
         <div class="col-span-2 p-1 flex place-items-center justify-between h-10">
 
-          <h3 class=""><b>{Date(data.date) || <Skeleton/>}</b> <br/>
+          {/* <h3 class=""><b>{Date(data.date) || <Skeleton/>}</b> <br/>
                       by Biman 
-            (Dhaka to Kathmandu)</h3>
+            (Dhaka to Kathmandu)</h3> */}
 
-          <h3>Airline logo</h3>
+          {/* <h3>Airline logo</h3> */}
+
+          <b>{new Date(data.date).toLocaleDateString("en-US", options) || <Skeleton/>}</b> 
+        
+                      
 
         </div>
 

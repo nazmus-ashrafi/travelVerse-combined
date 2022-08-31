@@ -22,7 +22,12 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../firebase";
 
+import Picker from 'emoji-picker-react';
+import SentimentVerySatisfiedRoundedIcon from '@mui/icons-material/SentimentVerySatisfiedRounded';
+
 const ExpandedPostMaker = ({showModal,setShowModal}) => {
+
+    
 
     const constraintsRef = useRef(null);
     const { width,height } = useDimensions(constraintsRef);
@@ -70,8 +75,7 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
         }
         
     }, []);
-
-        
+ 
 
     //
 
@@ -321,6 +325,18 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
     //     console.log(images)
 
     // },[onImageChange])
+
+
+    // mood - emoji picker
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [chosenEmoji, setChosenEmoji] = useState(null);
+
+    const onEmojiClick = (event, emojiObject) => {
+        setChosenEmoji(emojiObject);
+        data.title = data.title + emojiObject.emoji;
+
+    };
+    //
     
     
 
@@ -339,8 +355,17 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                     
 
                 <div class="flex justify-start items-center pt-3 pb-4">
+                    
                     <div class="avatar pr-5">
+
+                        {/* <div className='absolute z-50 text-3xl'>
+                            {chosenEmoji ? chosenEmoji.emoji : null}
+                        </div> */}
+                        
                         <div class="md:w-20 w-16 mask mask-squircle">
+
+                            
+                            
                             <img src={user && user.user.profileImage != undefined && user.user.profileImage.length>0 ? user.user.profileImage[0] : require('../img/default.png')}/>
 
                             {/* <img
@@ -410,14 +435,19 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                     <h2 class="basis-1/2 font-medium ml-5">Add to your post</h2>
 
 
-                    <div class="flex flex-row basis-1/4">
+                    <div class="flex flex-row basis-2.5/4 ">
 
                         <button class="btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal flex" onClick={()=>imageRef.current.click()}><InsertPhotoRoundedIcon  color='primary'/><span className='ml-1'>Photo</span></button>
                     
-                        <button class="flex btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal">
-                        <span>Mood</span>
+                        <button class="flex btn btn-ghost hover:bg-slate-600 flex-grow rounded-full normal-case font-normal" onClick={()=>{
+                            showEmojiPicker ? setShowEmojiPicker(false) : setShowEmojiPicker(true)
+                        }}>
+                            <SentimentVerySatisfiedRoundedIcon color='secondary'/>
+                            <span className='ml-1'>Mood</span>
                         </button>
 
+                        
+                        
                         <div style={{ display: "none" }}>
                             
                             <input
@@ -438,6 +468,35 @@ const ExpandedPostMaker = ({showModal,setShowModal}) => {
                         
 
                 </div>
+                
+                {showEmojiPicker ?
+                <div className='mt-5 mb-5'>
+                    
+                    {chosenEmoji ? (
+                        <div className='mb-3'>
+                            
+                            <span>{chosenEmoji.emoji} - has been added to your title</span>
+
+                            {/* <div className='btn ml-3 mb-3' onClick={()=>{
+                                setChosenEmoji(null)
+                            }}>No mood</div> */}
+                            
+                        </div>
+                        
+                        
+                    ) : (
+                        // <div>
+                        //     <span>No emoji Chosen</span>
+                            
+                        // </div>
+                        null
+                        
+                        
+                    )}
+                    <Picker onEmojiClick={onEmojiClick} pickerStyle={{ width: '100%' }} />
+
+                </div>:null}
+                
 
                 {images && images[0]? (
                 <div class="carousel carousel-center w-full  p-4 space-x-4 bg-base-200 rounded-box mt-4">

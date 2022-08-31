@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { followUser, unfollowUser } from '../features/user/userSlice'
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation } from "swiper";
+
 const FollowerSlider = () => {
 
     const { user } = useSelector(
@@ -66,88 +69,102 @@ const FollowerSlider = () => {
 
       <hr class="w-11/12 xl:col-start-1 xl:col-span-3 mb-4 opacity-10"></hr>
 
-      <div class="w-64 carousel rounded-box">
+      <Swiper
+        pagination={{
+          type: "fraction",
+        }}
+        navigation={true}
+        modules={[Pagination, Navigation]}
+        className="mySwiper h-80"
+      >
 
         {allUsers && allUsers.map((currUser, index) => {
-            return (
-
-              <div class="carousel-item w-full">
+          return (
+          <SwiperSlide>
+            <div class="w-full">
               {/* follower card */}
-              <div
-                
-                key="modal"
-                
-                // drag
-                // dragConstraints={{ left: 0, right: 0,top: 0,bottom:0 }}
-                // dragConstraints={constraintsRef}
-                
-                className='z-10 xl:col-start-3 xl:col-span-1 md:col-start-2 md:col-span-1 '
-                
-                
-              >
-                {/* follow card */}
-                <div class="card w-56 bg-base-100 shadow-xl grid place-items-center z-10 space-y-0">
+                <div
+                  
+                  key="modal"
+                  
+                  // drag
+                  // dragConstraints={{ left: 0, right: 0,top: 0,bottom:0 }}
+                  // dragConstraints={constraintsRef}
+                  
+                  className='z-10 xl:col-start-3 xl:col-span-1 md:col-start-2 md:col-span-1 '
+                  
+                  
+                >
+                  {/* follow card */}
+                  <div class="card w-56 bg-base-100 shadow-xl grid place-items-center z-10 space-y-0">
+
+                      
+
+                    {/* avatar */}
+                    <a class="avatar pt-4" href={`profile/${currUser._id}`}>
+                      <div class="w-20 mask mask-squircle">
+                        <img src={currUser.profileImage != undefined && currUser.profileImage.length>0 ? currUser.profileImage[0] : require('../img/default.png')}/>
+                      </div>
+                    </a>
 
                     
 
-                  {/* avatar */}
-                  <a class="avatar pt-4" href={`profile/${currUser._id}`}>
-                    <div class="w-20 mask mask-squircle">
-                      <img src={currUser.profileImage != undefined && currUser.profileImage.length>0 ? currUser.profileImage[0] : require('../img/default.png')}/>
+                  
+                    {/* name, description and follow button */}
+                    <div class="card-body items-center text-center ">
+                        
+                      <h2 class="text-lg font-extrabold">{currUser.username}</h2>
+
+                      <div class="text-base-content text-sm text-opacity-60">{currUser.description}</div>
+                  
+                      
+                      {/* <div class="card-actions">
+                        <button class="btn btn-info btn-sm">Follow</button>
+                      </div> */}
+
+                      {user && user.user._id != currUser._id &&
+
+                        (
+                            userDetails && userDetails.following.includes(currUser._id) ? 
+                                <div class="card-actions">
+                                    <button class="btn btn-error text-white  btn-sm " onClick={()=>{
+                                    dispatch(unfollowUser({followUser: currUser._id, userId: user.user._id}))
+                                    }}>Unfollow</button>
+                                </div>    :
+                            
+                                <div class="card-actions">
+                                    <button class="btn btn-primary text-white  btn-sm " onClick={()=>{
+                                      dispatch(followUser({followUser: currUser._id, userId: user.user._id}))
+                                    }}>Follow</button>
+                                </div>
+                        )
+                      }
+                        
                     </div>
-                  </a>
 
-                
-                  {/* name, description and follow button */}
-                  <div class="card-body items-center text-center ">
-                      
-                    <h2 class="text-lg font-extrabold">{currUser.username}</h2>
-
-                    <div class="text-base-content text-sm text-opacity-60">{currUser.description}</div>
-                
-                    
-                    {/* <div class="card-actions">
-                      <button class="btn btn-info btn-sm">Follow</button>
-                    </div> */}
-
-                    {user && user.user._id != currUser._id &&
-
-                            (
-                                userDetails && userDetails.following.includes(currUser._id) ? 
-                                    <div class="card-actions">
-                                       <button class="btn btn-error text-white  btn-sm " onClick={()=>{
-                                        dispatch(unfollowUser({followUser: currUser._id, userId: user.user._id}))
-                                       }}>Unfollow</button>
-                                    </div>    :
-                                
-                                    <div class="card-actions">
-                                        <button class="btn btn-primary text-white  btn-sm " onClick={()=>{
-                                          dispatch(followUser({followUser: currUser._id, userId: user.user._id}))
-                                        }}>Follow</button>
-                                    </div>
-                            )
-                        }
-                      
+                  
                   </div>
+                      
 
-                
+
                 </div>
-                    
 
-
-              </div>
-                
+              
+                  
               </div> 
 
+          </SwiperSlide>
+          )
 
-            )
         })}
-    
-    
-      </div>
+        
+      </Swiper>
+      
 
           
     </div>
+
+    
 
     
   )

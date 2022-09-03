@@ -36,11 +36,27 @@ const logout = () => {
 }
 
 
+// Forgot password
+const forgotPassword = async (email) => {
+  const response = await axios.post(API_URL + 'forgotpassword', email)
+
+  return response.data
+}
+
+// Reset password
+const resetPassword = async (userData) => {
+  const response = await axios.post(API_URL + 'reset', userData)
+
+  return response.data
+}
+
 
 const authService = {
   register,
   login,
   logout,
+  forgotPassword,
+  resetPassword
 
   
 }

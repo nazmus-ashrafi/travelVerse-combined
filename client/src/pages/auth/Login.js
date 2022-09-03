@@ -146,7 +146,7 @@ const Login = () => {
                   </button>
                 {/* </Link> */}
 
-                <Link class="text-s text-cyan-700 hover:text-cyan-800 mt-3 cursor-pointer m-auto pt-2" to="">
+                <Link class="text-s text-cyan-700 hover:text-cyan-800 mt-3 cursor-pointer m-auto pt-2" to="/forgotpassword">
                   Forgot password?
 
                 </Link> 

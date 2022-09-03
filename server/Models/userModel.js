@@ -10,6 +10,10 @@ const UserSchema = mongoose.Schema(
             type: String,
             required: true
         },
+        email : {
+            type: String,
+            required: false
+        },
         firstname: {
             type: String,
             required: true
@@ -37,6 +41,19 @@ const UserSchema = mongoose.Schema(
             type: Array
         },
         description: String,
+
+        isVendor: {
+            type: Boolean,
+            default: false
+        },
+        resetToken: {
+            type: String,
+            default: ''
+        },
+        expireToken: {
+            type: Date,
+        }
+
     },
     {timestamps: true}
 )

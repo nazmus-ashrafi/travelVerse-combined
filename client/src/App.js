@@ -4,6 +4,8 @@ import Register from "./pages/auth/Register"
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile"
 import VisualizeCompare from "./pages/profile/VisualizeCompare";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 import { Routes, Route, Navigate, Router } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -72,6 +74,16 @@ function App() {
             path="/visualize"
             element={user ? <VisualizeCompare/> : <Navigate to="../login" />}
           />
+          <Route
+            path="/forgotpassword"
+            element={user ? <Navigate to="../home" /> : <ForgotPassword/>}
+          />
+          <Route
+            path="/reset/:token"
+            element={user ? <Navigate to="../home" /> : <ResetPassword/>}
+          />
+
+        
           <Route
             path="*"
             element={

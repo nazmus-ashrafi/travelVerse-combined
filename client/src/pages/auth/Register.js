@@ -53,6 +53,7 @@ const Register = () => {
       firstname: "",
       lastname: "",
       username: "",
+      email: "",
       password: "",
       confirmpass: "",
     },
@@ -175,6 +176,14 @@ const Register = () => {
 
 
               {errors.username && touched.username && <p className="text-orange-700 error">{errors.username}</p>}
+            </div>
+
+            <div class="relative mb-4">
+              <label for="email" class="leading-7 text-sm text-zinc-400">Email</label>
+              <input type="email" id="email" name="email" class={`w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.email ?'input-error focus:border-red-700 focus:ring-red-400  ':""}`} onChange={handleChange} value={values.email} onBlur={handleBlur} />
+
+
+              {errors.email && touched.email && <p className="text-orange-700 error">{errors.email}</p>}
             </div>
 
             <div class="relative mb-4">

@@ -162,7 +162,7 @@ export const resetPassword = async (req, res) => {
     .then(user=>{
         if(!user){
             // return res.status(422).json({error:"Try again session expired"})
-            return res.status(422).json({message:"Try reseting password again, session expired"})
+            return res.status(422).json({message:"Try submitting email again, session expired"})
         }
 
 

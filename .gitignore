@@ -5,5 +5,11 @@ server/.env
 
 client/note.txt
 
+client/package.json
+server/package.json
+client/App.js
+client/tailwind.config.js
+
+
 
 

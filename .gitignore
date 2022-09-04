@@ -1,12 +1,14 @@
 client/node_modules
-
-client/.env
-server/.env
-
 client/notepad.txt
 
-client/package.json
+
+server/.env
 server/package.json
+server/package-lock.json
+
+client/.env
+client/package.json
+client/package-lock.json
 client/App.js
 client/tailwind.config.js
 

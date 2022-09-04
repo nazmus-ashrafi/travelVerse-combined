@@ -55,7 +55,7 @@ const VisualizeCompare = () => {
     };
 
   const onSelectLocation = useCallback(({longitude, latitude,zoom}) => {
-    mapRef.current?.flyTo({center: [longitude, latitude], duration: 6000 ,zoom: zoom?zoom:12});
+    mapRef.current?.flyTo({center: [longitude, latitude], duration: 6000 ,zoom: zoom ? zoom:17});
     // console.log(longitude, latitude)
   }, []);
 

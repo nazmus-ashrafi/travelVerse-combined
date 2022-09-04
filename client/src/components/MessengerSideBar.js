@@ -104,6 +104,37 @@ const MessengerSideBar = () => {
     const [query, setQuery] = useState("");
 
 
+    // people who you might want to follow
+
+    // get all unfollowed users
+  const [allUsers, setAllUsers] = useState();
+  // const [allUnfollowedUsers, setAllUnfollowedUsers] = useState();
+  
+
+  const getAllUsers = async () => {
+    const response = await axios.get(process.env.REACT_APP_POST_URL + user.user._id  + "/getallnotfollowedusers")
+    
+    setAllUsers(response.data)
+    // console.log(response.data)
+    
+
+
+    // console.log(response.data)
+    // setAllUnfollowedUsers(allUsers)
+    // console.log(allUnfollowedUsers)
+    
+  }
+
+  useEffect(() => {
+    getAllUsers()
+
+    
+  }, [userDetails]);
+
+  //
+
+
+
   return (
 
     
@@ -121,13 +152,13 @@ const MessengerSideBar = () => {
                 </svg>
             </span>
 
-            <input type="text" class="w-full py-2 pl-10 pr-4 input" placeholder="Search"  onChange={(e) => setQuery(e.target.value.toLowerCase())}/>
+            <input type="text" class="w-full py-2 pl-10 pr-4 input" placeholder="Search Travelverse"  onChange={(e) => setQuery(e.target.value.toLowerCase())}/>
         </div>
 
         <div class="overflow-y-auto no-scrollbar">
 
-
-            <hr class="my-6 border-gray-200 dark:border-gray-600" />
+            <div>
+                <hr class="my-6 border-gray-200 dark:border-gray-600" />
 
             <article class="prose ">
                 <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3"><b>Following</b></p>
@@ -145,6 +176,8 @@ const MessengerSideBar = () => {
                         
                         return(
                         <div class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring justify-between" >
+
+
 
                             <a href={`profile/${currUser._id}`}>
                                 <img class="object-cover mx-1 rounded-full h-6 w-6 ml-4" src={currUser && currUser.profileImage != undefined && currUser.profileImage.length>0 ? currUser.profileImage[0] : require('../img/default.png')} alt="avatar"/>
@@ -192,42 +225,122 @@ const MessengerSideBar = () => {
                 
             </div>
 
+            </div>
             
-            <article class="prose ">
-                <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3"><b>Followers</b></p>
+
+            <div>
+                <article class="prose ">
+                    <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3"><b>Followers</b></p>
                 
-            </article>
+                </article>
             
             
-            <div class="flex flex-col justify-between flex-1 mt-6">
-                
-                <nav>
-                    {allFollowers && allFollowers.filter((user) =>
-                    user.username.toLowerCase().includes(query)
-                    ).map((user, index) => {
+                <div class="flex flex-col justify-between flex-1 mt-6">
+                    
+                    <nav>
+                        {allFollowers && allFollowers.filter((user) =>
+                        user.username.toLowerCase().includes(query)
+                        ).map((user, index) => {
 
-                        
-                        return(
-                        <a class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring " href={`profile/${user._id}`}>
+                            
+                            return(
+                            <a class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring " href={`profile/${user._id}`}>
 
-                            <img class="object-cover mx-1 rounded-full h-6 w-6" src={user && user.profileImage != undefined && user.profileImage.length>0 ? user.profileImage[0] : require('../img/default.png')} alt="avatar"/>
+                                <img class="object-cover mx-1 rounded-full h-6 w-6" src={user && user.profileImage != undefined && user.profileImage.length>0 ? user.profileImage[0] : require('../img/default.png')} alt="avatar"/>
 
-                            <span class="mx-2 font-medium">@{user.username}</span>
-                        </a>
-                        )
+                                <span class="mx-2 font-medium">@{user.username}</span>
+                            </a>
+                            )
 
-                    })}
-
-                
-
-                    <hr class="my-6 border-gray-200 dark:border-gray-600" />
-
+                        })}
 
                     
-                </nav>
 
-            
+                        <hr class="my-6 border-gray-200 dark:border-gray-600" />
+
+
+                        
+                    </nav>
+
+                
+                </div>
+
+
+                
+
             </div>
+
+            <div>
+
+                
+
+                <article class="prose ">
+                    <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3"><b>People You May Know</b></p>
+                    
+                </article>
+            
+            
+                <div class=" mt-6 ">
+                    
+                    <nav>
+                        {allUsers && allUsers.filter((user) =>
+                        user.username.toLowerCase().includes(query)
+                        ).map((currUser, index) => {
+
+                            
+                            return(
+                            <div class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring justify-between" >
+
+
+
+                                <a href={`profile/${currUser._id}`}>
+                                    <img class="object-cover mx-1 rounded-full h-6 w-6 ml-4" src={currUser && currUser.profileImage != undefined && currUser.profileImage.length>0 ? currUser.profileImage[0] : require('../img/default.png')} alt="avatar"/>
+
+                                    <span class="font-medium">@{currUser.username}</span>
+                                </a>
+
+                                
+
+                                {user && user.user._id != currUser._id &&
+
+                                    (
+                                        userDetails && userDetails.following.includes(currUser._id) ? 
+                                            <div class="card-actions">
+                                                <button class="btn btn-error text-white  btn-xs " onClick={()=>{
+                                                dispatch(unfollowUser({followUser: currUser._id, userId: user.user._id}))
+                                                }}>Unfollow</button>
+                                            </div>    :
+                                        
+                                            <div class="card-actions">
+                                                <button class="btn btn-primary text-white  btn-xs " onClick={()=>{
+                                                    dispatch(followUser({followUser: currUser._id, userId: user.user._id}))
+                                                }}>Follow</button>
+                                            </div>
+                                    )
+                                }
+
+                                
+                            </div>
+
+                            )
+
+                        })}
+
+                    
+
+                        <hr class="my-6 border-gray-200 dark:border-gray-600" />
+
+
+                        
+
+                        
+                    </nav>
+
+                    
+                </div>
+
+            </div>
+            
 
         </div>
     </div>

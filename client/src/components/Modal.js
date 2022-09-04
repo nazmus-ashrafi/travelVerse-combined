@@ -21,7 +21,7 @@ function Modal(_ref) {
   if (size === 'sm') {
     modalSize = 'max-w-sm';
   } else if (size === 'lg') {
-    modalSize = 'max-w-6xl';
+    modalSize = 'max-w-7xl';
   } else {
     modalSize = 'max-w-3xl';
   }

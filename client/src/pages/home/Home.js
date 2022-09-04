@@ -105,12 +105,13 @@ useEffect(()=> {
 
             
 
-              {/* 'unexpanded post' card */}
+              {/* dashboard elements */}
               <div class="xl:col-start-2 xl:col-span-3 md:col-start-2 md:col-span-3 xl:ml-0 xl:mr-0 xl:w-full lg:w-11/12 lg:ml-0 lg:mr-10 md:w-10/12 md:ml-10 w-full">
-
+                
+                {/* 'unexpanded post' card */}
                 <UnExpandedPostMaker />
-                <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
+                <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
 
                 {/* post */}
                 <AllPosts socket={socket} userId={user.user._id}/>

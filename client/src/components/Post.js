@@ -36,6 +36,8 @@ import DeletePost from './DeletePost'
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
+import PhotoModal from './PhotoModal'
+
 
 
 
@@ -183,6 +185,10 @@ const Post = ({ data, socket, hidden }) => {
   //
 
   var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+
+  // photo modal
+  const [photoModalOpened, setPhotoModalOpened] = useState(false)
 
 
   if ( !data.isSharedPost ) {
@@ -333,18 +339,28 @@ const Post = ({ data, socket, hidden }) => {
           {data.images && data.images[0]  ? 
           <>
             <div class="carousel carousel-center w-full  p-4 space-x-4 bg-base-200 rounded-box">
+              
 
               {data.images ? data.images.map((image) => (
 
-          
-                <div class="carousel-item">
+                
+                <a class="carousel-item cursor-pointer" onClick={()=>{
+                  setPhotoModalOpened(true)
+                }}>
                   <img src={image} class="rounded-box w-60 h-60" />
-                </div> 
+                </a> 
 
               )) : null }
               
               
             </div>
+
+
+            <PhotoModal
+              showModal={photoModalOpened}
+              setShowModal={setPhotoModalOpened}
+              data={data.images}
+            />
           
           </>
           : null }  

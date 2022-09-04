@@ -9,7 +9,7 @@ server/package-lock.json
 client/.env
 client/package.json
 client/package-lock.json
-client/App.js
+client/src/App.js
 client/tailwind.config.js
 
 

@@ -7,6 +7,7 @@ import ProfileCard from '../../components/ProfileCard'
 import UnExpandedPostMaker from '../../components/UnExpandedPostMaker'
 import AllPosts from '../../components/AllPosts'
 import NotificationBell from '../../components/NotificationBell'
+import Messenger from '../../components/Messenger'
 
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -60,9 +61,15 @@ export default function Home({socket}) {
 
   //
 
-useEffect(()=> {
+  useEffect(()=> {
     themeChange(false)
   });
+
+
+  // tab selection in home
+  const [tab, setTab] = useState('home')
+
+
 
 
   return (
@@ -89,7 +96,7 @@ useEffect(()=> {
 
           <div class="top-10 left-0 fixed">
             
-            <Sidebar/>
+            <Sidebar tab={tab} setTab={setTab}/>
             
           </div>
 
@@ -100,23 +107,36 @@ useEffect(()=> {
           <div class="xl:col-start-2 xl:col-span-3 lg:col-start-2 md:col-span-3 xl:ml-0 xl:mr-0 xl:w-full lg:w-8/12 lg:ml-0 lg:mr-10 md:w-10/12 md:ml-10 w-full">
 
            
-
-            <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
-
+          {/* <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr> */}
             
 
-              {/* dashboard elements */}
-              <div class="xl:col-start-2 xl:col-span-3 md:col-start-2 md:col-span-3 xl:ml-0 xl:mr-0 xl:w-full lg:w-11/12 lg:ml-0 lg:mr-10 md:w-10/12 md:ml-10 w-full">
-                
-                {/* 'unexpanded post' card */}
-                <UnExpandedPostMaker />
+          
 
-                <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
+            {/* post elements */}
+            <div class={`xl:col-start-2 xl:col-span-3 md:col-start-2 md:col-span-3 xl:ml-0 xl:mr-0 xl:w-full lg:w-11/12 lg:ml-0 lg:mr-10 md:w-10/12 md:ml-10 w-full ${tab === 'home'?'':'hidden'}`}>
 
-                {/* post */}
-                <AllPosts socket={socket} userId={user.user._id}/>
+              <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
+              
+              {/* 'unexpanded post' card */}
+              <UnExpandedPostMaker />
 
-              </div>
+              <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
+
+              {/* post */}
+              <AllPosts socket={socket} userId={user.user._id}/>
+
+            </div>
+
+
+            {/* post elements */}
+            <div class={`xl:col-start-2 xl:col-span-3 md:col-start-2 md:col-span-3 xl:ml-0 xl:mr-0 xl:w-full lg:w-11/12 lg:ml-0 lg:mr-10 md:w-10/12 md:ml-10 w-full ${tab === 'messenger'?'':'hidden'}`}>
+
+              <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 mb-8 opacity-10"></hr>
+              
+              {/* messenger */}
+              <Messenger/>
+
+            </div>
 
           </div>
 

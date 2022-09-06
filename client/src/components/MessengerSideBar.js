@@ -160,70 +160,70 @@ const MessengerSideBar = () => {
             <div>
                 <hr class="my-6 border-gray-200 dark:border-gray-600" />
 
-            <article class="prose ">
-                <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3"><b>Following</b></p>
+                <article class="prose ">
+                    <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3"><b>Following</b></p>
+                    
+                </article>
                 
-            </article>
-            
-            
-            <div class=" mt-6 ">
                 
-                <nav>
-                    {allFollows && allFollows.filter((user) =>
-                    user.username.toLowerCase().includes(query)
-                    ).map((currUser, index) => {
+                <div class=" mt-6 ">
+                    
+                    <nav>
+                        {allFollows && allFollows.filter((user) =>
+                        user.username.toLowerCase().includes(query)
+                        ).map((currUser, index) => {
+
+                            
+                            return(
+                            <div class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring justify-between" >
+
+
+
+                                <a href={`profile/${currUser._id}`}>
+                                    <img class="object-cover mx-1 rounded-full h-6 w-6 ml-4" src={currUser && currUser.profileImage != undefined && currUser.profileImage.length>0 ? currUser.profileImage[0] : require('../img/default.png')} alt="avatar"/>
+
+                                    <span class="font-medium">@{currUser.username}</span>
+                                </a>
+
+                                
+
+                                {user && user.user._id != currUser._id &&
+
+                                    (
+                                        userDetails && userDetails.following.includes(currUser._id) ? 
+                                            <div class="card-actions">
+                                                <button class="btn btn-error text-white  btn-xs " onClick={()=>{
+                                                dispatch(unfollowUser({followUser: currUser._id, userId: user.user._id}))
+                                                }}>Unfollow</button>
+                                            </div>    :
+                                        
+                                            <div class="card-actions">
+                                                <button class="btn btn-primary text-white  btn-xs " onClick={()=>{
+                                                    dispatch(followUser({followUser: currUser._id, userId: user.user._id}))
+                                                }}>Follow</button>
+                                            </div>
+                                    )
+                                }
+
+                                
+                            </div>
+
+                            )
+
+                        })}
+
+                    
+
+                        <hr class="my-6 border-gray-200 dark:border-gray-600" />
+
 
                         
-                        return(
-                        <div class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring justify-between" >
 
-
-
-                            <a href={`profile/${currUser._id}`}>
-                                <img class="object-cover mx-1 rounded-full h-6 w-6 ml-4" src={currUser && currUser.profileImage != undefined && currUser.profileImage.length>0 ? currUser.profileImage[0] : require('../img/default.png')} alt="avatar"/>
-
-                                <span class="font-medium">@{currUser.username}</span>
-                            </a>
-
-                            
-
-                            {user && user.user._id != currUser._id &&
-
-                                (
-                                    userDetails && userDetails.following.includes(currUser._id) ? 
-                                        <div class="card-actions">
-                                            <button class="btn btn-error text-white  btn-xs " onClick={()=>{
-                                            dispatch(unfollowUser({followUser: currUser._id, userId: user.user._id}))
-                                            }}>Unfollow</button>
-                                        </div>    :
-                                    
-                                        <div class="card-actions">
-                                            <button class="btn btn-primary text-white  btn-xs " onClick={()=>{
-                                                dispatch(followUser({followUser: currUser._id, userId: user.user._id}))
-                                            }}>Follow</button>
-                                        </div>
-                                )
-                            }
-
-                            
-                        </div>
-
-                        )
-
-                    })}
-
-                
-
-                    <hr class="my-6 border-gray-200 dark:border-gray-600" />
-
+                        
+                    </nav>
 
                     
-
-                    
-                </nav>
-
-                
-            </div>
+                </div>
 
             </div>
             

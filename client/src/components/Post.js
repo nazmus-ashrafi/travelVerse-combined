@@ -199,7 +199,7 @@ const Post = ({ data, socket, hidden }) => {
 
         {/* main post section */}
         <div class="col-span-1 row-span-3 text-center p-2 card rounded-none h-60">
-          <Map
+          {/* <Map
                 {...viewState}
                 onMove={evt => setViewState(evt.viewState)}
                 onRender={evt => setViewState(viewState)}
@@ -216,9 +216,9 @@ const Post = ({ data, socket, hidden }) => {
                 <Marker longitude={data.longitude} latitude={data.latitude} anchor="bottom" >
                   <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
                 </Marker>
-          </Map>
+          </Map> */}
 
-        {/* <StaticMap
+        <StaticMap
           width={400}
           height={400}
           longitude= {data.longitude}
@@ -231,7 +231,7 @@ const Post = ({ data, socket, hidden }) => {
           <Marker longitude={data.longitude} latitude={data.latitude} anchor="bottom" >
             <RoomRoundedIcon style={{color:"slategrey",fontSize:viewport.zoom * 5}}/>
           </Marker>
-        </StaticMap> */}
+        </StaticMap>
               
         </div>
 

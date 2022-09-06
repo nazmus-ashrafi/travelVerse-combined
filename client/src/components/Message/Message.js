@@ -12,7 +12,7 @@ export default function Message({ message, own }) {
         />
         <p className="messageText">hello</p>
       </div>
-      <div className="messageBottom">2:00</div>
+      <div className="messageBottom">2 hours ago</div>
     </div>
   );
 }

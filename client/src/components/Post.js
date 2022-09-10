@@ -87,7 +87,8 @@ const Post = ({ data, socket, hidden }) => {
   const [liked, setLiked] = useState(data.likes.includes(user.user._id));
   const [likes, setLikes] = useState(data.likes.length)
 
-  
+  // const [socketLikes, setSocketLikes] = useState([])
+  let socketLikes = []
   //
   
 
@@ -104,12 +105,13 @@ const Post = ({ data, socket, hidden }) => {
     // console.log(data._id)
     // console.log(user.user._id)
   
-    liked? setLikes((prev)=>prev-1): setLikes((prev)=>prev+1)
+    liked ? setLikes((prev)=>prev-1) : setLikes((prev)=>prev+1)
 
     // dispatch(getUser(user.user._id))
 
     //socket
     handleNotification(1)
+    // handleOtherUsersLike()
     
 
   
@@ -119,16 +121,54 @@ const Post = ({ data, socket, hidden }) => {
   const handleNotification = (type) => {
     //socket
   
-    socket && socket.emit("sendNotification", {
-      senderId: user.user._id,
-      receiverId: data.userId,
+    socket && socket.current.emit("sendNotification", {
+      senderUserId: user.user._id,
+      receiverUserId: data.userId,
       data: data,
       type,
     });
 
     // console.log(user.user._id)
     // console.log(data.userId)
+
+    
   };
+
+  const handleOtherUsersLike = () => {
+    //socket
+    
+    socket && socket.current.emit("sendLike", {
+      senderUserId: user.user._id,
+      receiverUserId: data.userId,
+      data: data,
+    });
+    
+
+  }
+
+  // useEffect(() => {
+  //   socket.current.on("getLike", (data) => {
+
+  //     // setSocketLikes((prev)=>prev,data);
+      
+  //     // setLikes((prev)=>prev + socketLikes.length);
+
+  //     // socketLikes.filter((id)=> id === data.senderUserId).length > 0 ? setSocketLikes(socketLikes.splice(socketLikes.indexOf(data.senderUserId),1)) : setSocketLikes((prev)=>prev,data.senderUserId)
+
+  //     socketLikes.includes(data.senderUserId) ? socketLikes.splice(socketLikes.indexOf(data.senderUserId),1) : socketLikes.push(data.senderUserId)
+
+  //     console.log(socketLikes.length)
+
+  //     setLikes((prev)=>prev + socketLikes.length);
+  //     // setLikes((prev)=>prev + 1);
+
+      
+  //   });
+  // }, [socket]);
+
+
+
+
 
   //
 

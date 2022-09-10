@@ -27,7 +27,7 @@ const NotificationBell = ({socket}) => {
   useEffect(() => {
     try {
 
-      socket.on("getNotification", (data) => {
+      socket.current.on("getNotification", (data) => {
 
         setNotifications((prev) => [...prev, data]);
         setIsOn(true)
@@ -43,6 +43,8 @@ const NotificationBell = ({socket}) => {
     }
       
     }, [socket]);
+
+    console.log(notifications)
 
 
 

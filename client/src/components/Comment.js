@@ -57,7 +57,9 @@ const Comment = ({comment}) => {
             {/* avatar */}
             <div class="avatar pr-5 ">
                 <div class="md:w-10 w-8 mask mask-squircle">
-                    <img src="https://api.lorem.space/image/face?hash=92048"/>
+                    {/* <img src="https://api.lorem.space/image/face?hash=92048"/> */}
+
+                    <img src={commenterUser && commenterUser.profileImage != undefined && commenterUser.profileImage.length>0 ? commenterUser.profileImage[0] : require('../img/default.png')}/>
                 </div>
             </div>
               
@@ -65,7 +67,8 @@ const Comment = ({comment}) => {
             <h3 class="w-full text-lg p-2 rounded-xl resize-none border-solid border-2 border-base-200 bg-base-200 h-full"
             >
 
-              {comment.desc} by {commenterUser ? commenterUser.username : <Skeleton/>}
+              {/* {comment.desc} by {commenterUser ? commenterUser.username : <Skeleton/>} */}
+              {comment.desc}
             </h3>
 
 

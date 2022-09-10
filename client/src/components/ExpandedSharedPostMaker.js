@@ -103,9 +103,9 @@ const ExpandedSharedPostMaker = ({showModal,setShowModal,sharedPost, socket}) =>
             // notify 
             // handleNotifiication() was not working
             try {
-                socket.emit("sendNotification", {
-                senderId: user.user._id,
-                receiverId: sharedPost.userId,
+                socket && socket.current.emit("sendNotification", {
+                senderUserId: user.user._id,
+                receiverUserId: sharedPost.userId,
                 
                 });
                 // console.log(sharedPost.userId)

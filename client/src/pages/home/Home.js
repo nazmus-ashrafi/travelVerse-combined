@@ -128,13 +128,13 @@ export default function Home({socket}) {
             </div>
 
 
-            {/* post elements */}
+            {/* messenger elements */}
             <div class={`xl:col-start-2 xl:col-span-3 md:col-start-2 md:col-span-3 xl:ml-0 xl:mr-0 xl:w-full lg:w-11/12 lg:ml-0 lg:mr-10 md:w-10/12 md:ml-10 w-full ${tab === 'messenger'?'':'hidden'}`}>
 
               <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 mb-8 opacity-10"></hr>
               
               {/* messenger */}
-              <Messenger/>
+              <Messenger socket={socket}/>
 
             </div>
 

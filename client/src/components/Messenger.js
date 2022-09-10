@@ -3,7 +3,170 @@ import Message from './Message/Message'
 
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 
-const Messenger = () => {
+import { useSelector, useDispatch } from "react-redux";
+import axios from 'axios';
+
+import { useEffect, useState,useRef } from "react";
+import Conversation from './Conversation';
+import OnlineTravellers from './OnlineTravellers';
+
+import { io } from "socket.io-client";
+
+
+const Messenger = ({socket}) => {
+
+    const { user } = useSelector(
+      (state) => state.auth
+    )
+
+    const { userDetails } = useSelector(
+    (state) => state.user
+  )
+
+    const scrollRef = useRef();
+
+    const [conversations, setConversations] = useState([]);
+    const [currentChat, setCurrentChat] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [friend, setFriend] = useState(null);
+    const [newMessage, setNewMessage] = useState("");
+    const [arrivalMessage, setArrivalMessage] = useState(null);
+    const [onlineUsers, setOnlineUsers] = useState([]);
+
+    
+    // const socket = useRef(io("ws://localhost:3006"));
+    // const socket = useRef(io("ws://localhost:3006"));
+
+    //------------socket.io--------------------------------------------
+
+    useEffect(() => {
+        socket.current.on("getMessage", (data) => {
+            
+            setArrivalMessage({
+                sender: data.senderUserId,
+                text: data.text,
+                createdAt: Date.now(),
+            });
+        });
+    }, [socket]);
+
+    // console.log(arrivalMessage)
+
+    useEffect(() => {
+        arrivalMessage &&
+        currentChat?.members.includes(arrivalMessage.sender) &&
+        setMessages((prev) => [...prev, arrivalMessage]);
+    }, [arrivalMessage, currentChat]);
+    
+
+    useEffect(() => {
+        
+        // socket?.on("welcome", (user) => {
+        //   console.log(user);
+        // })
+
+        // socket.current.emit("newUser", user.user._id);
+
+        socket.current.on("getUsers", (users) => {
+          console.log(users);
+            setOnlineUsers(users);
+            setOnlineUsers(users.filter((u) => u.userId !== user.user._id));
+
+            // setOnlineUsers(onlineUsers.filter((user) => user.user._id !== user.user._id))
+
+            // setOnlineUsers(
+            //     userDetails?.followers.filter((f) => users.some((u) => u.userId === f))
+            // )
+        })
+
+        
+
+    }, [user,socket,userDetails]);
+
+    console.log(onlineUsers)
+
+
+    //--------------------------------
+
+    useEffect(() => {
+        const getConversations = async () => {
+        try {
+            const res = await axios.get("/conversation/" + user.user._id);
+            setConversations(res.data);
+            // console.log(res.data)
+        } catch (err) {
+            console.log(err);
+        }
+        };
+        getConversations();
+    }, [user._id]);
+
+
+
+    useEffect(() => {
+        const getMessages = async () => {
+        try {
+            const res = await axios.get("/message/" + currentChat?._id);
+            setMessages(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+        };
+        getMessages();
+
+        const friendId = currentChat?.members.find((member) => member !== user.user._id);
+        const getFriend = async () => {
+            try {
+                const res = await axios("/post/" + friendId + "/getanyuser");
+                setFriend(res.data);
+                console.log(res.data)
+                
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        if (friendId){
+            getFriend();
+        }
+
+    }, [currentChat]);
+
+    const receiverUserId = currentChat?.members.find(
+      (member) => member !== user.user._id
+    );
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const message = {
+            sender: user.user._id,
+            text: newMessage,
+            conversationId: currentChat._id,
+        };
+
+        socket.current.emit("sendMessage", {
+            senderUserId: user.user._id,
+            receiverUserId,
+            text: newMessage,
+        });
+
+        
+        
+
+        try {
+            const res = await axios.post("/message", message);
+            setMessages([...messages, res.data]);
+            setNewMessage("");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+
+
   return (
     
     // chatmenu, chatbox, online friends
@@ -13,7 +176,7 @@ const Messenger = () => {
 
             <div class="grid flex-grow bg-base-300 rounded-box place-items-center overflow-y-auto h-fit no-scrollbar relative chats">
 
-                <div className="overflow-x-auto w-full h-[40rem] no-scrollbar">
+                <div className="overflow-x-auto w-full h-[44rem] no-scrollbar">
                     <table className="table w-full">
                         {/* <!-- head --> */}
                         <thead className='sticky top-0 z-50'>
@@ -44,293 +207,13 @@ const Messenger = () => {
                         
                         <tbody className=''>
 
-                            
-                        {/* <!-- row 1 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                <div className="text-sm opacity-50">United States</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 2 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 2 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 2 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 2 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 2 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 2 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 2 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 2 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 2 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Brice Swyre</div>
-                                <div className="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 3 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Marjy Ferencz</div>
-                                <div className="text-sm opacity-50">Russia</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 4 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Yancy Tear</div>
-                                <div className="text-sm opacity-50">Brazil</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 5 --> */}
-                        <tr>
-                            <th>
-                            <label>
-                                <input type="checkbox" className="checkbox" />
-                            </label>
-                            </th>
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Yancy Tear</div>
-                                <div className="text-sm opacity-50">Brazil</div>
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
+                            {conversations.map((conversation) => (
+                                <tr className='cursor-pointer' onClick={() => setCurrentChat(conversation)}>
+                                    <Conversation conversation={conversation} currentUser={user.user} />
+                                </tr>
+                                
+                            ))}
+
                         </tbody>
                         
                         
@@ -342,49 +225,68 @@ const Messenger = () => {
             <div class="divider lg:divider-horizontal"></div> 
 
             <div>
-                <div class="p-3 bg-base-200 rounded-box place-items-center w-96 overflow-y-auto h-[40rem] no-scrollbar messages relative ml-4">
+                <div class="p-3 bg-base-200 rounded-t-xl place-items-center lg:w-96 mr-4 lg:mr-0 overflow-y-auto h-[40rem] no-scrollbar messages relative ml-4">
 
-                    <div className='sticky top-0'>
-                        <a class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring bg-base-100">
+                    {currentChat?
+                    <>
 
-                            <img class="object-cover mx-1 rounded-full h-6 w-6" src={require('../img/default.png')} alt="avatar"/>
+                        <div className='sticky top-0'>
+                            <a class="flex items-center px-4 py-2 transition-colors duration-200 transform rounded-md hover:ring bg-base-100">
 
-                            <span class="mx-2 font-medium">@john</span>
-                        </a>
-                    </div>
+                                <img class="object-cover mx-1 rounded-full h-6 w-6" src={friend && friend.profileImage != undefined && friend.profileImage.length>0 ? friend.profileImage[0] : require('../img/default.png')} alt="avatar"/>
 
-                    <div className=''>
-                        <Message own={true}/>
-                        <Message own={false}/>
-                        <Message own={true}/>
-                        <Message own={false}/>
-                        <Message own={true}/>
-                        <Message own={false}/>
-                        <Message own={true}/>
-                        <Message own={false}/>
-                        <Message own={true}/>
-                        <Message own={false}/>
-                        <Message own={true}/>
-                        <Message own={false}/>
-                        <Message own={true}/>
-                        <Message own={false}/>
-                        <Message own={true}/>
-                        <Message own={false}/>
-                    </div>
+                                <span class="mx-2 font-medium">@{friend?.username}</span>
+                            </a>
+                        </div>
 
-                
+                        <div className=''>
+                            {messages.map((message) => (
+                                <>
+                                    <div ref={scrollRef}>
+                                        <Message own={message.sender === user.user._id} message={message}/>
+                                    </div>
+                                    
+                                    
+                                </>
+
+                            ))}
+                            
+                            
+                        </div>
+
+
+
+                    </> : (
+                        
+
+                        <article class="prose absolute top-1/3 text-center ml-5">
+                            <p for="" class="mt-3 mb-3 tracking-wider prose-lg ml-3 opacity-60"><b>Open a chat to start messaging.</b></p>
+                                
+                        </article>
+                    )}
+
+                    
+                    
 
                 </div>
-
-                <div class="form-control p-4 ">
                 
-                    <label class="input-group w-96">
-                        <input type="text" placeholder="Aa" class="input input-bordered w-full" />
-                        <button class="btn btn-square">
-                        <SendRoundedIcon/>
-                        </button>
+            
+                <div class="form-control ml-4 bg-base-200 rounded-b-xl mr-4 lg:mr-0">
+                
+                    <label class="input-group p-3 ">
+                        {currentChat?
+                        <input type="text" placeholder="Aa" class="input input-bordered w-full" onChange={(e) => setNewMessage(e.target.value)}
+                        value={newMessage} />:
+                        <input type="text" placeholder="" class="input input-bordered w-full" disabled/>}
+                        
+                        {currentChat?
+                        <button class="btn btn-square" onClick={handleSubmit}>
+                            <SendRoundedIcon/>
+                        </button>:null}
                     </label>
                 </div>
+
+                
             </div>
             
             
@@ -393,7 +295,7 @@ const Messenger = () => {
 
             <div class="grid flex-grow bg-base-300 rounded-box place-items-center overflow-y-auto h-fit no-scrollbar relative online-friends">
 
-                <div className="overflow-x-auto w-full h-[40rem] no-scrollbar">
+                <div className="overflow-x-auto w-full h-[44rem] no-scrollbar">
                     <table className="table w-full">
                         {/* <!-- head --> */}
                         <thead className='sticky top-0 z-50'>
@@ -419,197 +321,13 @@ const Messenger = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                        {/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>{/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>{/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>{/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>{/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>{/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>{/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>{/* <!-- row 1 --> */}
-                        <tr>
-                            
-                            <td>
-                            <div className="flex items-center space-x-3">
-                                <div className="avatar">
-                                <div className="mask mask-squircle w-12 h-12">
-                                    <img class="object-cover rounded-full h-6 w-6 " src={require('../img/default.png')} alt="avatar"/>
-                                </div>
-                                </div>
-                                <div>
-                                <div className="font-bold">Hart Hagerty</div>
-                                {/* <div className="text-sm opacity-50">United States</div> */}
-                                </div>
-                            </div>
-                            </td>
-                            
-                        </tr>
+                            <OnlineTravellers 
+                                onlineUsers={onlineUsers}
+                                currentId={user.user._id}
+                                setCurrentChat={setCurrentChat}
+                                socket={socket}
+                                
+                            />
                         
                         </tbody>
                         

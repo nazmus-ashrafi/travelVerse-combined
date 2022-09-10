@@ -1,4 +1,7 @@
 client/node_modules
+server/node_modules
+socket/node_modules
+
 client/notepad.txt
 
 
@@ -9,8 +12,10 @@ server/package-lock.json
 client/.env
 client/package.json
 client/package-lock.json
-client/src/App.js
 client/tailwind.config.js
+
+client/src/App.js
+client/src/features
 
 
 

@@ -8,21 +8,35 @@ const io = new Server({
 });
 
 let onlineUsers = [];
+let onlineUsersDetails = [];
 
 const addNewUser = (user, socketId) => {
-  !onlineUsers.some((user) => user.username === user) &&
-  onlineUsers.push({ user, socketId });
+  let userId = user._id;
+  !onlineUsers.some((user) => user.userId === userId) &&
+  onlineUsers.push({ userId,user, socketId });
+
+  // !onlineUsersDetails.some((user) => user.userId === userId) &&
+  // onlineUsersDetails.push({ user, socketId });
+
+  // !onlineUsersDetails.some((onlineUser) => onlineUser.username === user.username) &&
+  // onlineUsersDetails.push({user});
+  
 };
+
+
 
 const removeUser = (socketId) => {
   onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
+
+
 };
 
-const getUser = (receiverId) => {
+const getUser = (receiverUserId) => {
   // console.log([...onlineUsers])
-  // console.log(userId)
+  // console.log(receiverUserId)
+  // console.log(onlineUsers)
 
-  return onlineUsers.find((userObj) => userObj.user.user._id === receiverId);  // bug
+  return onlineUsers.find((userObj) => userObj.userId === receiverUserId);  // bug
 };
 
 
@@ -31,43 +45,85 @@ const getUser = (receiverId) => {
 io.on("connection", (socket) => {
   // console.log("a user connected");
 
-  socket.on("newUser", (user) => {
+
+  socket.on("newUser", (userId) => {
     
-    {user? addNewUser(user, socket.id) : null}
+    
+    {userId ? addNewUser(userId, socket.id) : null}
     // addNewUser(user, socket.id);
 
     // console.log(onlineUsers[0].user.user._id);
     // console.log([...onlineUsers]);
-    console.log("added nnew user");
+    console.log("added new user");
+
+    io.emit("getUsers", onlineUsers);
 
   });
 
-  socket.on("sendNotification", ({ senderId, receiverId, info, data }) => {
-    const receiver = getUser(receiverId);
+  socket.on("sendNotification", ({ senderUserId, receiverUserId, data,type }) => {
+    const receiver = getUser(receiverUserId);
 
-    // console.log(receiver)
-    // console.log(senderId)
+    // console.log(receiver.socketId +"socket recei")
+    // console.log(senderUserId)
     // console.log(type)
 
     if (receiver) {
       io.to(receiver.socketId).emit("getNotification", {
-        senderId,
-        info,
+        senderUserId,
+        data,
+        type
+      });
+
+    }
+
+
+  });
+
+
+  socket.on("sendLike", ({ senderUserId, receiverUserId, data }) => {
+    const receiver = getUser(receiverUserId);
+
+    if (receiver) {
+      io.to(receiver.socketId).emit("getLike", {
+        senderUserId,
         data,
       });
 
     }
 
-   
 
   });
 
-    
 
+  // send and get message
+  socket.on("sendMessage", ({ senderUserId, receiverUserId, text }) => {
+
+    console.log(receiverUserId)
+    console.log(text)
+    const receiver = getUser(receiverUserId);
+    console.log(receiver.socketId)
+
+    io.to(receiver.socketId).emit("getMessage", {
+      senderUserId,
+      text,
+    });
+  });
+
+ 
+
+    
   socket.on("disconnect", () => {
     removeUser(socket.id);
     console.log("user disconnected");
+    io.emit("getUsers", onlineUsers);
   });
+
+  //------------------------------messenger------------------------------
+
+  io.emit("getUsers", onlineUsers);
+  io.emit("getUsersDetails", onlineUsersDetails);
+ 
+  io.emit("welcome", "welcome to this server");
   
 });
 

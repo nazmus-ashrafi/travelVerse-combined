@@ -156,7 +156,7 @@ const SharedPost = ({ data, socket, hidden }) => {
   const handleNotification = (type) => {
     //socket
   
-    socket.emit("sendNotification", {
+    socket.current.emit("sendNotification", {
       senderId: user.user._id,
       receiverId: data.userId,
       data: data,

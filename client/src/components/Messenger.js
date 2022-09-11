@@ -70,9 +70,10 @@ const Messenger = ({socket}) => {
         socket.current.on("getUsers", (users) => {
           console.log(users);
             setOnlineUsers(users);
-            setOnlineUsers(users.filter((u) => u.userId !== user.user._id));
+            setOnlineUsers(users.filter((u) => u.userId !== user.user._id)); // exclude self
+            // setOnlineUsers(users.filter((u) => u.userId === userDetails.following)); // include only followers
 
-            // setOnlineUsers(onlineUsers.filter((user) => user.user._id !== user.user._id))
+            // console.log(userDetails.following)
 
             // setOnlineUsers(
             //     userDetails?.followers.filter((f) => users.some((u) => u.userId === f))

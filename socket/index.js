@@ -95,22 +95,6 @@ io.on("connection", (socket) => {
   });
 
 
-  // send and get message
-  socket.on("sendMessage", ({ senderUserId, receiverUserId, text }) => {
-
-    console.log(receiverUserId)
-    console.log(text)
-    const receiver = getUser(receiverUserId);
-    console.log(receiver.socketId)
-
-    io.to(receiver.socketId).emit("getMessage", {
-      senderUserId,
-      text,
-    });
-  });
-
- 
-
     
   socket.on("disconnect", () => {
     removeUser(socket.id);
@@ -121,9 +105,37 @@ io.on("connection", (socket) => {
   //------------------------------messenger------------------------------
 
   io.emit("getUsers", onlineUsers);
-  io.emit("getUsersDetails", onlineUsersDetails);
+  // io.emit("getUsersDetails", onlineUsersDetails);
  
-  io.emit("welcome", "welcome to this server");
+  // io.emit("welcome", "welcome to this server");
+
+  // send and get message
+  socket.on("sendMessage", ({ senderUserId, receiverUserId, text }) => {
+
+    // console.log(receiverUserId)
+    // console.log(text)
+    const receiver = getUser(receiverUserId);
+    console.log(receiver.socketId)
+
+    io.to(receiver.socketId).emit("getMessage", {
+      senderUserId,
+      text,
+    });
+  });
+
+  socket.on("sendConversation", ({ senderUserId, receiverUserId, conversation }) => {
+    const receiver = getUser(receiverUserId);
+
+    if(receiver){
+      io.to(receiver.socketId).emit("getConversation", {
+        receiverUserId,
+        senderUserId,
+        conversation,
+      });
+    }
+  })
+
+  //----------------------------------------------------------------
   
 });
 

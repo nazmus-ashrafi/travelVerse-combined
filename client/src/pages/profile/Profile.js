@@ -71,15 +71,15 @@ const ProfilePage = () => {
 
     // mapbox component saves the previously initialized map to the DOM (bug)
     // reload page once on load 
-    const reloadCount = sessionStorage.getItem('reloadCount');
-    useEffect(() => {
-        if(reloadCount < 2) {
-        sessionStorage.setItem('reloadCount', String(reloadCount + 1));
-        window.location.reload();
-        } else {
-        sessionStorage.removeItem('reloadCount');
-        }
-    }, []);
+    // const reloadCount = sessionStorage.getItem('reloadCount');
+    // useEffect(() => {
+    //     if(reloadCount < 2) {
+    //     sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+    //     window.location.reload();
+    //     } else {
+    //     sessionStorage.removeItem('reloadCount');
+    //     }
+    // }, []);
     //
 
 

@@ -2,7 +2,7 @@ import ConversationModel from '../Models/conversationModel.js';
 
 export const createConversation = async (req, res) => {
   const newConversation = new ConversationModel({
-    members: [req.body.senderId, req.body.receiverId],
+    members: [req.body.senderId, req.body.receiverId]
   });
 
   try {
@@ -30,6 +30,15 @@ export const getTwoUsersConversation = async (req, res) => {
       members: { $all: [req.params.firstUserId, req.params.secondUserId] },
     });
     res.status(200).json(conversation)
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+
+export const deleteConversation = async (req, res) => {
+  try {
+    const conversation = await ConversationModel.findByIdAndDelete(req.params.conversationId);
+    res.status(200).json(conversation);
   } catch (err) {
     res.status(500).json(err);
   }

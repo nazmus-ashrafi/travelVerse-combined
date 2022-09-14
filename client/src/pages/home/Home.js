@@ -34,16 +34,19 @@ export default function Home({socket}) {
 
 
   // reload page once on load 
-    const reloadCount = sessionStorage.getItem('reloadCount');
-    useEffect(() => {
-        if(reloadCount < 2) {
-        sessionStorage.setItem('reloadCount', String(reloadCount + 1));
-        window.location.reload();
-        } else {
-        sessionStorage.removeItem('reloadCount');
-        }
-    }, []);
+    // const reloadCount = sessionStorage.getItem('reloadCount');
+    // useEffect(() => {
+    //     if(reloadCount < 2) {
+    //     sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+    //     window.location.reload();
+    //     } else {
+    //     sessionStorage.removeItem('reloadCount');
+    //     }
+    // }, []);
   //
+
+
+  const [unOpenedMessages, setUnOpenedMessages] = useState([]);
 
   // redux
   const dispatch = useDispatch()
@@ -82,7 +85,7 @@ export default function Home({socket}) {
 
       {/* nav bar */}
       <div class="sticky top-0 z-50">
-        <Nav socket={socket} />
+        <Nav socket={socket} unOpenedMessages={unOpenedMessages} setUnOpenedMessages ={setUnOpenedMessages} />
         
       </div>
       
@@ -134,7 +137,7 @@ export default function Home({socket}) {
               <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 mb-8 opacity-10"></hr>
               
               {/* messenger */}
-              <Messenger socket={socket}/>
+              <Messenger socket={socket} unOpenedMessages={unOpenedMessages} setUnOpenedMessages ={setUnOpenedMessages}/>
 
             </div>
 

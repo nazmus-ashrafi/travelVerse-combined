@@ -38,13 +38,13 @@ const NotificationBell = ({socket}) => {
     } catch (error) {
 
       console.log(error)
-      console.log(notifications)
+      // console.log(notifications)
       
     }
       
-    }, [socket]);
+  }, [socket]);
 
-    console.log(notifications)
+  // console.log(notifications)
 
 
 
@@ -170,11 +170,6 @@ const NotificationBell = ({socket}) => {
 
 
                             <BellIcon className="h-6 w-6" aria-hidden="true" />
-
-            
-
-                            
-                            
 
                   
                       </button>

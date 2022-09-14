@@ -14,6 +14,7 @@ import { useRef, useState } from "react";
 import Logo from './Logo'
 
 import {themeChange} from "theme-change";
+import MessageBell from './MessageBell'
 
 const themeValues = [
         "Dark",
@@ -68,7 +69,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const Nav = ({dark,setDark, socket}) => {
+const Nav = ({dark,setDark, socket, unOpenedMessages, setUnOpenedMessages}) => {
 
   useEffect(()=> {
     themeChange(false)
@@ -239,7 +240,7 @@ function refreshPage() {
 
                 <h1 class="font-['Abril'] italic font-medium text-2xl text-zinc-400 mr-3">@{user.user.username}</h1>
 
-
+                  <MessageBell unOpenedMessages={unOpenedMessages} setUnOpenedMessages ={setUnOpenedMessages}/>
 
                   {/* notification button */}
                   {!isHide ? <NotificationBell socket={socket}/> :null}

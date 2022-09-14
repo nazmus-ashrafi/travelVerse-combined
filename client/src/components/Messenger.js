@@ -13,7 +13,7 @@ import OnlineTravellers from './OnlineTravellers';
 import { io } from "socket.io-client";
 
 
-const Messenger = ({socket}) => {
+const Messenger = ({socket, unOpenedMessages, setUnOpenedMessages}) => {
 
     const { user } = useSelector(
       (state) => state.auth
@@ -32,6 +32,9 @@ const Messenger = ({socket}) => {
     const [newMessage, setNewMessage] = useState("");
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    
+    
+    // const [unOpened, setUnOpened] = useState(false);
 
     
     // const socket = useRef(io("ws://localhost:3006"));
@@ -68,7 +71,7 @@ const Messenger = ({socket}) => {
         // socket.current.emit("newUser", user.user._id);
 
         socket.current.on("getUsers", (users) => {
-          console.log(users);
+        //   console.log(users);
             setOnlineUsers(users);
             setOnlineUsers(users.filter((u) => u.userId !== user.user._id)); // exclude self
             // setOnlineUsers(users.filter((u) => u.userId === userDetails.following)); // include only followers
@@ -84,7 +87,7 @@ const Messenger = ({socket}) => {
 
     }, [user,socket,userDetails]);
 
-    console.log(onlineUsers)
+    // console.log(onlineUsers)
 
 
     //--------------------------------
@@ -120,7 +123,7 @@ const Messenger = ({socket}) => {
             try {
                 const res = await axios("/post/" + friendId + "/getanyuser");
                 setFriend(res.data);
-                console.log(res.data)
+                // console.log(res.data)
                 
             } catch (err) {
                 console.log(err);
@@ -167,6 +170,32 @@ const Messenger = ({socket}) => {
     }, [messages]);
 
 
+    useEffect(() => {
+        try {
+
+        socket.current.on("getConversation", (data) => {
+            // console.log(data.conversation)
+            setConversations([...conversations, data.conversation]);
+           
+            setUnOpenedMessages((prev) => [...prev, data.conversation._id]);
+
+            
+
+        });
+        
+        } catch (error) {
+
+            console.log(error)
+        
+        }
+      
+    }, [socket]);
+
+    // console.log(unOpenedMessages)
+
+   
+
+
 
   return (
     
@@ -182,15 +211,15 @@ const Messenger = ({socket}) => {
                         {/* <!-- head --> */}
                         <thead className='sticky top-0 z-50'>
                         <tr>
-                            <th>
+                            {/* <th>
                                 <label>
                                     <input type="checkbox" className="checkbox" />
                                 </label>
-                            </th>
+                            </th> */}
                             <th>Chats</th>
                             
                         </tr>
-                        <tr className=' '>
+                        {/* <tr className=' '>
                             <th colSpan="2" className='p-2'>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -203,14 +232,43 @@ const Messenger = ({socket}) => {
                                 </div>
                             </th>
                             
-                        </tr>
+                        </tr> */}
+                        
+                         <hr class="my-3 border-gray-200 dark:border-gray-600 opacity-50" />
+
+
                         </thead>
                         
                         <tbody className=''>
 
+                            
+
                             {conversations.map((conversation) => (
-                                <tr className='cursor-pointer' onClick={() => setCurrentChat(conversation)}>
-                                    <Conversation conversation={conversation} currentUser={user.user} />
+                                <tr className='cursor-pointer' onClick={() => {
+                                    setCurrentChat(conversation)
+                                    setUnOpenedMessages((prev) => prev.filter((id) => id !== conversation._id))
+
+                                    
+                                }
+
+                                
+                                }>
+                                    <Conversation 
+                                    conversation={conversation} 
+                                    currentUser={user.user} 
+                                    setConversations={setConversations} 
+                                    conversations={conversations} 
+                                    setCurrentChat={setCurrentChat} 
+                                    socket={socket} 
+
+                                    // unOpenedMessages={unOpenedMessages}
+                                    // setUnOpenedMessages={setUnOpenedMessages}
+                                    
+                                    unOpened = {unOpenedMessages.includes(conversation._id)}
+                                    
+
+                                    
+                                    />
                                 </tr>
                                 
                             ))}
@@ -307,17 +365,19 @@ const Messenger = ({socket}) => {
                         </tr>
 
                         <tr>
-                            <th className='p-2'>
+                            {/* <th className='p-2'>
                                 <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
-                                        <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </span>
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
+                                            <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
 
-                                <input type="text" class="w-full py-2 pl-10 pr-4 input" placeholder="Search Travellers"  />
-                            </div>
-                            </th>
+                                    <input type="text" class="w-full py-2 pl-10 pr-4 input" placeholder="Search Travellers"  />
+                                </div>
+                            </th> */}
+
+                            <hr class="my-3 border-gray-200 dark:border-gray-600 opacity-50" />
                             
                         </tr>
                         </thead>
@@ -327,6 +387,8 @@ const Messenger = ({socket}) => {
                                 currentId={user.user._id}
                                 setCurrentChat={setCurrentChat}
                                 socket={socket}
+                                conversations = {conversations}
+                                setConversations = {setConversations}
                                 
                             />
                         

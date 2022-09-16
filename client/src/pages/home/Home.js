@@ -85,7 +85,7 @@ export default function Home({socket}) {
 
       {/* nav bar */}
       <div class="sticky top-0 z-50">
-        <Nav socket={socket} unOpenedMessages={unOpenedMessages} setUnOpenedMessages ={setUnOpenedMessages} />
+        <Nav socket={socket} unOpenedMessages={unOpenedMessages} setUnOpenedMessages ={setUnOpenedMessages}/>
         
       </div>
       

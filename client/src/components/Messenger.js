@@ -175,7 +175,7 @@ const Messenger = ({socket, unOpenedMessages, setUnOpenedMessages}) => {
 
         socket.current.on("getConversation", (data) => {
             // console.log(data.conversation)
-            setConversations([...conversations, data.conversation]);
+            setConversations((prev) => [...prev, data.conversation]);
            
             setUnOpenedMessages((prev) => [...prev, data.conversation._id]);
 

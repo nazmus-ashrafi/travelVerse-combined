@@ -421,7 +421,7 @@ export const getAnyPost = async (req, res) => {
 
 
 // @desc    Get all users except current user and current user's follows
-// @route   GET post/getallusers
+// @route   GET post/:userid/getallnotfollowedusers
 // @access  
 export const getAllNotFollowedUsers = async (req, res) => {
 
@@ -433,16 +433,65 @@ export const getAllNotFollowedUsers = async (req, res) => {
     const users = await UserModel.find();
     
     
-    console.log(users.findIndex(user => user._id.toString() === currentUser._id.toString()))
+    // console.log(users.findIndex(user => user._id.toString() === currentUser._id.toString()))
     // exclude current user
     users.splice(users.findIndex(user => user._id.toString() === currentUser._id.toString()), 1) 
 
     // exclude followers of current user
     currentUser.following.forEach(friendId => {
       users.splice(users.findIndex(user => user._id.toString() === friendId.toString()), 1)
-    } )
+    })
+
+    // exclude admin
+    users.splice(users.findIndex(user => user.isAdmin === true), 1)
+  
     
     res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+
+// @desc    Get all users except current user 
+// @route   GET post/:userid/getallusers
+// @access  
+export const getAllUsers = async (req, res) => {
+
+  // console.log("get all users")
+  const userId = req.params.userid;
+  const currentUser = await UserModel.findById(userId);
+
+  try {
+    const users = await UserModel.find();
+    
+    
+    // console.log(users.findIndex(user => user._id.toString() === currentUser._id.toString()))
+    // exclude current user
+    users.splice(users.findIndex(user => user._id.toString() === currentUser._id.toString()), 1) 
+
+    
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+
+// @desc    Get all posts
+// @route   GET post/:userid/getallusers
+// @access  
+export const getAllPosts = async (req, res) => {
+
+  // console.log("get all users")
+  const userId = req.params.userid;
+  const currentUser = await UserModel.findById(userId);
+
+  try {
+    const posts = await PostModel.find(); 
+
+    
+    res.status(200).json(posts);
   } catch (error) {
     res.status(500).json(error);
   }

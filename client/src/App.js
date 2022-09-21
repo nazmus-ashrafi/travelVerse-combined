@@ -18,6 +18,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { io } from "socket.io-client";
 
 import { useEffect, useState,useRef } from "react";
+import RegisterShop from "./pages/auth/RegisterShop";
 
 
 
@@ -73,6 +74,10 @@ function App() {
           <Route
             path="/register"
             element={user ? <Navigate to="../home" /> : <Register />}
+          />
+          <Route
+            path="/register-shop"
+            element={user ? <Navigate to="../home" /> : <RegisterShop/>}
           />
           <Route
             path="/visualize"

@@ -32,7 +32,7 @@ const AllPosts = ({socket, userId}) => {
       // getTimeLinePosts() = Get logged in user's timeline posts
 
       dispatch(getTimeLinePosts(userId)) 
-      dispatch(getUser(user)) // this populated the user state when the app first loads
+      dispatch(getUser(user)) // this populated the user state when the app first loads (deprecated - now done in Home.js)
 
 
     

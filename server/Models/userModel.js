@@ -22,6 +22,10 @@ const UserSchema = mongoose.Schema(
             type: String,
             required: true
         },
+        shopname : {
+            type: String,
+            required: false
+        },
         isAdmin : {
             type: Boolean,
             default: false,
@@ -41,17 +45,16 @@ const UserSchema = mongoose.Schema(
             type: Array
         },
         description: String,
-
-        isVendor: {
-            type: Boolean,
-            default: false
-        },
         resetToken: {
             type: String,
             default: ''
         },
         expireToken: {
             type: Date,
+        },
+        isShop: {
+            type: Boolean,
+            default: false
         }
 
     },

@@ -13,6 +13,9 @@ import Logo from '../../components/Logo'
 import { useFormik } from "formik";
 import { loginSchema } from "../../formSchemas";
 
+import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
+import RestaurantMenuRoundedIcon from '@mui/icons-material/RestaurantMenuRounded';
+
 
 const Login = () => {
 
@@ -162,13 +165,23 @@ const Login = () => {
                 </div>
         
                 
-                <div class="m-auto yellow-600 ">
-                  <Link to="/register">
+                  <div class="m-auto yellow-600 ">
+                    <Link to="/register">
+                      
+                      <button class="text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:bg-yellow-700 rounded text-lg mt-3 content-center glass w-72"><GroupRoundedIcon/><span class="ml-2">Register as a person</span></button>
+                    </Link>
                     
-                    <button class="text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:bg-yellow-700 rounded text-lg mt-3 w-40 content-center glass">Register</button>
-                  </Link>
-                  
-                </div>
+                  </div>
+
+                  <div class="m-auto yellow-600 ">
+                    <Link to="/register-shop">
+                      
+                      <button class="text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:bg-yellow-700 rounded text-lg mt-3 content-center glass w-72"><RestaurantMenuRoundedIcon/><span class="ml-2">Register a restaurant</span></button>
+                    </Link>
+                    
+                  </div>
+              
+                
                 
               </form>
 

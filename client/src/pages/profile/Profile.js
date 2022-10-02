@@ -35,6 +35,8 @@ import axios from 'axios'
 import {themeChange} from "theme-change";
 import AllProducts from '../../components/Shop/AllProducts';
 
+import { getUser } from '../../features/user/userSlice'
+
 
 
 const ProfilePage = () => {
@@ -65,6 +67,10 @@ const ProfilePage = () => {
     let { timelinePosts, isLoading } = useSelector((state) => state.post);
 
     useEffect(()=>{
+
+        if(user){
+            dispatch(getUser(user)) // this populated the user state when the app first loads
+        }
        
   
     },[])
@@ -136,7 +142,7 @@ const ProfilePage = () => {
         const fetchProfileUser = async () => {
         if (profileUserId === user.user._id) {
             setProfileUser(userDetails);
-            console.log('user details', userDetails)
+            // console.log('user details', userDetails)
         } else {
             console.log("fetching")
             const profileUser = await axios.get(process.env.REACT_APP_POST_URL + profileUserId + "/getanyuser")
@@ -424,7 +430,7 @@ const ProfilePage = () => {
         <div class="section-2 grid xl:grid-cols-4 grid-cols-1 pt-10 xl:pl-28 xl:pr-28 xl:relative transition duration-200 ease-in-out pl-7 pr-7 mt-3 xl:place-items-stretch place-items-center">
 
             {/* friends block */}
-            {user.user._id === profileUserId ? ( // show if own profile
+            {user.user._id === profileUserId && !user.user.isShop ? ( // show if own profile and user is not a shop
                 <FriendsBlock/>
             ):null}
             
@@ -442,7 +448,7 @@ const ProfilePage = () => {
 
             {user.user.isShop || user.user._id != profileUserId && profileUser.isShop  ?
             // if logged in user is shop or 
-            // logged in used s not shop and profile user is shop
+            // logged in user is not shop and profile user is shop
             <>
 
             <div class="xl:col-start-1 xl:col-span-3 w-full">

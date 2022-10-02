@@ -23,8 +23,6 @@ const getUser = async (user) => {
     // console.log(response.data)
     return response.data
 
-    
-   
   
 }
 

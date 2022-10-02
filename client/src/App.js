@@ -6,6 +6,7 @@ import Profile from "./pages/profile/Profile"
 import VisualizeCompare from "./pages/profile/VisualizeCompare";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
+import ProductScreen from "./components/Shop/ProductScreen";
 
 import { Routes, Route, Navigate, Router } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -91,7 +92,12 @@ function App() {
             path="/reset/:token"
             element={user ? <Navigate to="../home" /> : <ResetPassword/>}
           />
+          <Route
+            path="/product/:id"
+            element={user ? <ProductScreen/> : <Navigate to="../login" />}
+          />
 
+        
         
           <Route
             path="*"

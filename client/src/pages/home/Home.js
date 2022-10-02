@@ -61,7 +61,11 @@ export default function Home({socket}) {
 
 
   useEffect(()=>{
-    dispatch(getUser(user)) // this populated the user state when the app first loads
+
+    if(user){
+      dispatch(getUser(user)) // this populated the user state when the app first loads
+    }
+    
 
   },[])
 

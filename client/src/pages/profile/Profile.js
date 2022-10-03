@@ -51,7 +51,6 @@ const ProfilePage = () => {
         zoom: 8
     });
 
-    
 
     // redux
 
@@ -447,32 +446,32 @@ const ProfilePage = () => {
 
 
             {user.user.isShop || user.user._id != profileUserId && profileUser.isShop  ?
-            // if logged in user is shop or 
-            // logged in user is not shop and profile user is shop
-            <>
+                // if logged in user is shop or 
+                // logged in user is not shop and profile user is shop
+                <>
 
-            <div class="xl:col-start-1 xl:col-span-3 w-full">
-                <AllProducts/>
-            </div>
-                
-                
-            </> :
-            <>
-            {/* 'unexpanded post' card */}
                 <div class="xl:col-start-1 xl:col-span-3 w-full">
-
-                    {user.user._id === profileUserId ? ( // show if own profile
-                        <UnExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
-                    ):null}
-
-                    <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
-
-                    {/* posts */}
-                    {/* no need to pass socket because we dont care about live notifications in this page */}
-                    <AllPosts userId={id}/>
-
+                    <AllProducts profileUserId={profileUserId}/>
                 </div>
-            </>
+                    
+                    
+                </> :
+                <>
+                {/* 'unexpanded post' card */}
+                    <div class="xl:col-start-1 xl:col-span-3 w-full">
+
+                        {user.user._id === profileUserId ? ( // show if own profile
+                            <UnExpandedPostMaker showModal={showModal} setShowModal={setShowModal}/>
+                        ):null}
+
+                        <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr>
+
+                        {/* posts */}
+                        {/* no need to pass socket because we dont care about live notifications in this page */}
+                        <AllPosts userId={id}/>
+
+                    </div>
+                </>
             }
 
           

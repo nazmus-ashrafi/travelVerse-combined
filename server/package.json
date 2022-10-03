@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+
+    "data:import": "node seeder",
+    "data:destroy": "node seeder -d"
+
   },
   "author": "Nazmus2878",
   "license": "ISC",

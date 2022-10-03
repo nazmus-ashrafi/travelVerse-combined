@@ -20,8 +20,12 @@ const productSchema = mongoose.Schema(
   {
     user: { // this user is the user who created the product
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: false,
       ref: 'UserModel',
+    },
+    userId: { // this userId is the userId who created the product
+      type: String,
+      required: true,
     },
     name: {
       type: String,
@@ -33,7 +37,7 @@ const productSchema = mongoose.Schema(
     },
     brand: {
       type: String,
-      required: true,
+      required: false,
     },
     category: {
       type: String,

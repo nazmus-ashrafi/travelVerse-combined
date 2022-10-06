@@ -7,6 +7,7 @@ import VisualizeCompare from "./pages/profile/VisualizeCompare";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import ProductScreen from "./components/Shop/ProductScreen";
+import CartScreen from "./components/Shop/CartScreen";
 
 import { Routes, Route, Navigate, Router } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -96,8 +97,15 @@ function App() {
             path="/product/:id"
             element={user ? <ProductScreen/> : <Navigate to="../login" />}
           />
+          <Route
+            path="/cart/"
+            element={user ? <CartScreen/> : <Navigate to="../login" />}
+          />
+          <Route
+            path="/cart/:id"
+            element={user ? <CartScreen/> : <Navigate to="../login" />}
+          />
 
-        
         
           <Route
             path="*"

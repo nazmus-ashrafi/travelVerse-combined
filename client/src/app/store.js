@@ -4,6 +4,7 @@ import postReducer from '../features/post/postSlice'
 import userReducer from '../features/user/userSlice'
 
 import productReducer from '../features/product/productSlice'
+import cartReducer from '../features/cart/cartSlice'
 
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     user : userReducer,
     
     product : productReducer,
+    cart : cartReducer,
   },
 });
 

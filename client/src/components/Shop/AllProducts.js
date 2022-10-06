@@ -22,6 +22,8 @@ const AllProducts = ({profileUserId}) => {
     (state) => state.product
   )
 
+  // console.log(products);
+
 // const products = [
 //   {
 //     id: 1,

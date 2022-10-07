@@ -22,9 +22,27 @@ const removeProduct = async ( productId ) => { // this is the product's id
     return response.data
 }
 
+// Add shipping address
+// @route   
+// @access  Public
+const addShippingAddress = async ( shippingAddress ) => {
+    // const response = await axios.post(API_URL + 'shipping', shippingAddress)
+    return shippingAddress
+}
+
+// Add seller details
+// @route   GET /post/:id/getanyuser // we get seller's details using this route 
+// @access  Public
+const addSellerDetails = async ( sellerId ) => {
+    const response = await axios.get('/post/' + `${sellerId}` +'/getanyuser')
+    return response.data
+}
+
 const cartService = {
     addProduct,
-    removeProduct
+    removeProduct,
+    addShippingAddress,
+    addSellerDetails,
 }
 
 export default cartService

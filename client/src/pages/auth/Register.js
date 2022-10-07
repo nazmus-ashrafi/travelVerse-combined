@@ -31,7 +31,7 @@ const Register = () => {
     // }
 
     
-    console.log(values)
+    // console.log(values)
     dispatch(register(values))
     actions.resetForm()
     

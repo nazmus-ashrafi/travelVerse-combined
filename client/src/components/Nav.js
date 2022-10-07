@@ -15,6 +15,7 @@ import Logo from './Logo'
 
 import {themeChange} from "theme-change";
 import MessageBell from './MessageBell'
+import CartIcon from './Shop/CartIcon'
 
 const themeValues = [
         "Dark",
@@ -239,6 +240,8 @@ function refreshPage() {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
                 <h1 class="font-['Abril'] italic font-medium text-2xl text-zinc-400 mr-3">@{user.user.username}</h1>
+
+                  <CartIcon/>
 
                   <MessageBell unOpenedMessages={unOpenedMessages} setUnOpenedMessages ={setUnOpenedMessages}/>
 

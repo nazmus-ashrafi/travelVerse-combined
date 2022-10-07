@@ -8,6 +8,8 @@ import { useSearchParams } from "react-router-dom";
 import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XIcon } from '@heroicons/react/solid'
 
 import { toast } from 'react-toastify'
+
+import { useNavigate } from "react-router-dom";
  
 
 const CartScreen = () => {
@@ -47,8 +49,10 @@ const CartScreen = () => {
         dispatch(removeProduct(productId));
     }
 
+    let navigate = useNavigate();
     const checkoutHandler = () => {
         // props.history.push("/login?redirect=shipping");
+        navigate(`/shipping`)
 
     }
     

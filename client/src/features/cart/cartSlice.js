@@ -1,15 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import cartService from './cartService'
 
-// Get user and cart from localStorage
+// Get details from localStorage
 const user = JSON.parse(localStorage.getItem('user'))
 const cartItems = JSON.parse(localStorage.getItem('cartItems'))
+const shippingAddress = JSON.parse(localStorage.getItem('shippingAddress'))
 //
+const sellerDetails = {}
 
 
 const initialState = {
   user: user ? user : null,
   cartItems: cartItems ? cartItems : [],
+  shippingAddress: shippingAddress ? shippingAddress : {},
+  sellerDetails: sellerDetails ? sellerDetails : {},
   
   isError: false,
   isSuccess: false,
@@ -46,6 +50,50 @@ export const removeProduct = createAsyncThunk(
     async ( productId , thunkAPI) => { // this is the product's id
         try {
             const response = await cartService.removeProduct(productId)
+            return response
+        } catch (error) {
+            
+            const message =
+            (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+            error.message ||
+            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+            
+        }
+    }
+)
+
+// Add shipping address
+export const addShippingAddress = createAsyncThunk(
+    'cart/shipping',
+    async ( shippingAddress , thunkAPI) => { // this is the product's id
+        try {
+            const response = await cartService.addShippingAddress(shippingAddress)
+            return response
+        } catch (error) {
+            
+            const message =
+            (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+            error.message ||
+            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+            
+        }
+    }
+)
+
+// Add seller details
+export const addSellerDetails = createAsyncThunk(
+  'cart/sellerDetails',
+    async ( sellerId , thunkAPI) => { // this is the product's id
+        try {
+            const response = await cartService.addSellerDetails(sellerId)
             return response
         } catch (error) {
             
@@ -159,6 +207,49 @@ export const cartSlice = createSlice({
 
     state.cartItems = null
     })
+
+    // add shipping address
+    .addCase(addShippingAddress.pending, (state) => {
+    state.isLoading = true
+    })
+    .addCase(addShippingAddress.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.isSuccess = true
+
+      state.shippingAddress = action.payload
+
+      localStorage.setItem('shippingAddress', JSON.stringify(state.shippingAddress))
+
+    })
+    
+    .addCase(addShippingAddress.rejected, (state, action) => {
+    state.isLoading = false
+    state.isError = true
+    state.message = action.payload
+
+    state.cartItems = null
+    })
+
+    // add seller details
+    .addCase(addSellerDetails.pending, (state) => {
+    state.isLoading = true
+    })
+    .addCase(addSellerDetails.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.isSuccess = true
+
+      state.sellerDetails = action.payload
+
+    })
+    
+    .addCase(addSellerDetails.rejected, (state, action) => {
+    state.isLoading = false
+    state.isError = true
+    state.message = action.payload
+
+    state.cartItems = null
+    })
+
 
   }
 })

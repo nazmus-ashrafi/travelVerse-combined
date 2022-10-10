@@ -11,6 +11,7 @@ import ProductScreen from "./components/Shop/ProductScreen";
 import CartScreen from "./components/Shop/CartScreen";
 import ShippingScreen from "./components/Shop/ShippingScreen";
 import PlaceOrderScreen from "./components/Shop/PlaceOrderScreen";
+import AllOrdersScreen from "./components/Shop/AllOrdersScreen";
 
 import { Routes, Route, Navigate, Router } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -117,6 +118,10 @@ function App() {
           <Route
             path="/placeorder"
             element={user ? <PlaceOrderScreen/> : <Navigate to="../login" />}
+          />
+          <Route
+            path="/allorders"
+            element={user ? <AllOrdersScreen/> : <Navigate to="../login" />}
           />
 
         

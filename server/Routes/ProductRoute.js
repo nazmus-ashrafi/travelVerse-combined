@@ -5,6 +5,8 @@ import asyncHandler from 'express-async-handler'
 
 import UserModel from '../Models/userModel.js'
 
+// todo : add functionality in controller
+
 // @desc    Fetch all products for a shop
 // @route   GET /products
 // @access  Public

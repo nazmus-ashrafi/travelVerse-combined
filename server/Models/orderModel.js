@@ -7,15 +7,20 @@ const orderSchema = mongoose.Schema(
       required: true,
       ref: 'UserModel',
     },
+    sellerUser: { // this user is the user who is selling the product
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'UserModel',
+    },
     orderItems: [
       {
-        name: { type: String, required: true },
-        qty: { type: Number, required: true },
-        image: { type: String, required: true },
-        price: { type: Number, required: true },
+        name: { type: String, required: false },
+        qty: { type: Number, required: false },
+        image: { type: String, required: false },
+        price: { type: Number, required: false },
         product: {
           type: mongoose.Schema.Types.ObjectId,
-          required: true,
+          required: false,
           ref: 'Product',
         },
       },
@@ -35,11 +40,13 @@ const orderSchema = mongoose.Schema(
       status: { type: String },
       update_time: { type: String },
       email_address: { type: String },
+      required: false,
     },
     taxPrice: {
       type: Number,
       required: true,
       default: 0.0,
+      required: false,
     },
     shippingPrice: {
       type: Number,
@@ -48,13 +55,14 @@ const orderSchema = mongoose.Schema(
     },
     totalPrice: {
       type: Number,
-      required: true,
+      required: false,
       default: 0.0,
     },
     isPaid: {
       type: Boolean,
       required: true,
       default: false,
+      required: false,
     },
     paidAt: {
       type: Date,

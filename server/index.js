@@ -7,7 +7,9 @@ import UserRoute from './Routes/UserRoute.js'
 import PostRoute from './Routes/PostRoute.js'
 import ConversationRoute from './Routes/ConversationRoute.js'
 import MessageRoute from './Routes/MessageRoute.js'
+
 import ProductRoute from './Routes/ProductRoute.js'
+import OrderRoute from './Routes/OrderRoute.js'
 
 import {errorHandler} from "./middleware/errorMiddleware.js"
 
@@ -48,6 +50,7 @@ app.use('/conversation', ConversationRoute)
 app.use('/message', MessageRoute)
 
 app.use('/product', ProductRoute)
+app.use('/order', OrderRoute)
 
 
 

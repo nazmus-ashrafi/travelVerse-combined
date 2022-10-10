@@ -1,11 +1,54 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux";
+
+import { addOrder } from '../../features/order/orderSlice';
+import { useNavigate } from 'react-router-dom'
 
 const PlaceOrderScreen = () => {
 
     const { cartItems, sellerDetails, isLoading, isError, message, shippingAddress } = useSelector(
         (state) => state.cart
     )
+    const { user } = useSelector((state) => state.auth)
+    const { isSuccess } = useSelector((state) => state.order)
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const placeOrderHandler = () => {
+        
+        const order = {
+            user: user.user,
+            sellerUser: sellerDetails,
+            orderItems: cartItems,
+            shippingAddress: shippingAddress,
+            sellerDetails: sellerDetails,
+            paymentMethod: 'COD',
+            shippingPrice: 50,
+            taxPrice: 0,
+            // itemsPrice: Number(cartItems
+            //                         .reduce((acc, item) => acc + item.qty * item.product.price , 0)
+            //                         .toFixed(2)),
+            totalPrice: Number(cartItems
+                                    .reduce((acc, item) => acc + item.qty * item.product.price , 50)
+                                    .toFixed(2)),
+        }
+        dispatch(addOrder(order))
+    }
+
+
+    useEffect(() => {
+
+        if (isSuccess) {
+            navigate('/allorders')
+
+            localStorage.removeItem("cartItems");
+            localStorage.removeItem("sellerDetails");
+            // localStorage.removeItem("shippingAddress");
+        }
+
+
+    }, [isSuccess])
 
 
     return (
@@ -22,7 +65,7 @@ const PlaceOrderScreen = () => {
                     
                         {cartItems.map((item) => (
 
-                            <div className="mt-4 md:mt-6 flex  flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full ">
+                            <div key={item.product._id} className="mt-4 md:mt-6 flex  flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full ">
                                 <div className="pb-4 md:pb-8 w-full md:w-40">
                                     <img className="w-full hidden md:block" src={item.product.image} alt="dress" />
                                     <img className="w-full md:hidden" src={item.product.image}  alt="dress" />
@@ -125,7 +168,7 @@ const PlaceOrderScreen = () => {
                                 </div>
                             </div>
                             <div className="flex w-full justify-center items-center md:justify-start md:items-start">
-                                <button className="btn btn-primary w-full">Place order</button>
+                                <button className="btn btn-primary w-full" onClick={()=>placeOrderHandler()}>Place order</button>
                             </div>
                         </div>
                     </div>

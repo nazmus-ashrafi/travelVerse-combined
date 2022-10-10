@@ -5,8 +5,9 @@ import cartService from './cartService'
 const user = JSON.parse(localStorage.getItem('user'))
 const cartItems = JSON.parse(localStorage.getItem('cartItems'))
 const shippingAddress = JSON.parse(localStorage.getItem('shippingAddress'))
+const sellerDetails = JSON.parse(localStorage.getItem('sellerDetails'))
 //
-const sellerDetails = {}
+
 
 
 const initialState = {
@@ -239,6 +240,8 @@ export const cartSlice = createSlice({
       state.isSuccess = true
 
       state.sellerDetails = action.payload
+
+      localStorage.setItem('sellerDetails', JSON.stringify(state.sellerDetails))
 
     })
     

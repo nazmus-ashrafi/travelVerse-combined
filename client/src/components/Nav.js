@@ -90,13 +90,17 @@ const Nav = ({dark,setDark, socket, unOpenedMessages, setUnOpenedMessages}) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const { user} = useSelector(
+  const { user } = useSelector(
     (state) => state.auth
   )
 
   const { userDetails } = useSelector(
-        (state) => state.user
-    )
+    (state) => state.user
+  )
+
+  const { cartItems } = useSelector(
+    (state) => state.cart
+  )
 
   const onLogout = () =>{
     dispatch(logout())
@@ -241,7 +245,14 @@ function refreshPage() {
 
                 <h1 class="font-['Abril'] italic font-medium text-2xl text-zinc-400 mr-3">@{user.user.username}</h1>
 
-                  <CartIcon/>
+                  {/* <CartIcon/> */}
+
+                  <label tabindex="0" class="btn btn-ghost btn-circle mr-0">
+                    <div class="indicator" onClick={()=>navigate("/cart")}>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                      <span class="badge badge-sm indicator-item">{cartItems.reduce((acc, item) => acc + item.qty, 0)}</span>
+                    </div>
+                  </label>
 
                   <MessageBell unOpenedMessages={unOpenedMessages} setUnOpenedMessages ={setUnOpenedMessages}/>
 
@@ -285,13 +296,26 @@ function refreshPage() {
                             
                           </Link>
 
+                          <Link to={`/allorders`} >
                             <a
-                              href="/login"
+                              href="#"
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            >
+                              Order History
+                            </a>
+                          </Link>
+
+                            
+                          <Link to={`/login`} >
+                            <a
+                              href="#"
                               className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                               onClick={onLogout}
                             >
                               Logout
                             </a>
+                          </Link>
+                            
 
 
                           </>

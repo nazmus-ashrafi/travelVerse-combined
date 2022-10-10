@@ -5,6 +5,8 @@ import { addSellerDetails } from '../../features/cart/cartSlice';
 
 import { useNavigate } from 'react-router-dom'
 
+import ShopNav from './ShopNav';
+
 const ShippingScreen = () => {
 
     const { cartItems, isLoading, isError, message, shippingAddress } = useSelector(
@@ -32,6 +34,7 @@ const ShippingScreen = () => {
     
   return (
     <>
+        <ShopNav />
         <form class="container px-5 py-5 mx-auto infoForm authForm" onSubmit={submitHandler}  >
             <div className="max-w-2xl mx-auto pt-16 pb-24 px-6 sm:px-6 lg:max-w-5xl lg:px-8">
                 <h1 className="text-3xl font-extrabold tracking-tight text-zinc-200 sm:text-4xl">Shipping & Payment</h1>

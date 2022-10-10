@@ -2,12 +2,25 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom'
 import { CheckCircleIcon } from '@heroicons/react/solid'
+import ShopNav from './ShopNav';
 
 import { getOrders } from '../../features/order/orderSlice'
 import axios from 'axios'
 
 
 export default function AllOrderScreen() {
+
+  // reload page once on load 
+    const reloadCount = sessionStorage.getItem('reloadCount');
+    useEffect(() => {
+        if(reloadCount < 2) {
+        sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+        window.location.reload();
+        } else {
+        sessionStorage.removeItem('reloadCount');
+        }
+    }, []);
+  
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -27,7 +40,7 @@ export default function AllOrderScreen() {
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
-    timeZone: 'UTC'
+    timeZone: 'Asia/Dhaka',
   };
 
 
@@ -105,111 +118,115 @@ export default function AllOrderScreen() {
   
 
   return (
-    <div className="bg-base">
-      <div className="py-16 sm:py-24">
-        <div className="max-w-7xl mx-auto sm:px-2 lg:px-8">
-          <div className="max-w-2xl mx-auto px-4 lg:max-w-4xl lg:px-0">
-            <h1 className="text-2xl font-extrabold tracking-tight text-gray-100 sm:text-3xl">Order history</h1>
-            <p className="mt-2 text-sm text-gray-300">
-              Check the status of recent orders.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-16">
-          <h2 className="sr-only">Recent orders</h2>
+    <>
+      <ShopNav/>
+      <div className="bg-base">
+        <div className=" pt-28 pb-16">
           <div className="max-w-7xl mx-auto sm:px-2 lg:px-8">
-            <div className="max-w-2xl mx-auto space-y-8 sm:px-4 lg:max-w-4xl lg:px-0">
-              {orders && orders.map((order) => (
-                <div
-                  key={order._id}
-                  className="bg-slate-700 border-t-2 border-b-2 border-gray-600 shadow-sm sm:rounded-lg sm:border-2"
-                >
-                  <h3 className="sr-only">
-                    Order placed on <time dateTime={order.createdAt}>{order.createdAt}</time>
-                  </h3>
+            <div className="max-w-2xl mx-auto px-4 lg:max-w-4xl lg:px-0">
+              <h1 className="text-2xl font-extrabold tracking-tight text-gray-300 sm:text-3xl">Order history</h1>
+              <p className="mt-2 text-sm text-gray-300">
+                Check the status of recent orders.
+              </p>
+            </div>
+          </div>
 
-                  <div className="flex items-center p-4 border-b-2 border-gray-600 sm:p-6 sm:grid sm:grid-cols-4 sm:gap-x-6">
-                    <dl className="flex-1 grid grid-cols-2 gap-x-6 text-sm sm:col-span-3 sm:grid-cols-3 lg:col-span-2">
-                      <div>
-                        <dt className="font-medium text-gray-200">Order number</dt>
-                        <dd className="mt-1 text-gray-400">{order._id.substr(order._id.length - 5)}</dd>
-                      </div>
-                      <div className="hidden sm:block">
-                        <dt className="font-medium text-gray-200">Date placed</dt>
-                        <dd className="mt-1 text-gray-400">
-                          <time dateTime={order.createdAt}>{new Date(order.createdAt).toLocaleDateString("en-US", options)}</time>
-                          
-                        </dd>
-                      </div>
-                      <div>
-                        <dt className="font-medium text-gray-200">Total amount</dt>
-                        <dd className="mt-1 font-medium text-gray-400">৳{order.totalPrice}</dd>
-                      </div>
-                      
-                    </dl>
+          <div className="mt-16">
+            <h2 className="sr-only">Recent orders</h2>
+            <div className="max-w-7xl mx-auto sm:px-2 lg:px-8">
+              <div className="max-w-2xl mx-auto space-y-8 sm:px-4 lg:max-w-4xl lg:px-0">
+                {orders && orders.map((order) => (
+                  <div
+                    key={order._id}
+                    className="bg-slate-700 border-t-2 border-b-2 border-gray-600 shadow-sm sm:rounded-lg sm:border-2"
+                  >
+                    <h3 className="sr-only">
+                      Order placed on <time dateTime={order.createdAt}>{order.createdAt}</time>
+                    </h3>
 
-                    {/* shop name */}
-                    <GetShopDetails shopId={order.sellerUser} />
+                    <div className="flex items-center p-4 border-b-2 border-gray-600 sm:p-6 sm:grid sm:grid-cols-4 sm:gap-x-6">
+                      <dl className="flex-1 grid grid-cols-2 gap-x-6 text-sm sm:col-span-3 sm:grid-cols-3 lg:col-span-2">
+                        <div>
+                          <dt className="font-medium text-gray-200">Order number</dt>
+                          <dd className="mt-1 text-gray-400">{order._id.substr(order._id.length - 5)}</dd>
+                        </div>
+                        <div className="hidden sm:block">
+                          <dt className="font-medium text-gray-200">Date placed</dt>
+                          <dd className="mt-1 text-gray-400">
+                            <time dateTime={order.createdAt}>{new Date(order.createdAt).toLocaleDateString("en-US", options)}</time>
+                            
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="font-medium text-gray-200">Total amount</dt>
+                          <dd className="mt-1 font-medium text-gray-400">৳{order.totalPrice}</dd>
+                        </div>
+                        
+                      </dl>
 
+                      {/* shop name */}
+                      <GetShopDetails shopId={order.sellerUser} />
+
+                    </div>
+
+                    {/* Products */}
+                    <h4 className="sr-only">Items</h4>
+                    <ul role="list" className="divide-gray-600 divide-y-2">
+                      {order.orderItems.map((product) => (
+                        <GetProductDetails productId={product.product} qty={product.qty} />
+                      ))}
+                    </ul>
+
+
+
+                    {/* delivery status */}
+                    {order.isDelivered ? (
+                      <div className="mt-6 sm:flex sm:justify-between pr-6 pl-6 pb-6">
+                        <div className="flex items-center">
+                          <CheckCircleIcon className="w-5 h-5 text-green-500" aria-hidden="true" />
+
+                          {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                          </svg> */}
+
+
+                          {/* <p className="ml-2 text-sm font-medium text-gray-400">
+                            Delivered on <time dateTime={order.deliveredDatetime}>{order.deliveredDate}</time>
+                          </p> */}
+
+                          <p className="ml-2 text-sm font-medium text-gray-400">
+                            Delivered
+                          </p>
+                        </div>
+      
+                      </div>
+                    ) : (
+                      <div className="mt-6 sm:flex sm:justify-between pr-6 pl-6 pb-6">
+                        <div className="flex items-center">
+                          {/* <CheckCircleIcon className="w-5 h-5 text-green-500" aria-hidden="true" /> */}
+
+                          <svg color='goldenrod' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                          </svg>
+
+                          <p className="ml-2 text-sm font-medium text-gray-400">
+                            Processing
+                          </p>
+                        </div>
+      
+                      </div>
+                    )}
+                    
                   </div>
 
-                  {/* Products */}
-                  <h4 className="sr-only">Items</h4>
-                  <ul role="list" className="divide-gray-600 divide-y-2">
-                    {order.orderItems.map((product) => (
-                      <GetProductDetails productId={product.product} qty={product.qty} />
-                    ))}
-                  </ul>
-
-
-
-                  {/* delivery status */}
-                  {order.isDelivered ? (
-                    <div className="mt-6 sm:flex sm:justify-between pr-6 pl-6 pb-6">
-                      <div className="flex items-center">
-                        <CheckCircleIcon className="w-5 h-5 text-green-500" aria-hidden="true" />
-
-                        {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                        </svg> */}
-
-
-                        {/* <p className="ml-2 text-sm font-medium text-gray-400">
-                          Delivered on <time dateTime={order.deliveredDatetime}>{order.deliveredDate}</time>
-                        </p> */}
-
-                        <p className="ml-2 text-sm font-medium text-gray-400">
-                          Delivered
-                        </p>
-                      </div>
-    
-                    </div>
-                  ) : (
-                    <div className="mt-6 sm:flex sm:justify-between pr-6 pl-6 pb-6">
-                      <div className="flex items-center">
-                        {/* <CheckCircleIcon className="w-5 h-5 text-green-500" aria-hidden="true" /> */}
-
-                        <svg color='goldenrod' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                        </svg>
-
-                        <p className="ml-2 text-sm font-medium text-gray-400">
-                          Processing
-                        </p>
-                      </div>
-    
-                    </div>
-                  )}
                   
-                </div>
-
-                
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
+    
   )
 }

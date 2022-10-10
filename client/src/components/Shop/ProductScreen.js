@@ -5,6 +5,7 @@ import { getProduct } from '../../features/product/productSlice';
 import { useParams } from "react-router-dom";
 
 import Spinner from '../Spinner';
+import ShopNav from './ShopNav';
 
 import { useNavigate } from "react-router-dom";
 
@@ -46,6 +47,7 @@ const ProductScreen = () => {
 
   return (
     <>
+      <ShopNav />
       {isLoading ? <h2><Spinner /></h2> : isError ? <h2>{message}</h2> : 
       (
       <section class="text-gray-400 bg-base body-font overflow-hidden">

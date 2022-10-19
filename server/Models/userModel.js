@@ -26,6 +26,22 @@ const UserSchema = mongoose.Schema(
             type: String,
             required: false
         },
+
+        // shop location
+        latitude: {
+            type: Number,
+            required: [false,'Please add a longitude and latitude'],
+            min: -90,
+            max: 90,
+        },
+        longitude: {
+            type: Number,
+            required: [false,'Please add a longitude and latitude'],
+            min: -180,
+            max: 180,
+        },
+        //
+        
         isAdmin : {
             type: Boolean,
             default: false,

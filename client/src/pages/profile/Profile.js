@@ -19,7 +19,8 @@ import Post from '../../components/Post';
 import FriendsBlock from '../../components/FriendsBlock';
 import ProfileModal from '../../components/ProfileModal';
 import AllPosts from '../../components/AllPosts';
-
+import AllOwnPosts from '../../components/AllOwnPosts';
+import SetShopLocation from '../../components/Shop/SetShopLocation';
 
 import AllTimelinePins from '../../components/AllTimelinePins';
 
@@ -33,9 +34,14 @@ import { useParams } from "react-router-dom";
 import axios from 'axios'
 
 import {themeChange} from "theme-change";
-import AllProducts from '../../components/Shop/AllProducts';
+import ShopProfileElements from '../../components/Shop/ShopProfileElements';
 
 import { getUser } from '../../features/user/userSlice'
+
+import {Marker} from 'react-map-gl'
+
+import StoreIcon from '@mui/icons-material/Store';
+
 
 
 
@@ -46,6 +52,8 @@ const ProfilePage = () => {
 
     const [showModal, setShowModal] = useState(false)
     const [showProfileModal, setShowProfileModal] = useState(false)
+
+    const [shopLocationModalOpened, setShopLocationModalOpened] = useState(false)
 
     const [viewport, setViewport] = useState({
         zoom: 8
@@ -63,7 +71,7 @@ const ProfilePage = () => {
     )
 
     const dispatch = useDispatch()
-    let { timelinePosts, isLoading } = useSelector((state) => state.post);
+    let { timelinePosts, isLoading, ownPosts  } = useSelector((state) => state.post);
 
     useEffect(()=>{
 
@@ -213,11 +221,11 @@ const ProfilePage = () => {
 
   // Using geo location to set initial location to the current location of the user
 
-    const [initialViewState,setInitialViewState]= useState({
+    const [initialViewState,setInitialViewState] = useState({
         
         longitude: 103.38149930538287,
         latitude: 23.77783437646191,
-        zoom: 4 //4
+        zoom: 2 //4
                         
     })
 
@@ -229,7 +237,13 @@ const ProfilePage = () => {
         })
 
         function successLocation(position) {
-            setInitialViewState({longitude:position.coords.longitude, latitude:position.coords.latitude})
+            if(profileUser && profileUser.longitude && profileUser.latitude){
+                setInitialViewState({longitude:profileUser.longitude, latitude:profileUser.latitude})
+            } else{
+                
+
+                setInitialViewState({longitude:position.coords.longitude, latitude:position.coords.latitude})
+            }
             
         }
 
@@ -388,8 +402,25 @@ const ProfilePage = () => {
                     mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                 >
 
-                    <AllTimelinePins posts={timelinePosts} userId={id}/>
+                    
 
+                    {
+                        
+                    profileUser && profileUser.isShop ? // if the profile is a shop's profile
+                    
+                    profileUser.longitude && profileUser.latitude && // if the shop has a location set
+                        <Marker longitude={profileUser.longitude} latitude={profileUser.latitude} anchor="bottom">
+                            <StoreIcon style={{color:"Peru",fontSize:viewport.zoom * 5}}/>
+                        </Marker>
+
+                    : // else if the profile is a user's profile
+
+                        <AllTimelinePins posts={ownPosts} userId={id}/>
+
+                    }
+
+
+                    
                     
 
                 </Map>
@@ -429,9 +460,9 @@ const ProfilePage = () => {
         <div class="section-2 grid xl:grid-cols-4 grid-cols-1 pt-10 xl:pl-28 xl:pr-28 xl:relative transition duration-200 ease-in-out pl-7 pr-7 mt-3 xl:place-items-stretch place-items-center">
 
             {/* friends block */}
-            {user.user._id === profileUserId && !user.user.isShop ? ( // show if own profile and user is not a shop
+            { user.user._id === profileUserId && !user.user.isShop ? ( // show if own profile and user is not a shop
                 <FriendsBlock/>
-            ):null}
+            ) : null }
             
 
             {/* tab */}
@@ -444,20 +475,36 @@ const ProfilePage = () => {
                 
             </div> */}
 
-
-            {user.user.isShop || user.user._id != profileUserId && profileUser.isShop  ?
-                // if logged in user is shop or 
-                // logged in user is not shop and profile user is shop
+            {profileUser && // profileUser is not null
+            user.user.isShop && profileUser.isShop || user.user._id != profileUserId && profileUser.isShop  ?
+                // if 
+                // logged in user is shop and profile user is shop
+                // or 
+                // not own profile and profile user is shop
                 <>
 
                 <div class="xl:col-start-1 xl:col-span-3 w-full">
-                    <AllProducts profileUserId={profileUserId}/>
+
+                    {/* buttons */}
+                    {user.user.isShop & user.user._id === profileUserId ? 
+                        // show if user is a shop and the profile is the user's own profile
+                        <>
+                        <button class="btn btn-info mr-6" onClick= {()=> setShopLocationModalOpened(true)}>Shop location</button>
+                        <button class="btn btn-success">Add products</button>
+                        </>:null
+                    }
+                    
+                    {/* cart items */}
+                    <ShopProfileElements profileUserId={profileUserId}/>  
+
                 </div>
+
+                <SetShopLocation showModal={shopLocationModalOpened} setShowModal={setShopLocationModalOpened} profileUserId={profileUserId}/>
                     
                     
                 </> :
                 <>
-                {/* 'unexpanded post' card */}
+                    {/* 'unexpanded post' card */}
                     <div class="xl:col-start-1 xl:col-span-3 w-full">
 
                         {user.user._id === profileUserId ? ( // show if own profile
@@ -468,17 +515,14 @@ const ProfilePage = () => {
 
                         {/* posts */}
                         {/* no need to pass socket because we dont care about live notifications in this page */}
-                        <AllPosts userId={id}/>
+
+                        {/* <AllPosts userId={id}/> */}
+                        <AllOwnPosts userId={id}/>
+
 
                     </div>
                 </>
             }
-
-          
-
-            
-            
-            
              
 
 

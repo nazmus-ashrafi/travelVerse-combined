@@ -5,6 +5,7 @@ import postService from './postService'
 const user = JSON.parse(localStorage.getItem('user'))
 
 const timelinePosts = []
+const ownPosts = []
 
 const comments = []
 const likes = []
@@ -13,6 +14,7 @@ const likes = []
 const initialState = {
   user: user ? user : null,
   timelinePosts: timelinePosts ? timelinePosts : null,
+  ownPosts: ownPosts ? ownPosts : null,
   // post: post ? post : null,
   // comments: comments ? comments : null,
   // likes: likes ? likes : null,
@@ -33,6 +35,33 @@ export const getTimeLinePosts = createAsyncThunk(
       const user = thunkAPI.getState().auth.user 
 
       return await postService.getTimelinePosts(userId) 
+
+      
+    } catch (error) {
+
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+      
+    }
+  }
+)
+
+// Get own posts
+export const getOwnPosts = createAsyncThunk(
+   'post/ownPosts',
+    async ( userId , thunkAPI) => {
+
+      try {
+
+      const user = thunkAPI.getState().auth.user 
+
+      return await postService.getOwnPosts(userId)
 
       
     } catch (error) {
@@ -299,6 +328,25 @@ export const postSlice = createSlice({
         state.isError = true
         state.message = action.payload
         state.timelinePosts = null
+      })
+
+      // getOwnPosts
+      .addCase(getOwnPosts.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getOwnPosts.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+    
+        state.ownPosts = action.payload
+        
+        
+      })
+      .addCase(getOwnPosts.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+        state.ownPosts = null
       })
 
       // createPost

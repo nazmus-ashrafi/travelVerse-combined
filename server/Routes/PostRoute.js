@@ -12,7 +12,7 @@ router.put('/:id', updatePost)
 router.delete("/:id", deletePost)
 router.put("/:id/like", likePost)
 router.get("/:id/timeline", getTimelinePosts)
-router.get("/:id/posts", getUserPosts)
+router.get("/:id/posts", getUserPosts) // get all post by a user
 
 router.post("/:postid/addcomment", protect, addComment)
 router.put("/:commentid/deletecomment", protect, deleteComment)

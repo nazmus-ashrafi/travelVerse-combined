@@ -18,13 +18,25 @@ const getTimelinePosts = async (userId) => {
   const response = await axios.get(API_URL + `${id}/timeline`)
   
 
-//   if (response.data) {
-//     localStorage.setItem('user', JSON.stringify(response.data))
-//   }
+  //   if (response.data) {
+  //     localStorage.setItem('user', JSON.stringify(response.data))
+  //   }
 
   return response.data
 }
 
+
+// Get own posts
+// @route   GET /posts/id
+// @access  Public
+const getOwnPosts = async (userId) => {
+  
+  // console.log(userId)
+  const id = userId
+  const response = await axios.get(API_URL + `${id}/posts`)
+  // console.log(response.data)
+  return response.data
+}
 
 // Create post
 // @route   POST /api/posts
@@ -172,10 +184,8 @@ const postService = {
 
   likePost,
 
-  
+  getOwnPosts,
 
-
- 
   
 }
 

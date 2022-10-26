@@ -10,15 +10,30 @@ import { useParams } from "react-router-dom";
 
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-import { updateUser } from "../../features/user/userSlice";
+import { createProduct } from '../../features/product/productSlice';
 
 
 const AddProduct = ({setShowProfileModal, showProfileModal, data}) => {
 
-  const [formData, setFormData] = useState(data);
-  useEffect(() => {
-    setFormData(data);
-  } , [data]);
+  const { user } = useSelector(
+        (state) => state.auth
+    )
+
+  const [formData, setFormData] = useState(
+    {
+      name: '',
+      description: '',
+      price: '',
+      brand: '',
+      countInStock: '',
+      profileImage: null,
+      category: '',
+      userId: user.user._id,
+
+
+    }
+  );
+  
 
 
   const [progressFull,setProgressFull]= useState(false)
@@ -40,9 +55,16 @@ const AddProduct = ({setShowProfileModal, showProfileModal, data}) => {
   };
 
   const onImageChange = (event) => {
+
+    formData.profileImage = event.target.files[0]
+
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
       setProfileImage(img)
+
+      formData.profileImage = profileImage.name
+
+      
         
     }
   };
@@ -115,14 +137,16 @@ const AddProduct = ({setShowProfileModal, showProfileModal, data}) => {
 
             
           }).then(() => {
+
             userData.profileImage = imgUrl
 
-            dispatch(updateUser(userData));
+            dispatch(createProduct(userData));
 
             setShowProfileModal(false);
             setProfileImage(null);
 
-            window.location.reload();
+            // window.location.reload();
+
           } )
         }
       );
@@ -131,12 +155,12 @@ const AddProduct = ({setShowProfileModal, showProfileModal, data}) => {
     }else {
       console.log(userData);
 
-      dispatch(updateUser(userData));
+      dispatch(createProduct(userData));
 
       setShowProfileModal(false);
       setProfileImage(null);
 
-      window.location.reload();
+      // window.location.reload();
     }
     
 
@@ -159,7 +183,7 @@ const AddProduct = ({setShowProfileModal, showProfileModal, data}) => {
 
             
             <article class="prose">
-              <h2 for="" class="mt-3 mb-3 tracking-wider ">Edit profile</h2>
+              <h2 for="" class="mt-3 mb-3 tracking-wider ">Add Product</h2>
               
             </article>
 
@@ -173,7 +197,7 @@ const AddProduct = ({setShowProfileModal, showProfileModal, data}) => {
 
               <div class="avatar">
                 <div class="w-24 mask mask-squircle">
-                    <img src={profileImage ? URL.createObjectURL(profileImage) : (formData.profileImage != undefined && formData.profileImage.length>0 ? formData.profileImage[0] : require('../../img/default.png'))}/>
+                    <img src={profileImage ? URL.createObjectURL(profileImage) : (formData.profileImage != undefined ? formData.profileImage : "https://dummyimage.com/400x400")}/>
                 </div>
               </div>
               
@@ -187,36 +211,52 @@ const AddProduct = ({setShowProfileModal, showProfileModal, data}) => {
             <div class="form-control mt-4">
 
               <label class="input-group">
-                <span>First Name</span>
-                <input type="text" name='firstname' placeholder="Lorem" class="input input-bordered" onChange={handleChange} value={formData.firstname} />
+                <span>Product Name</span>
+                <input type="text" name='name' placeholder="Name" class="input input-bordered" onChange={handleChange} value={formData.name} />
               </label>
             </div>
 
             <div class="form-control mt-4">
 
               <label class="input-group">
-                <span>Last Name</span>
-                <input type="text" placeholder="Ipsum" class="input input-bordered" onChange={handleChange} name='lastname' value={formData.lastname} />
+                <span>Brand Name</span>
+                <input type="text" name='brand' placeholder="Brand" class="input input-bordered" onChange={handleChange} value={formData.brand} />
+              </label>
+            </div>
+
+            <div class="form-control mt-4">
+
+              <label class="input-group">
+                <span>Product Price (৳)</span>
+                <input type="text" placeholder="Price" class="input input-bordered" onChange={handleChange} name='price' value={`${formData.price}`} />
+              </label>
+            </div>
+
+            <div class="form-control mt-4">
+
+              <label class="input-group">
+                <span>Product Qty</span>
+                <input type="text" placeholder="Number in stock" class="input input-bordered" onChange={handleChange} name='countInStock' value={formData.countInStock} />
               </label>
             </div>
               
               
 
-            <textarea id="description" name='description' type="text" rows="4" placeholder="Write something about yourself...." class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200 mt-8 " onChange={handleChange} value={formData.description}></textarea>
+            <textarea id="description" name='description' type="text" rows="4" placeholder="Description" class="input w-full h-full text-lg pr-2 pt-2 pb-2 rounded-xl resize-none border-solid border-2 border-base-200 mt-8 " onChange={handleChange} value={formData.description}></textarea>
             {/* Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's. */}
 
               
             
                   
             {
-                    (formData.lastname && formData.firstname)?(
+                    (formData.name && formData.brand && formData.price && formData.countInStock && formData.description && formData.profileImage) ? (
 
-                      (progressFull)?(<button data-modal-toggle="defaultModal" class="btn loading mt-8 mb-2 w-full">Update</button>) :
+                      (progressFull)?(<button data-modal-toggle="defaultModal" class="btn loading mt-8 mb-2 w-full">Create</button>) :
                         
                         
-                        <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-8 mb-2 w-full" onClick={handleSubmit} >Update</button>
+                        <button data-modal-toggle="defaultModal" type="button" class="btn bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 text-white mt-8 mb-2 w-full" onClick={handleSubmit} >Create</button>
                     ):(
-                        <button data-modal-toggle="defaultModal" type="button" class="btn no-animation mb-2 w-full pointer-events-none opacity-20 mt-8" >Update</button>
+                        <button data-modal-toggle="defaultModal" type="button" class="btn no-animation mb-2 w-full pointer-events-none opacity-20 mt-8" >Create</button>
                         
                     )
 

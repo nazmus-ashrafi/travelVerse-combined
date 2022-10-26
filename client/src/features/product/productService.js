@@ -34,11 +34,21 @@ const updateProduct = async (newProduct) => { // this is the shop's userId
   return response.data
 }
 
+
+// Create a product
+// @route   POST /product/create 
+// @access  Public
+const createProduct = async (newProduct) => { 
+  const response = await axios.post(API_URL + 'create', newProduct)
+  return response.data
+}
+
 const productService = {
-    getProducts,
-    getProduct,
-    deleteProduct,
-    updateProduct,
+  getProducts,
+  getProduct,
+  deleteProduct,
+  updateProduct,
+  createProduct,
 }
 
 export default productService

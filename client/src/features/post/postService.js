@@ -39,7 +39,7 @@ const getOwnPosts = async (userId) => {
 }
 
 // Create post
-// @route   POST /api/posts
+// @route   POST /posts
 // @access  
 // updated (protection pending)
 const createPost = async (postData,token) => {

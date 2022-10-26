@@ -2,8 +2,8 @@ import express from 'express'
 const router = express.Router()
 import Product from '../Models/productModel.js'
 import asyncHandler from 'express-async-handler'
-
 import UserModel from '../Models/userModel.js'
+
 
 // todo : add functionality in controller
 
@@ -66,6 +66,24 @@ router.put('/:id/update', asyncHandler(async (req, res) => {
         res.status(404)
         throw new Error('Product not found')
     }
+}))
+
+// @desc    Create a product
+// @route   POST /products/create
+// @access 
+router.post('/create', asyncHandler(async (req, res) => {
+    const newProduct = new Product(req.body);
+
+    try {
+        await newProduct.save();
+        res.status(200).json(newProduct);
+        
+    } catch (error) {
+        res.status(500).json(error);
+        console.log(error)
+        
+    }
+
 }))
 
 

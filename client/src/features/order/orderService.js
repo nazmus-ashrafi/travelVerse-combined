@@ -18,9 +18,27 @@ const getOrders = async ( customerId ) => {
     return response.data
 }
 
+// Get all orders for seller
+// @route   GET /getorders/:id/seller
+// @access  Public
+const getTransactions = async ( sellerId ) => {
+    const response = await axios.get(API_URL + 'getorders/' + sellerId + '/seller')
+    return response.data
+}
+
+// Fulfill order
+// @route   PUT /:id/fulfillorder
+// @access  Public
+const fulfillOrder = async ( orderId ) => {
+    const response = await axios.put(API_URL + orderId + '/fulfillorder')
+    return response.data
+}
+
 const orderService = {
     addOrder,
     getOrders,
+    getTransactions,
+    fulfillOrder,
 }
 
 export default orderService

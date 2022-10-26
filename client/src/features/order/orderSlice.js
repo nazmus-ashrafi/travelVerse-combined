@@ -2,11 +2,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import orderService from './orderService'
 
 const orders = []
+const transactions = []
 const order = {}
 
 const initialState = {
   orders: orders ? orders : [],
     order: order ? order : {},
+    transactions: transactions ? transactions : [],
 
   isError: false,
   isSuccess: false,
@@ -44,6 +46,50 @@ export const getOrders = createAsyncThunk(
     async ( customerId , thunkAPI) => { // this is id of customer
         try {
             const response = await orderService.getOrders(customerId)
+            return response
+        } catch (error) {
+            const message =
+            (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+            error.message ||
+            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+            
+        }
+        
+    }
+)
+
+// Get all orders for seller
+export const getTransactions = createAsyncThunk(
+  'order/getorders/:id/seller',
+    async ( sellerId , thunkAPI) => { // this is id of customer
+        try {
+            const response = await orderService.getTransactions(sellerId)
+            return response
+        } catch (error) {
+            const message =
+            (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+            error.message ||
+            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+            
+        }
+        
+    }
+)
+
+// Fulfill order
+export const fulfillOrder = createAsyncThunk(
+  'order/:id/fulfillorder',
+  async ( orderId , thunkAPI) => { 
+        try {
+            const response = await orderService.fulfillOrder(orderId)
             return response
         } catch (error) {
             const message =
@@ -113,6 +159,55 @@ export const orderSlice = createSlice({
     state.message = action.payload
 
     state.orders = null
+    })
+
+    // get all orders for customer
+    .addCase(getTransactions.pending, (state) => {
+    state.isLoading = true
+    })
+    .addCase(getTransactions.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.isSuccess = true
+
+        state.transactions = action.payload
+
+    })
+    
+    .addCase(getTransactions.rejected, (state, action) => {
+    state.isLoading = false
+    state.isError = true
+    state.message = action.payload
+
+    state.transactions = null
+    })
+
+
+    // fulfill order
+    .addCase(fulfillOrder.pending, (state) => {
+    state.isLoading = true
+    })
+    .addCase(fulfillOrder.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.isSuccess = true
+
+        
+
+        state.transactions = state.transactions.map(transaction => {
+          if (transaction._id === action.payload._id) {
+            return action.payload
+          } else {
+            return transaction
+          }
+        })
+
+    })
+    
+    .addCase(fulfillOrder.rejected, (state, action) => {
+    state.isLoading = false
+    state.isError = true
+    state.message = action.payload
+
+    state.transactions = null
     })
    
 

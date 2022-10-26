@@ -17,8 +17,39 @@ import { getUser } from '../../features/user/userSlice'
 import {themeChange} from "theme-change";
 import AdminHome from '../../components/Admin/AdminHome'
 
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import AllTransactionsScreen from '../../components/Shop/AllTransactionsScreen'
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Home({socket}) {
+
+  const data = {
+  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  datasets: [
+    {
+      label: '# of Votes',
+      data: [12, 19, 3, 5, 2, 3],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
 
   // const [dark,setDark] = useState('dark')
 
@@ -122,9 +153,21 @@ export default function Home({socket}) {
               {/* <hr class="w-full xl:col-start-1 xl:col-span-3 mt-8 opacity-10"></hr> */}
                 
 
-                {user.user.isShop?(
+                {user.user.isShop ? (
                   <>
                     {/* shop dashboard */}
+
+                    <div class="grid grid-cols-8">
+                      <div class="xl:col-start-3 xl:col-span-4 lg:p-10 lg:pb-0 md:col-start-2 md:col-span-6  col-start-2 col-span-6 p-5 " >
+                        <Doughnut data={data} />
+                        {/* orders received / orders fulfilled */}
+                      </div>
+                      
+                      
+                    </div>
+
+                    <AllTransactionsScreen/>
+                    
                     
                   </>
                   

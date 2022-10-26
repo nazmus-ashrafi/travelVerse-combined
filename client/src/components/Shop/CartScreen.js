@@ -79,7 +79,7 @@ const CartScreen = () => {
                         <li key={item.product._id} className="flex py-6 sm:py-10">
                         <div className="flex-shrink-0">
                             <img
-                            src={item.product.image}
+                            src={item.product.profileImage}
                             alt={item.product.imageAlt}
                             className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
                             />

@@ -4,22 +4,22 @@ import { useNavigate } from 'react-router-dom'
 import { CheckCircleIcon } from '@heroicons/react/solid'
 import ShopNav from './ShopNav';
 
-import { getOrders } from '../../features/order/orderSlice'
+import { getTransactions, fulfillOrder } from '../../features/order/orderSlice';
 import axios from 'axios'
 
 
-export default function AllOrderScreen() {
+export default function AllTransactionsScreen() {
 
   // reload page once on load 
-    const reloadCount = sessionStorage.getItem('reloadCount');
-    useEffect(() => {
-        if(reloadCount < 2) {
-        sessionStorage.setItem('reloadCount', String(reloadCount + 1));
-        window.location.reload();
-        } else {
-        sessionStorage.removeItem('reloadCount');
-        }
-    }, []);
+    // const reloadCount = sessionStorage.getItem('reloadCount');
+    // useEffect(() => {
+    //     if(reloadCount < 2) {
+    //     sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+    //     window.location.reload();
+    //     } else {
+    //     sessionStorage.removeItem('reloadCount');
+    //     }
+    // }, []);
   
 
   const dispatch = useDispatch()
@@ -28,10 +28,10 @@ export default function AllOrderScreen() {
   const {user} = useSelector(state => state.auth)
 
   useEffect(() => {
-    dispatch(getOrders(user.user._id))
+    dispatch(getTransactions(user.user._id))
   }, [])
 
-  const {orders} = useSelector(state => state.order)
+  const { transactions } = useSelector(state => state.order)
 
   var options = { 
     year: 'numeric', 
@@ -44,7 +44,7 @@ export default function AllOrderScreen() {
   };
 
 
-  const GetShopDetails = ({shopId}) => {
+  const GetShopDetails = ({shopId}) => { // this is to get buyer details, not shop details
     const [seller, setSeller] = useState({});
     
     useEffect( () => { 
@@ -63,8 +63,8 @@ export default function AllOrderScreen() {
       <>
         {/* shop name */}
         <div className='text-sm'>
-          <dt className="font-medium text-gray-200">Shop name</dt>
-          <dd className="mt-1 font-medium text-gray-400">{seller.shopname}</dd>
+          <dt className="font-medium text-gray-200">Customer name</dt>
+          <dd className="mt-1 font-medium text-gray-400">{seller.firstname}</dd>
         </div>
       </>
       
@@ -87,6 +87,7 @@ export default function AllOrderScreen() {
         fetchData();
     }, []);
 
+
     return (
       <>
         <li key={product.id} className="p-4 sm:p-6">
@@ -102,7 +103,7 @@ export default function AllOrderScreen() {
               <div className="font-medium text-gray-200 sm:flex sm:justify-between">
                 <h5>{product.name}</h5>
                 <p className="mt-2 sm:mt-0 sm:ml-2 text-gray-400">Qty: {qty}</p>
-                <p className="mt-2 sm:mt-0">{product.price}</p>
+                <p className="mt-2 sm:mt-0">৳{product.price}</p>
               </div>
               {/* <p className="hidden text-gray-500 sm:block sm:mt-2">{product.description}</p> */}
             </div>
@@ -114,28 +115,35 @@ export default function AllOrderScreen() {
 
   }
 
-  
-  
+
+   const onFulfilledClick = (orderId) => {
+        
+    
+        dispatch(fulfillOrder(orderId))
+        
+    }
+
+
 
   return (
     <>
-      <ShopNav/>
+      {/* <ShopNav/> */}
       <div className="bg-base">
-        <div className=" pt-28 pb-16">
+        <div className=" pt-20 pb-16">
           <div className="max-w-7xl mx-auto sm:px-2 lg:px-8">
             <div className="max-w-2xl mx-auto px-4 lg:max-w-4xl lg:px-0">
-              <h1 className="text-2xl font-extrabold tracking-tight text-gray-300 sm:text-3xl">Order history</h1>
+              <h1 className="text-2xl font-extrabold tracking-tight text-gray-300 sm:text-3xl">Transaction history</h1>
               <p className="mt-2 text-sm text-gray-300">
-                Check the status of recent orders.
+                Check the status of recent transactions.
               </p>
             </div>
           </div>
 
           <div className="mt-16">
-            <h2 className="sr-only">Recent orders</h2>
+            <h2 className="sr-only">Recent transactions</h2>
             <div className="max-w-7xl mx-auto sm:px-2 lg:px-8">
               <div className="max-w-2xl mx-auto space-y-8 sm:px-4 lg:max-w-4xl lg:px-0">
-                {orders && orders.map((order) => (
+                {transactions && transactions.map((order) => (
                   <div
                     key={order._id}
                     className="bg-slate-700 border-t-2 border-b-2 border-gray-600 shadow-sm sm:rounded-lg sm:border-2"
@@ -165,7 +173,7 @@ export default function AllOrderScreen() {
                       </dl>
 
                       {/* shop name */}
-                      <GetShopDetails shopId={order.sellerUser} />
+                      <GetShopDetails shopId={order.user} />
 
                     </div>
 
@@ -178,44 +186,54 @@ export default function AllOrderScreen() {
                     </ul>
 
 
+                    <div class='grid grid-cols-4 justify-center'>
 
-                    {/* delivery status */}
-                    {order.isDelivered ? (
-                      <div className="mt-6 sm:flex sm:justify-between pr-6 pl-6 pb-6">
-                        <div className="flex items-center">
-                          <CheckCircleIcon className="w-5 h-5 text-green-500" aria-hidden="true" />
+                        {/* delivery status */}
+                        {order.isDelivered ? (
+                        <div className="mt-6 sm:flex sm:justify-between pr-6 pl-6 pb-6">
+                            <div className="flex items-center">
+                            <CheckCircleIcon className="w-5 h-5 text-green-500" aria-hidden="true" />
 
-                          {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                          </svg> */}
+                            {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                            </svg> */}
 
 
-                          {/* <p className="ml-2 text-sm font-medium text-gray-400">
-                            Delivered on <time dateTime={order.deliveredDatetime}>{order.deliveredDate}</time>
-                          </p> */}
+                            {/* <p className="ml-2 text-sm font-medium text-gray-400">
+                                Delivered on <time dateTime={order.deliveredDatetime}>{order.deliveredDate}</time>
+                            </p> */}
 
-                          <p className="ml-2 text-sm font-medium text-gray-400">
-                            Delivered
-                          </p>
+                            <p className="ml-2 text-sm font-medium text-gray-400">
+                                Delivered
+                            </p>
+                            </div>
+        
                         </div>
-      
-                      </div>
-                    ) : (
-                      <div className="mt-6 sm:flex sm:justify-between pr-6 pl-6 pb-6">
-                        <div className="flex items-center">
-                          {/* <CheckCircleIcon className="w-5 h-5 text-green-500" aria-hidden="true" /> */}
+                        ) : (
+                        <div className="mt-6 sm:flex sm:justify-between pr-6 pl-6 pb-6">
+                            <div className="flex items-center">
+                            {/* <CheckCircleIcon className="w-5 h-5 text-green-500" aria-hidden="true" /> */}
 
-                          <svg color='goldenrod' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                          </svg>
+                            <svg color='goldenrod' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                            </svg>
 
-                          <p className="ml-2 text-sm font-medium text-gray-400">
-                            Processing
-                          </p>
+                            <p className="ml-2 text-sm font-medium text-gray-400">
+                                Processing
+                            </p>
+                            </div>
+        
                         </div>
-      
-                      </div>
-                    )}
+                        )}
+
+                        {/* change status button */}
+                        <div class="pt-5 pl-20 z-30">
+
+                            <button onClick={()=>onFulfilledClick(order._id)} class={`btn btn-outline btn-info btn-sm ${order.isDelivered && 'hidden'}`}>Fulfilled</button>
+                        </div>
+
+                    </div>
+                    
                     
                   </div>
 

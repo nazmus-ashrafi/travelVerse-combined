@@ -48,8 +48,42 @@ const getOrders = asyncHandler(async (req, res) => {
   res.json(orders)
 })
 
+// @desc    Get all orders for seller
+// @route   GET /getorders/:id/seller
+// @access  Public
+const getTransactions = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ sellerUser: req.params.id }).sort({_id:-1}) 
+  res.json(orders)
+})
+
+// @desc    Fulfill order
+// @route   PUT /:id/fulfillorder
+// @access  Public
+const fulfillOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id)
+  try {
+    if (order) {
+      order.isDelivered = true
+      // order.deliveredAt = Date.now()
+      const updatedOrder = await order.save()
+      res.json(updatedOrder)
+    } else {
+      res.status(404)
+      throw new Error('Order not found')
+    }
+    
+  } catch (error) {
+    res.status(404)
+    throw new Error('Order not found')
+  }
+    
+  
+})
+
 export {
   addOrder,
   getOrders,
+  getTransactions,
+  fulfillOrder,
 
 }

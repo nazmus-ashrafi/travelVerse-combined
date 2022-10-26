@@ -41,6 +41,7 @@ import { getUser } from '../../features/user/userSlice'
 import {Marker} from 'react-map-gl'
 
 import StoreIcon from '@mui/icons-material/Store';
+import AddProduct from '../../components/Shop/AddProduct';
 
 
 
@@ -54,6 +55,7 @@ const ProfilePage = () => {
     const [showProfileModal, setShowProfileModal] = useState(false)
 
     const [shopLocationModalOpened, setShopLocationModalOpened] = useState(false)
+    const [addProductModalOpened, setAddProductModalOpened] = useState(false)
 
     const [viewport, setViewport] = useState({
         zoom: 8
@@ -490,8 +492,10 @@ const ProfilePage = () => {
                         // show if user is a shop and the profile is the user's own profile
                         <>
                         <button class="btn btn-info mr-6" onClick= {()=> setShopLocationModalOpened(true)}>Shop location</button>
-                        <button class="btn btn-success">Add products</button>
-                        </>:null
+
+                        <button class="btn btn-success" onClick= {()=> setAddProductModalOpened(true)}>Add product</button>
+
+                        </> : null
                     }
                     
                     {/* cart items */}
@@ -500,6 +504,8 @@ const ProfilePage = () => {
                 </div>
 
                 <SetShopLocation showModal={shopLocationModalOpened} setShowModal={setShopLocationModalOpened} profileUserId={profileUserId}/>
+
+                <AddProduct showProfileModal={addProductModalOpened} setShowProfileModal={setAddProductModalOpened} data={userDetails}/>
                     
                     
                 </> :

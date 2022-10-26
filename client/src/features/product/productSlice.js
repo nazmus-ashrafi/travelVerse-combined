@@ -63,6 +63,50 @@ export const getProduct = createAsyncThunk(
     }
 )
 
+// Delete a product
+export const deleteProduct = createAsyncThunk(
+    'product/deleteProduct',
+    async ( productId , thunkAPI) => { 
+        try {
+            const response = await productService.deleteProduct(productId)
+            return response
+        } catch (error) {
+            const message =
+            (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+            error.message ||
+            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+            
+        }
+        
+    }
+)
+
+// Update a product
+export const updateProduct = createAsyncThunk(
+    'product/updateProduct',
+    async ( newPost , thunkAPI) => { 
+        try {
+            const response = await productService.updateProduct(newPost)
+            return response
+        } catch (error) {
+            const message =
+            (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+            error.message ||
+            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+            
+        }
+        
+    }
+)
+
 
 
 export const productSlice = createSlice({
@@ -113,6 +157,59 @@ export const productSlice = createSlice({
     state.message = action.payload
     state.products = null
     })
+
+    // delete product
+    .addCase(deleteProduct.pending, (state) => {
+    state.isLoading = true
+    })
+    .addCase(deleteProduct.fulfilled, (state, action) => {
+    state.isLoading = false
+    state.isSuccess = true
+
+    state.products = state.products.filter(product => product._id !== action.payload._id)
+    
+    })
+    .addCase(deleteProduct.rejected, (state, action) => {
+    state.isLoading = false
+    state.isError = true
+    state.message = action.payload
+    state.products = null
+    })
+
+    // updateProduct
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+
+        console.log(action.payload)
+        
+        // state.timelinePosts.reduce(timelinePosts.filter(action.payload._id))
+        // state.timelinePosts[state.timelinePosts.findIndex(post => post._id.toString === action.payload._id.toString)] = action.payload
+
+        // console.log(timelinePosts.filter(post => post._id.toString === action.payload._id.toString))
+
+        // state.timelinePosts.findIndex(post => post._id.toString === action.payload.postId.toString)
+
+
+        state.products = state.products.map(product => {
+          if (product._id === action.payload._id) {
+            return action.payload
+          } else {
+            return product
+          }
+        })
+        
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+        
+        state.products = null
+      })
 
       
 

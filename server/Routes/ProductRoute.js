@@ -32,6 +32,43 @@ router.get('/:id/product', asyncHandler(async (req, res) => {
     }
 }))
 
+// @desc    Delete a product
+// @route   DELETE /products/:id/delete
+// @access  
+router.delete('/:id/delete', asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id)
+    if (product) {
+        await product.remove()
+        res.json(product)
+    } else {
+        res.status(404)
+        throw new Error('Product not found')
+    }
+}))
+
+// @desc    Update a product
+// @route   PUT /products/:id/update
+// @access
+router.put('/:id/update', asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id)
+    if (product) {
+
+        product.name = req.body.name || product.name
+        product.price = req.body.price || product.price
+        product.profileImage = req.body.profileImage || product.profileImage
+        product.description = req.body.description || product.description
+        product.brand= req.body.brand || product.brand
+        product.countInStock = req.body.countInStock || product.countInStock
+
+        const updatedProduct = await product.save()
+        res.json(updatedProduct)
+    } else {
+        res.status(404)
+        throw new Error('Product not found')
+    }
+}))
+
+
 
 
 

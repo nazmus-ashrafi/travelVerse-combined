@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Product from './ProductScreen'
 import { Link } from 'react-router-dom'
 
-import { getProducts } from '../../features/product/productSlice'
+import { getProducts, deleteProduct } from '../../features/product/productSlice'
 import { useSelector, useDispatch } from "react-redux";
 
 import Spinner from '../Spinner';
+import UpdateProduct from './UpdateProduct';
 
 
 const AllProducts = ({profileUserId}) => {
@@ -21,6 +22,15 @@ const AllProducts = ({profileUserId}) => {
   const { products, isLoading, isError, message } = useSelector(
     (state) => state.product
   )
+
+  const { user } = useSelector(
+    (state) => state.auth
+  )
+
+
+  const { userDetails } = useSelector(
+        (state) => state.user
+    )
 
   // console.log(products);
 
@@ -99,7 +109,18 @@ const AllProducts = ({profileUserId}) => {
 //   },
 // ]
 
+    const onDeleteClick = (id) => {
+        dispatch(deleteProduct(id));
+    }
 
+    const [addProductModalOpened, setAddProductModalOpened] = useState(false)
+
+
+    const [product, setProduct] = useState({})
+    const onUpdateClick = (data) => {
+      setAddProductModalOpened(true)
+      setProduct(data)
+    }
   
   return (
     <div className="bg-base-100">
@@ -111,19 +132,36 @@ const AllProducts = ({profileUserId}) => {
         <>
           <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
           {products.map((product) => (
-            <Link key={product._id} className="group" to={`/product/${product._id}`}>
-              <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
-                <img
-                  src={product.image}
-                  // alt={product.imageAlt}
-                  className="h-full w-full object-cover object-center group-hover:opacity-75"
-                />
-              </div>
-              <h3 className="mt-4 text-sm ">{product.name}</h3>
-              <p className="mt-1 text-lg font-medium ">Tk {product.price}</p>
-            </Link>
+            <div class="grid grid-rows-4 grid-flow-col gap-4">
+              <Link key={product._id} className="group" to={`/product/${product._id}`}>
+                <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
+                  <img
+                    src={product.profileImage}
+                    // alt={product.imageAlt}
+                    className="h-full w-full object-cover object-center group-hover:opacity-75"
+                  />
+                </div>
+                <h3 className="mt-4 text-sm ">{product.name}</h3>
+                <p className="mt-1 text-lg font-medium ">৳ {product.price}</p>
+              </Link>
+
+              {user && user.user._id === profileUserId && user.user.isShop &&
+              // user is a shop and this is his own profile
+                <div>
+                  <button class="btn btn-sm btn-info" onClick= {()=> onUpdateClick(product)}>Update</button>
+                  <button class="btn btn-sm btn-error ml-4" disabled onClick={()=>onDeleteClick(product._id)}>Delete</button>
+                </div>
+              }
+              
+              
+            </div>
+
+            
+            
           ))}
         </div>
+
+        <UpdateProduct showProfileModal={addProductModalOpened} setShowProfileModal={setAddProductModalOpened} data={product}/>
         </>
         
         

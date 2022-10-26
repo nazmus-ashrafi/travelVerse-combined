@@ -31,10 +31,14 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
+    // profileImage: {
+    //   type: String,
+    //   required: true,
+    // },
+    profileImage : {
+            type: Array
+            
+        },
     brand: {
       type: String,
       required: false,

@@ -53,7 +53,7 @@ const ProductScreen = () => {
       <section class="text-gray-400 bg-base body-font overflow-hidden">
         <div class="container px-5 py-24 mx-auto">
           <div class="lg:w-4/5 mx-auto flex flex-wrap">
-            <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src={product.image?product.image : "https://dummyimage.com/400x400"}/>
+            <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src={product.profileImage ? product.profileImage : "https://dummyimage.com/400x400"}/>
             <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h2 class="text-sm title-font text-gray-500 tracking-widest">{product.brand}</h2>
               <h1 class="text-white text-3xl title-font font-medium mb-1">{product.name}</h1>

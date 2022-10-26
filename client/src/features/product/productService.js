@@ -18,9 +18,27 @@ const getProduct = async (productId) => { // this is the shop's userId
   return response.data
 }
 
+// Delete a product
+// @route   DELETE /product/:id/delete  //this id is the product's id
+// @access  Public
+const deleteProduct = async (productId) => { // this is the shop's userId
+  const response = await axios.delete(API_URL + `${productId}` +'/delete')
+  return response.data
+}
+
+// Update a product
+// @route   PUT /product/:id/update  //this id is the product's id
+// @access  Public
+const updateProduct = async (newProduct) => { // this is the shop's userId
+  const response = await axios.put(API_URL + `${newProduct._id}` +'/update', newProduct)
+  return response.data
+}
+
 const productService = {
     getProducts,
-    getProduct
+    getProduct,
+    deleteProduct,
+    updateProduct,
 }
 
 export default productService

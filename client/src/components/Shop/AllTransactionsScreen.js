@@ -129,7 +129,7 @@ export default function AllTransactionsScreen() {
     <>
       {/* <ShopNav/> */}
       <div className="bg-base">
-        <div className=" pt-20 pb-16">
+        <div className=" pt-16 pb-16">
           <div className="max-w-7xl mx-auto sm:px-2 lg:px-8">
             <div className="max-w-2xl mx-auto px-4 lg:max-w-4xl lg:px-0">
               <h1 className="text-2xl font-extrabold tracking-tight text-gray-300 sm:text-3xl">Transaction history</h1>

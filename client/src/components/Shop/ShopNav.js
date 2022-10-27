@@ -16,7 +16,10 @@ const ShopNav = () => {
     <>
     <div class="navbar bg-base-200 fixed w-full z-10 top-0">
         <div class="flex-1">   
-            <h1 class="font-['Abril'] italic font-medium text-2xl text-sky-600 text-center ml-5">Travelverse</h1>
+            <a class="cursor-pointer" onClick={()=>navigate("/")}>
+                <h1 class="font-['Abril'] italic font-medium text-2xl text-sky-600 text-center ml-5" >Travelverse</h1>
+            </a>
+            
             <a class=" ml-4 normal-case text-xl">Shops</a>
         </div>
         <div class="flex-none mr-6">

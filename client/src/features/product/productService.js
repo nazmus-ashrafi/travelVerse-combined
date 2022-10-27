@@ -43,6 +43,8 @@ const createProduct = async (newProduct) => {
   return response.data
 }
 
+
+
 const productService = {
   getProducts,
   getProduct,

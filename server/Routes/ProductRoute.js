@@ -86,6 +86,26 @@ router.post('/create', asyncHandler(async (req, res) => {
 
 }))
 
+// Update a product countInStock
+// @route   PUT /products/:id/updateCountInStock
+// @access
+router.put('/:id/updateCountInStock', asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id)
+    if (product) {
+
+        // product.countInStock = req.body.countInStock || product.countInStock
+        product.countInStock = req.body.countInStock
+
+        const updatedProduct = await product.save()
+        console.log(updatedProduct)
+        res.json(updatedProduct)
+    } else {
+        res.status(404)
+        throw new Error('Product not found')
+    }
+}))
+
+
 
 
 

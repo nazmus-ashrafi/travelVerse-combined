@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 
 import { addOrder } from '../../features/order/orderSlice';
+import { updateProduct } from '../../features/product/productSlice';
 import { useNavigate } from 'react-router-dom'
+
+import axios from 'axios';
+
 
 import ShopNav from './ShopNav';
 
@@ -36,6 +40,23 @@ const PlaceOrderScreen = () => {
                                     .toFixed(2)),
         }
         dispatch(addOrder(order))
+
+
+        // deduct item from seller's inventory
+        cartItems.map(item => {
+
+            const resetCountInStock = async () => {
+                await axios.put(`http://localhost:5000/product/${item.product._id}/updateCountInStock`, {
+                    countInStock: item.product.countInStock - item.qty
+                })
+            }
+            resetCountInStock()
+        })
+
+        
+
+
+
     }
 
 

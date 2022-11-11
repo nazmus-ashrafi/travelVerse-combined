@@ -166,6 +166,7 @@ const AdminHome = () => {
             <th>Name</th>
             <th>Stats</th>
             <th>Type</th>
+            <th>Shop Registration</th>
             <th></th>
           </tr>
         </thead>
@@ -205,6 +206,8 @@ const AdminHome = () => {
                 </td>
                 {user.isShop ?<td><div class="badge badge-primary">Shop</div></td>:<td><div class="badge badge-secondary">User</div>
                 </td>}
+
+                {user.isShop ? <td><div class="badge badge-primary">{user.shopnumber}</div></td>: <td><div class="badge badge-primary"></div></td>}
                 
                 <th>
                   <button class="btn btn-error btn-xs" onClick={()=>onDeleteUserClick(user._id)}>delete</button>

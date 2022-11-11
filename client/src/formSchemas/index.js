@@ -35,6 +35,7 @@ export const registerShopSchema = yup.object().shape({
   lastname: yup.string().required("Required"),
   username: yup.string().required("Required"),
   shopname: yup.string().required("Required"),
+  shopnumber: yup.string().required("Required"),
   email: yup.string().email("Please enter a valid email").required("Required"),
   password: yup
     .string()

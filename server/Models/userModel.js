@@ -71,6 +71,11 @@ const UserSchema = mongoose.Schema(
         isShop: {
             type: Boolean,
             default: false
+        },
+        shopnumber: {
+            type: String,
+            default: '',
+            required: false
         }
 
     },

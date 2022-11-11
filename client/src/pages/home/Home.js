@@ -26,8 +26,6 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default function Home({socket}) {
 
 
-  
-
   // const [dark,setDark] = useState('dark')
 
   // const window = document.querySelector(".window");
@@ -89,12 +87,9 @@ export default function Home({socket}) {
 
 
 
-
   return (
 
 
-    
-    
     
     // <div class='window dark' data-theme={process.env.REACT_APP_THEME}>
     <div class='window dark'>

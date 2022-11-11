@@ -42,6 +42,7 @@ const RegisterShop = () => {
       lastname: "",
       username: "",
       shopname: "",
+      shopnumber: "",
       email: "",
       password: "",
       confirmpass: "",
@@ -150,6 +151,15 @@ const RegisterShop = () => {
 
 
               {errors.shopname && touched.shopname && <p className="text-orange-700 error">{errors.shopname}</p>}
+            </div>
+
+            <div class="relative mb-4">
+              <label for="username" class="leading-7 text-sm text-zinc-400">Shop registration licence</label>
+
+              <input type="name" id="shopnumber" name="shopnumber" class={`w-full bg-white rounded border border-gray-300 focus:border-cyan-700 focus:ring-2 focus:ring-sky-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.shopnumber ?'input-error focus:border-red-700 focus:ring-red-400  ':""}`} onChange={handleChange} value={values.shopnumber} onBlur={handleBlur} />
+
+
+              {errors.shopnumber && touched.shopnumber && <p className="text-orange-700 error">{errors.shopnumber}</p>}
             </div>
 
             <div class="relative mb-4">
